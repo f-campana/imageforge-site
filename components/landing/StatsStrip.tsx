@@ -14,7 +14,7 @@ export function StatsStrip() {
           {STATS.map((stat, index) => (
             <MotionWrap key={stat.label} delayMs={index * 90}>
               <div className="panel-card h-full p-5 text-center md:p-6">
-                <p className="mb-1 font-mono text-[0.7rem] tracking-[0.16em] text-zinc-500 uppercase">
+                <p className="mb-1 font-mono text-[0.7rem] tracking-[0.16em] text-zinc-400 uppercase">
                   {stat.label}
                 </p>
                 <p
@@ -24,7 +24,7 @@ export function StatsStrip() {
                 >
                   {stat.value}
                 </p>
-                <p className="mt-1 text-sm text-zinc-500">{stat.subtext}</p>
+                <p className="mt-1 text-sm text-zinc-400">{stat.subtext}</p>
               </div>
             </MotionWrap>
           ))}
