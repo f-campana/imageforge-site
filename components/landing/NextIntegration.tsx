@@ -4,10 +4,10 @@ import { NEXT_INTEGRATION_EXAMPLE } from "@/components/landing/constants";
 
 export function NextIntegration() {
   return (
-    <section id="nextjs" className="border-b border-white/10 py-20 md:py-24">
-      <div className="mx-auto w-full max-w-6xl px-6">
+    <section id="nextjs" className="border-b border-white/10 py-20 md:py-28">
+      <div className="section-shell">
         <MotionWrap>
-          <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+          <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
             Next.js integration
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-zinc-400">

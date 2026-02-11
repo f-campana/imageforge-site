@@ -9,17 +9,19 @@ const RUN_ONCE_COMMAND = "npx @imageforge/cli ./public/images";
 
 function CommandCard({ command, label }: { command: string; label: string }) {
   return (
-    <div className="flex w-full max-w-2xl items-center justify-between gap-3 rounded-xl border border-white/12 bg-black/55 px-4 py-3">
+    <div className="panel-card-strong flex w-full max-w-2xl flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <p className="mb-1 text-[11px] tracking-[0.18em] text-zinc-500 uppercase">
+        <p className="mb-1 font-mono text-[0.66rem] tracking-[0.18em] text-zinc-500 uppercase">
           {label}
         </p>
-        <div className="flex items-center gap-2 font-mono text-sm text-zinc-200 md:text-base">
+        <div className="flex items-center gap-2 overflow-x-auto font-mono text-sm text-zinc-100 md:text-base">
           <span className="text-zinc-500 select-none">$</span>
           <code className="truncate">{command}</code>
         </div>
       </div>
-      <CopyButton text={command} />
+      <div className="self-start sm:self-auto">
+        <CopyButton text={command} />
+      </div>
     </div>
   );
 }

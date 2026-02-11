@@ -74,16 +74,16 @@ export function TerminalDemo() {
 
   return (
     <div ref={containerRef} className="mx-auto w-full max-w-3xl">
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/70 shadow-[0_24px_120px_rgba(0,0,0,0.55)]">
-        <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
+      <div className="panel-card-strong overflow-hidden">
+        <div className="flex items-center gap-2 border-b border-white/12 bg-white/[0.04] px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
-          <span className="ml-2 font-mono text-xs tracking-[0.16em] text-zinc-500 uppercase">
+          <span className="ml-2 font-mono text-[0.68rem] tracking-[0.16em] text-zinc-500 uppercase">
             imageforge-demo
           </span>
         </div>
-        <div className="min-h-[360px] overflow-x-auto p-4 md:p-6">
+        <div className="min-h-[370px] overflow-x-auto px-4 py-4 md:px-6 md:py-6">
           {TERMINAL_LINES.slice(0, renderedCount).map((line, index) => (
             <div
               key={`${index}-${line.text}`}

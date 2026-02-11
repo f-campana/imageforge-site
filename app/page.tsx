@@ -12,7 +12,7 @@ import { StatsStrip } from "@/components/landing/StatsStrip";
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <div className="noise-layer" aria-hidden="true" />
+      <div className="site-grid-layer" aria-hidden="true" />
       <HeaderNav />
       <main>
         <Hero />

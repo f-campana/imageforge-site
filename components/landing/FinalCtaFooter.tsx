@@ -4,10 +4,10 @@ import { IMAGEFORGE_VERSION } from "@/components/landing/constants";
 
 export function FinalCtaFooter() {
   return (
-    <section className="py-20 md:py-24">
-      <div className="mx-auto w-full max-w-6xl px-6">
+    <section className="py-20 md:py-28">
+      <div className="section-shell">
         <MotionWrap className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
             Keep image optimization boring and reliable.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">
@@ -21,7 +21,7 @@ export function FinalCtaFooter() {
         </MotionWrap>
 
         <MotionWrap
-          className="mt-10 flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-500"
+          className="mt-11 flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-500"
           delayMs={200}
         >
           <a
