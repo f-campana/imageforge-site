@@ -61,14 +61,14 @@ export function FinalCtaFooter() {
         </MotionWrap>
 
         <MotionWrap
-          className="mt-11 flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-500"
+          className="mt-11 flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-400"
           delayMs={200}
         >
           <a
             href="https://github.com/f-campana/imageforge"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:text-zinc-300"
+            className="transition hover:text-zinc-200 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
           >
             GitHub
           </a>
@@ -77,7 +77,7 @@ export function FinalCtaFooter() {
             href="https://www.npmjs.com/package/@imageforge/cli"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:text-zinc-300"
+            className="transition hover:text-zinc-200 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
           >
             npm package
           </a>

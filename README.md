@@ -52,6 +52,24 @@ pnpm format      # prettier check
 pnpm format:write
 ```
 
+## Accessibility
+
+- Contrast target: WCAG 2.1 AA for normal text (`>= 4.5:1`).
+- Components remediated for contrast:
+  - `components/landing/StatsStrip.tsx`
+  - `components/landing/FinalCtaFooter.tsx`
+- Release gate checks:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm build`
+  - Lighthouse accessibility (desktop and mobile) against local production server
+
+Verification snapshot (2026-02-11):
+
+- Desktop accessibility score: `95 -> 100`
+- Mobile accessibility score: `95 -> 100`
+- Failing audit delta: `color-contrast` only, `12 -> 0` failing nodes
+
 ## Environment variables
 
 `NEXT_PUBLIC_IMAGEFORGE_VERSION` is used for public version display in the UI.
