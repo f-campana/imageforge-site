@@ -16,14 +16,15 @@ export function MotionWrap({
   delayMs = 0,
 }: MotionWrapProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const shouldAnimate = prefersReducedMotion === false;
 
-  const style: CSSProperties | undefined = prefersReducedMotion
-    ? undefined
-    : { animationDelay: `${delayMs}ms` };
+  const style: CSSProperties | undefined = shouldAnimate
+    ? { animationDelay: `${delayMs}ms` }
+    : undefined;
 
   return (
     <div
-      className={`${className ?? ""} ${prefersReducedMotion ? "" : "motion-rise"}`}
+      className={`${className ?? ""} ${shouldAnimate ? "motion-rise" : ""}`}
       style={style}
     >
       {children}

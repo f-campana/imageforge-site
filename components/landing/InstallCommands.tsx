@@ -4,7 +4,7 @@ type InstallCommandsProps = {
   showHelpText?: boolean;
 };
 
-const INSTALL_COMMAND = "pnpm add -g @imageforge/cli";
+const INSTALL_COMMAND = "npm install -g @imageforge/cli";
 const RUN_ONCE_COMMAND = "npx @imageforge/cli ./public/images";
 
 function CommandCard({ command, label }: { command: string; label: string }) {

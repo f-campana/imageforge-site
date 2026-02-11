@@ -32,7 +32,7 @@ export const EXAMPLE_TIMESTAMP = "2026-02-11T09:30:00.000Z";
 
 export const TERMINAL_LINES: TerminalLine[] = [
   {
-    text: "$ imageforge ./public/images -f webp,avif --json",
+    text: "$ imageforge ./public/images -f webp,avif",
     tone: "terminal-command",
     delayMs: 0,
   },
@@ -195,7 +195,7 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
     description:
       "Consume imageforge.json in app code for dimensions, format outputs, and placeholders.",
     code: `{
-  "generatedAt": "${EXAMPLE_TIMESTAMP}",
+  "generated": "${EXAMPLE_TIMESTAMP}",
   "images": {
     "hero.jpg": {
       "blurDataURL": "data:image/png;base64,iVBOR...",
@@ -228,7 +228,7 @@ export const STATS: StatItem[] = [
 
 export const MANIFEST_EXAMPLE = `{
   "version": "1.0",
-  "generatedAt": "${EXAMPLE_TIMESTAMP}",
+  "generated": "${EXAMPLE_TIMESTAMP}",
   "images": {
     "hero.jpg": {
       "width": 1200,
@@ -276,9 +276,10 @@ import Image from "next/image";
 import { getImageMeta } from "@/lib/imageforge";
 
 const hero = getImageMeta("hero.jpg");
+const heroSrc = "/images/hero.jpg";
 
 <Image
-  src={hero.outputs.webp.path}
+  src={heroSrc}
   alt="Hero"
   width={hero.width}
   height={hero.height}

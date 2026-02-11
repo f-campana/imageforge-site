@@ -5,15 +5,20 @@ import { useEffect, useRef, useState } from "react";
 import { TERMINAL_LINES } from "@/components/landing/constants";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
+const PREVIEW_LINE_COUNT = 6;
+
 export function TerminalDemo() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const shouldAnimate = prefersReducedMotion === false;
+  const shouldReduceMotion = prefersReducedMotion === true;
   const [isInView, setIsInView] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(PREVIEW_LINE_COUNT);
   const containerRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<number[]>([]);
+  const animationStartedRef = useRef(false);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (!shouldAnimate) return;
 
     const node = containerRef.current;
     if (!node) return;
@@ -22,14 +27,6 @@ export function TerminalDemo() {
       ([entry]) => {
         if (entry?.isIntersecting) {
           setIsInView(true);
-          setVisibleCount(0);
-
-          timersRef.current = TERMINAL_LINES.map((line, index) =>
-            window.setTimeout(() => {
-              setVisibleCount(index + 1);
-            }, line.delayMs),
-          );
-
           observer.disconnect();
         }
       },
@@ -43,11 +40,37 @@ export function TerminalDemo() {
       timersRef.current = [];
       observer.disconnect();
     };
-  }, [prefersReducedMotion]);
+  }, [shouldAnimate]);
 
-  const renderedCount = prefersReducedMotion
+  useEffect(() => {
+    if (!shouldAnimate || !isInView || animationStartedRef.current) return;
+
+    animationStartedRef.current = true;
+
+    const startIndex = Math.min(PREVIEW_LINE_COUNT, TERMINAL_LINES.length);
+    const baseDelay =
+      startIndex > 0 ? (TERMINAL_LINES[startIndex - 1]?.delayMs ?? 0) : 0;
+
+    timersRef.current = TERMINAL_LINES.slice(startIndex).map((line, index) =>
+      window.setTimeout(
+        () => {
+          setVisibleCount(startIndex + index + 1);
+        },
+        Math.max(line.delayMs - baseDelay, 0),
+      ),
+    );
+
+    return () => {
+      timersRef.current.forEach((timer) => window.clearTimeout(timer));
+      timersRef.current = [];
+    };
+  }, [isInView, shouldAnimate]);
+
+  const renderedCount = shouldReduceMotion
     ? TERMINAL_LINES.length
-    : visibleCount;
+    : shouldAnimate
+      ? visibleCount
+      : PREVIEW_LINE_COUNT;
 
   return (
     <div ref={containerRef} className="mx-auto w-full max-w-3xl">
@@ -72,7 +95,7 @@ export function TerminalDemo() {
               {line.text}
             </div>
           ))}
-          {!prefersReducedMotion &&
+          {shouldAnimate &&
           isInView &&
           renderedCount < TERMINAL_LINES.length ? (
             <span className="terminal-cursor" aria-hidden="true" />
