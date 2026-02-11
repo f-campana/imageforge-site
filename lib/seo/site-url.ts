@@ -91,7 +91,13 @@ export function resolveSiteUrl(options: ResolveSiteUrlOptions = {}): URL {
     );
   }
 
-  return new URL(DEFAULT_LOCAL_URL);
+  if (process.env.NODE_ENV === "development") {
+    return new URL(DEFAULT_LOCAL_URL);
+  }
+
+  throw new Error(
+    "Unable to resolve site URL in non-development mode. Set NEXT_PUBLIC_SITE_URL (preferred) or provide a deployment URL (VERCEL_PROJECT_PRODUCTION_URL / VERCEL_URL).",
+  );
 }
 
 export function resolveSiteUrlString(options: ResolveSiteUrlOptions = {}): string {
