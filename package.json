@@ -11,13 +11,22 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "seo:tech": "node scripts/seo/run.mjs --suite tech --mode advisory",
+    "seo:content": "node scripts/seo/run.mjs --suite content --mode advisory",
+    "seo:offpage": "node scripts/seo/run.mjs --suite offpage --mode advisory",
+    "seo:full": "node scripts/seo/run.mjs --suite full --mode advisory",
+    "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
+    "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },
   "dependencies": {
+    "cheerio": "^1.1.2",
+    "googleapis": "^166.0.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,0 +1,7 @@
+interface:
+  display_name: "SEO Agent"
+  short_description: "Run full-suite SEO audits and remediation"
+  default_prompt: "Use $seo-agent to audit this repository and propose the highest-impact SEO fixes first."
+
+policy:
+  allow_implicit_invocation: true

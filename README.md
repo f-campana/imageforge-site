@@ -42,6 +42,12 @@ pnpm lint        # eslint
 pnpm typecheck   # typescript checks
 pnpm build       # production build
 pnpm start       # run production server
+pnpm seo:tech    # technical SEO checks
+pnpm seo:content # content SEO checks
+pnpm seo:offpage # off-page/public SEO checks
+pnpm seo:full    # full SEO checks (includes optional GSC adapter)
+pnpm seo:check   # CI-oriented SEO check (mode from SEO_MODE)
+pnpm seo:test    # SEO script unit tests
 pnpm format      # prettier check
 pnpm format:write
 ```
@@ -49,6 +55,11 @@ pnpm format:write
 ## Environment variables
 
 `NEXT_PUBLIC_IMAGEFORGE_VERSION` is used for public version display in the UI.
+`NEXT_PUBLIC_SITE_URL` defines canonical/metadata base URL and should match production.
+`SEO_MODE` controls audit mode (`advisory` or `strict`).
+`SEO_LOCALE` defaults keyword/report locale (`en-US`).
+`SEO_COMPETITOR_URLS` optionally enables competitor snapshot checks.
+`SEO_GSC_CLIENT_EMAIL`, `SEO_GSC_PRIVATE_KEY`, and `SEO_GSC_PROPERTY_URI` enable Google Search Console analysis.
 
 Example:
 
