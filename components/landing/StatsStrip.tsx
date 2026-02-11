@@ -7,7 +7,7 @@ export function StatsStrip() {
       <div className="section-shell">
         <MotionWrap>
           <p className="mb-9 text-center font-mono text-[0.72rem] tracking-[0.2em] text-zinc-400 uppercase md:mb-10">
-            Actual run (example) - 12 source images, single command
+            Example run proof - 12 source images, one command, zero runtime cost
           </p>
         </MotionWrap>
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">

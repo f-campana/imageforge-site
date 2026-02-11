@@ -8,16 +8,27 @@ export function FinalCtaFooter() {
       <div className="section-shell">
         <MotionWrap className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
-            Keep image optimization boring and reliable.
+            Build once. Ship fast. Keep costs at zero.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">
-            Ship smaller images automatically with deterministic outputs, CI
-            guardrails, and machine-readable run reports.
+            Start with one command, add --check in CI, and keep deterministic
+            image outputs in every deployment environment.
           </p>
         </MotionWrap>
 
         <MotionWrap className="mx-auto mt-8 max-w-xl" delayMs={120}>
-          <InstallCommands showHelpText={false} includeRunOnce={false} />
+          <InstallCommands showHelpText={false} includeRunOnce />
+        </MotionWrap>
+
+        <MotionWrap className="mt-5 text-center" delayMs={160}>
+          <a
+            href="https://github.com/f-campana/imageforge"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-sm font-medium text-zinc-400 transition hover:text-emerald-300"
+          >
+            View full docs on GitHub
+          </a>
         </MotionWrap>
 
         <MotionWrap

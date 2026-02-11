@@ -17,13 +17,13 @@ const monoFont = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ImageForge CLI | Ship Smaller Images Automatically",
+  title: "ImageForge CLI | Build-Time Image Optimization, Zero Monthly Cost",
   description:
-    "ImageForge CLI is a build-time image pipeline for WebP/AVIF conversion, blurDataURL generation, hash-based caching, and deterministic CI checks.",
+    "ImageForge CLI pre-generates WebP/AVIF assets, writes imageforge.json, and adds --check CI enforcement so teams ship optimized images with zero recurring runtime cost.",
   openGraph: {
     title: "ImageForge CLI",
     description:
-      "Build-time image optimization with WebP/AVIF, blurDataURL placeholders, hash caching, and CI guardrails.",
+      "Build-time image optimization with WebP/AVIF, CI guardrails, and zero recurring runtime image optimization cost.",
     type: "website",
     siteName: "ImageForge CLI",
   },
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "ImageForge CLI",
     description:
-      "Ship smaller images automatically with deterministic build-time optimization and CI enforcement.",
+      "Optimize once, deploy everywhere, and keep recurring image optimization costs at zero.",
   },
   icons: {
     icon: "/favicon.ico",

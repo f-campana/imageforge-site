@@ -1,4 +1,5 @@
 import { MotionWrap } from "@/components/landing/MotionWrap";
+import { NAV_ITEMS } from "@/components/landing/constants";
 
 export function HeaderNav() {
   return (
@@ -11,12 +12,18 @@ export function HeaderNav() {
           imageforge
         </a>
         <MotionWrap
-          className="flex items-center gap-5 text-sm text-zinc-400"
+          className="flex items-center gap-4 text-sm text-zinc-400 md:gap-5"
           delayMs={120}
         >
-          <a href="#features" className="transition hover:text-zinc-100">
-            Features
-          </a>
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="transition hover:text-zinc-100"
+            >
+              {item.label}
+            </a>
+          ))}
           <a
             href="https://github.com/f-campana/imageforge"
             target="_blank"

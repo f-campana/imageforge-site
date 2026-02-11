@@ -6,8 +6,8 @@ export function ProblemStrip() {
       <div className="section-shell py-11 md:py-12">
         <MotionWrap>
           <p className="text-center font-mono text-sm tracking-[0.14em] text-zinc-400 md:text-base">
-            Stale outputs · missing placeholders · scripts only one person
-            understands
+            Per-request billing · first-hit latency · external-service
+            compliance risk
           </p>
         </MotionWrap>
       </div>

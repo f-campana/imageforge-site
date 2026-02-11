@@ -7,8 +7,12 @@ export function FeaturesGrid() {
       <div className="section-shell">
         <MotionWrap>
           <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
-            Features
+            Why teams choose ImageForge
           </h2>
+          <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
+            Keep image optimization predictable with build-time outputs, CI
+            checks, and deterministic metadata your app can consume directly.
+          </p>
         </MotionWrap>
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {FEATURES.map((feature, index) => (

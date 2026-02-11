@@ -1,12 +1,14 @@
 import { CICheckExample } from "@/components/landing/CICheckExample";
+import { ComparisonAndCost } from "@/components/landing/ComparisonAndCost";
 import { FeaturesGrid } from "@/components/landing/FeaturesGrid";
 import { FinalCtaFooter } from "@/components/landing/FinalCtaFooter";
 import { HeaderNav } from "@/components/landing/HeaderNav";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
-import { ManifestExample } from "@/components/landing/ManifestExample";
+import { Limitations } from "@/components/landing/Limitations";
 import { NextIntegration } from "@/components/landing/NextIntegration";
 import { ProblemStrip } from "@/components/landing/ProblemStrip";
+import { SegmentUseCases } from "@/components/landing/SegmentUseCases";
 import { StatsStrip } from "@/components/landing/StatsStrip";
 
 export default function Home() {
@@ -17,12 +19,14 @@ export default function Home() {
       <main>
         <Hero />
         <ProblemStrip />
+        <ComparisonAndCost />
         <HowItWorks />
         <FeaturesGrid />
         <StatsStrip />
-        <ManifestExample />
         <CICheckExample />
         <NextIntegration />
+        <SegmentUseCases />
+        <Limitations />
         <FinalCtaFooter />
       </main>
     </div>

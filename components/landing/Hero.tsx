@@ -12,17 +12,18 @@ export function Hero() {
       <div className="section-shell relative pt-24 pb-20 md:pt-32 md:pb-28">
         <MotionWrap className="max-w-4xl" delayMs={40}>
           <h1 className="max-w-3xl text-5xl leading-[1.03] font-semibold tracking-[-0.03em] text-balance text-white md:text-7xl">
-            Ship smaller images{" "}
-            <span className="text-emerald-300">automatically</span>.
+            Optimize once, deploy everywhere,{" "}
+            <span className="text-emerald-300">pay nothing monthly</span>.
           </h1>
         </MotionWrap>
 
         <MotionWrap className="mt-6 max-w-3xl" delayMs={140}>
           <p className="text-lg leading-relaxed text-pretty text-zinc-300 md:text-[1.25rem] md:leading-relaxed">
-            ImageForge CLI converts JPG/PNG assets to WebP and AVIF at build
-            time, generates blurDataURL placeholders, writes{" "}
+            ImageForge is a <strong>build-time</strong> image pipeline that
+            pre-generates <strong>WebP/AVIF</strong> assets, writes{" "}
             <code className="font-mono text-zinc-100">imageforge.json</code>,
-            and keeps reruns deterministic with hash-based caching.
+            and enforces freshness in CI with{" "}
+            <code className="font-mono text-zinc-100">--check</code>.
           </p>
         </MotionWrap>
 
@@ -34,7 +35,7 @@ export function Hero() {
             rel="noopener noreferrer"
             className="mt-4 inline-block text-sm font-medium text-zinc-400 transition hover:text-emerald-300"
           >
-            View docs on GitHub
+            View docs and source on GitHub
           </a>
         </MotionWrap>
 
