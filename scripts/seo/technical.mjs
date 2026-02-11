@@ -11,6 +11,10 @@ import {
 } from "./utils.mjs";
 
 const GENERIC_ALT_TEXT = new Set(["image", "photo", "picture", "hero"]);
+const EXCLUDED_H1_AUDIT_FILES = new Set([
+  "app/opengraph-image.tsx",
+  "app/twitter-image.tsx",
+]);
 
 export function evaluateMetadataFields(layoutSource) {
   const metadataBase = /metadataBase\s*:/.test(layoutSource);
@@ -84,6 +88,11 @@ export function findBrokenInternalLinks(hrefs, routes) {
     .filter(isInternalHref)
     .map(normalizeHrefForRoute)
     .filter((href) => !normalizedRoutes.has(href));
+}
+
+function includeInH1Audit(rootDir, filePath) {
+  const relativePath = path.relative(rootDir, filePath).replaceAll("\\", "/");
+  return !EXCLUDED_H1_AUDIT_FILES.has(relativePath);
 }
 
 export async function runTechnicalChecks(config) {
@@ -256,7 +265,11 @@ export async function runTechnicalChecks(config) {
     })),
   );
 
-  const h1Count = fileContents.reduce(
+  const h1AuditFiles = fileContents.filter((file) =>
+    includeInH1Audit(config.rootDir, file.filePath),
+  );
+
+  const h1Count = h1AuditFiles.reduce(
     (count, file) => count + (file.content.match(/<h1\b/g)?.length ?? 0),
     0,
   );
@@ -272,8 +285,8 @@ export async function runTechnicalChecks(config) {
         h1Status === "pass"
           ? "Exactly one H1 appears across page sections."
           : `Expected one H1, found ${h1Count}.`,
-      evidence: sourceFiles
-        .map((filePath) => path.relative(config.rootDir, filePath))
+      evidence: h1AuditFiles
+        .map((file) => path.relative(config.rootDir, file.filePath))
         .join(", "),
       fixHint: "Ensure each indexable page renders exactly one descriptive H1.",
       file: "app/page.tsx",

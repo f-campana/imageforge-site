@@ -90,20 +90,22 @@ export async function runContentChecks(config) {
     }),
   );
 
-  const sourceFiles = [
-    path.join(config.rootDir, "README.md"),
-    ...(await listFilesRecursively(config.appDir, (filePath) =>
-      /\.(tsx|ts|md)$/.test(filePath),
-    )),
-    ...(await listFilesRecursively(config.componentsDir, (filePath) =>
-      /\.(tsx|ts|md)$/.test(filePath),
-    )),
-  ];
+  const routePageFiles = await listFilesRecursively(config.appDir, (filePath) =>
+    /page\.tsx$/.test(filePath),
+  );
+  const landingComponentsDir = path.join(config.componentsDir, "landing");
+  const landingContentFiles = await listFilesRecursively(
+    landingComponentsDir,
+    (filePath) => /\.(tsx|ts)$/.test(filePath),
+  );
+  const crawlableContentFiles = [...new Set([...routePageFiles, ...landingContentFiles])];
 
   const sourceText = compactWhitespace(
     (
       await Promise.all(
-        sourceFiles.map(async (filePath) => extractTextLike((await readTextOrNull(filePath)) ?? "")),
+        crawlableContentFiles.map(async (filePath) =>
+          extractTextLike((await readTextOrNull(filePath)) ?? ""),
+        ),
       )
     ).join(" "),
   );
@@ -120,7 +122,7 @@ export async function runContentChecks(config) {
         wordCount >= 250
           ? "Page copy depth is adequate for a focused landing page."
           : "Landing page copy appears thin for broad SEO intent coverage.",
-      evidence: `Approximate crawlable word count: ${wordCount}`,
+      evidence: `Approximate crawlable word count: ${wordCount} across ${crawlableContentFiles.length} route/content source files.`,
       fixHint:
         "Add concise explanatory sections that target user intent questions and integration examples.",
       file: "app/page.tsx",
@@ -141,7 +143,7 @@ export async function runContentChecks(config) {
         coverageStatus === "pass"
           ? "Seed keyword cluster coverage is healthy."
           : "Seed keyword cluster coverage is below threshold.",
-      evidence: `coverage=${(coverage.coverageRatio * 100).toFixed(1)}% (${coverage.covered.length}/${keywordSeed.keywords.length})`,
+      evidence: `coverage=${(coverage.coverageRatio * 100).toFixed(1)}% (${coverage.covered.length}/${keywordSeed.keywords.length}) over crawlable route content`,
       fixHint:
         "Expand copy and headings with missing high-intent terms that match product capabilities.",
       file: "components/landing/Hero.tsx",
