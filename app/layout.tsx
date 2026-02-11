@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 
+import { resolveSiteUrl } from "@/lib/seo/site-url";
+
 import "./globals.css";
+
+const siteUrl = resolveSiteUrl();
 
 const headingFont = Space_Grotesk({
   subsets: ["latin"],
@@ -17,21 +21,36 @@ const monoFont = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
   title: "ImageForge CLI | Build-Time Image Optimization, Zero Monthly Cost",
   description:
     "ImageForge CLI pre-generates WebP/AVIF assets, writes imageforge.json, and adds --check CI enforcement so teams ship optimized images with zero recurring runtime cost.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "ImageForge CLI",
     description:
       "Build-time image optimization with WebP/AVIF, CI guardrails, and zero recurring runtime image optimization cost.",
     type: "website",
+    url: "/",
     siteName: "ImageForge CLI",
+    locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ImageForge CLI",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "ImageForge CLI",
     description:
       "Optimize once, deploy everywhere, and keep recurring image optimization costs at zero.",
+    images: ["/twitter-image"],
   },
   icons: {
     icon: "/favicon.ico",

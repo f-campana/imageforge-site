@@ -10,25 +10,40 @@ import { NextIntegration } from "@/components/landing/NextIntegration";
 import { ProblemStrip } from "@/components/landing/ProblemStrip";
 import { SegmentUseCases } from "@/components/landing/SegmentUseCases";
 import { StatsStrip } from "@/components/landing/StatsStrip";
+import { buildHomepageSchemas, serializeJsonLd } from "@/lib/seo/schema";
+import { resolveSiteUrl } from "@/lib/seo/site-url";
+
+const homepageSchemas = buildHomepageSchemas(resolveSiteUrl());
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <div className="site-grid-layer" aria-hidden="true" />
-      <HeaderNav />
-      <main>
-        <Hero />
-        <ProblemStrip />
-        <ComparisonAndCost />
-        <HowItWorks />
-        <FeaturesGrid />
-        <StatsStrip />
-        <CICheckExample />
-        <NextIntegration />
-        <SegmentUseCases />
-        <Limitations />
-        <FinalCtaFooter />
-      </main>
-    </div>
+    <>
+      {homepageSchemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(schema),
+          }}
+        />
+      ))}
+      <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+        <div className="site-grid-layer" aria-hidden="true" />
+        <HeaderNav />
+        <main>
+          <Hero />
+          <ProblemStrip />
+          <ComparisonAndCost />
+          <HowItWorks />
+          <FeaturesGrid />
+          <StatsStrip />
+          <CICheckExample />
+          <NextIntegration />
+          <SegmentUseCases />
+          <Limitations />
+          <FinalCtaFooter />
+        </main>
+      </div>
+    </>
   );
 }
