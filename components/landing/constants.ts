@@ -95,87 +95,76 @@ export const TERMINAL_LINES: TerminalLine[] = [
   },
   { text: "", tone: "terminal-muted", delayMs: 2300 },
   {
+    text: "──────────────────────────────────────────────────",
+    tone: "terminal-muted",
+    delayMs: 2360,
+  },
+  { text: "", tone: "terminal-muted", delayMs: 2420 },
+  {
     text: "Done in 2.1s (example)",
     tone: "terminal-strong",
-    delayMs: 2440,
+    delayMs: 2500,
   },
   {
     text: "  9 processed, 3 cached",
     tone: "terminal-success",
-    delayMs: 2600,
+    delayMs: 2660,
   },
   {
     text: "  Total: 8.4MB -> 1.9MB (-77%)",
     tone: "terminal-success",
-    delayMs: 2740,
+    delayMs: 2800,
   },
   {
     text: "  Manifest: imageforge.json",
     tone: "terminal-accent",
-    delayMs: 2880,
-  },
-  {
-    text: "  JSON report: stdout (--json)",
-    tone: "terminal-accent",
-    delayMs: 3040,
+    delayMs: 2940,
   },
 ];
 
 export const FEATURES: FeatureItem[] = [
   {
-    title: "Build-time only",
+    title: "WebP + AVIF",
     description:
-      "Runs during development or CI to produce ready-to-ship assets before deploy. No runtime image generation.",
-    flag: "imageforge ./public/images",
-  },
-  {
-    title: "WebP + AVIF outputs",
-    description:
-      "Convert source JPG/PNG assets to modern formats with deterministic output paths.",
+      "Convert source images to modern formats with deterministic output paths.",
     flag: "-f webp,avif",
   },
   {
-    title: "blurDataURL placeholders",
+    title: "Blur placeholders",
     description:
-      "Generate tiny blur placeholders and dimensions for fast progressive rendering in Next.js.",
+      "Generate blurDataURL values and dimensions for fast progressive rendering in Next.js.",
     flag: "--blur",
   },
   {
-    title: "Hash-based caching",
+    title: "Hash cache",
     description:
-      "Only changed inputs or option changes reprocess. Unchanged files are skipped reliably.",
+      "Content and options hashing skips unchanged images so reruns stay fast and predictable.",
     flag: "--cache",
+  },
+  {
+    title: "CI guard",
+    description:
+      "Use --check to exit non-zero when images need processing in CI.",
+    flag: "--check",
   },
   {
     title: "Bounded concurrency",
     description:
-      "Control parallel work for local machines and CI runners to avoid resource spikes.",
-    flag: "--concurrency 4",
+      "Control parallel processing with --concurrency for stable local and CI resource usage.",
+    flag: "--concurrency",
   },
   {
-    title: "Deterministic CI guard",
+    title: "JSON output",
     description:
-      "Use --check to fail builds when assets are stale and force reproducible image pipelines.",
-    flag: "--check",
-  },
-  {
-    title: "Machine-readable run report",
-    description:
-      "Use --json to emit a structured report to stdout for CI logs, bots, or dashboards.",
+      "Use --json to emit a structured run report to stdout for CI logs and automation.",
     flag: "--json",
-  },
-  {
-    title: "Manifest by default",
-    description:
-      "Writes imageforge.json with dimensions, outputs, hashes, and placeholder metadata.",
-    flag: "imageforge.json",
   },
 ];
 
 export const HOW_IT_WORKS_STEPS: StepItem[] = [
   {
     number: "1",
-    title: "Run once",
+    title: "Run",
     description:
       "Point ImageForge at your source directory. It converts files to WebP/AVIF and generates blurDataURL placeholders.",
     code: "imageforge ./public/images -f webp,avif",
@@ -183,7 +172,7 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
   },
   {
     number: "2",
-    title: "Cache intelligently",
+    title: "Cache",
     description:
       "Future runs reuse hash-based cache data so only modified images are processed.",
     code: "imageforge ./public/images --concurrency 4\n# example: 3 processed, 47 cached",
@@ -191,7 +180,7 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
   },
   {
     number: "3",
-    title: "Integrate manifest",
+    title: "Ship",
     description:
       "Consume imageforge.json in app code for dimensions, format outputs, and placeholders.",
     code: `{
@@ -214,16 +203,16 @@ export const STATS: StatItem[] = [
   {
     label: "Input",
     value: "8.4 MB",
-    subtext: "12 source images (example run)",
+    subtext: "12 JPEGs + PNGs",
   },
-  { label: "Output", value: "1.9 MB", subtext: "WebP + AVIF derivatives" },
+  { label: "Output", value: "1.9 MB", subtext: "WebP/AVIF derivatives" },
   {
     label: "Saved",
     value: "77%",
-    subtext: "smaller image payload",
+    subtext: "smaller on disk",
     accent: true,
   },
-  { label: "Duration", value: "2.1s", subtext: "example run with warm cache" },
+  { label: "Time", value: "2.1s", subtext: "example run duration" },
 ];
 
 export const MANIFEST_EXAMPLE = `{

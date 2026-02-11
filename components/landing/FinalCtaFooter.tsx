@@ -16,8 +16,8 @@ export function FinalCtaFooter() {
           </p>
         </MotionWrap>
 
-        <MotionWrap className="mx-auto mt-8 max-w-3xl" delayMs={120}>
-          <InstallCommands showHelpText={false} />
+        <MotionWrap className="mx-auto mt-8 max-w-xl" delayMs={120}>
+          <InstallCommands showHelpText={false} includeRunOnce={false} />
         </MotionWrap>
 
         <MotionWrap

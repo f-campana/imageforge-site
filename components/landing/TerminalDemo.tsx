@@ -73,17 +73,17 @@ export function TerminalDemo() {
       : PREVIEW_LINE_COUNT;
 
   return (
-    <div ref={containerRef} className="mx-auto w-full max-w-3xl">
+    <div ref={containerRef} className="mx-auto w-full max-w-[760px]">
       <div className="panel-card-strong overflow-hidden">
-        <div className="flex items-center gap-2 border-b border-white/12 bg-white/[0.04] px-4 py-3">
+        <div className="flex items-center gap-2 border-b border-white/14 bg-white/[0.05] px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="ml-2 font-mono text-[0.68rem] tracking-[0.16em] text-zinc-500 uppercase">
-            imageforge-demo
+            terminal
           </span>
         </div>
-        <div className="min-h-[370px] overflow-x-auto px-4 py-4 md:px-6 md:py-6">
+        <div className="min-h-[420px] overflow-x-auto px-4 py-4 md:px-6 md:py-6">
           {TERMINAL_LINES.slice(0, renderedCount).map((line, index) => (
             <div
               key={`${index}-${line.text}`}
