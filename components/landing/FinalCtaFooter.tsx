@@ -79,7 +79,7 @@ export function FinalCtaFooter() {
             rel="noopener noreferrer"
             className="transition hover:text-zinc-300"
           >
-            npm
+            npm package
           </a>
           <span>·</span>
           <span className="font-mono">

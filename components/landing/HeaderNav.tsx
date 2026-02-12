@@ -40,7 +40,7 @@ export function HeaderNav() {
             rel="noopener noreferrer"
             className="hidden transition hover:text-zinc-100 sm:inline"
           >
-            npm
+            npm package
           </a>
         </MotionWrap>
       </div>

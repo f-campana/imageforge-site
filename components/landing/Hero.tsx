@@ -36,7 +36,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100"
             >
-              Get Started (npm)
+              Get Started
             </a>
             <a
               href="https://github.com/f-campana/imageforge"
