@@ -6,6 +6,7 @@ import { HeaderNav } from "@/components/landing/HeaderNav";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { Limitations } from "@/components/landing/Limitations";
+import { Methodology } from "@/components/landing/Methodology";
 import { NextIntegration } from "@/components/landing/NextIntegration";
 import { ProblemStrip } from "@/components/landing/ProblemStrip";
 import { SegmentUseCases } from "@/components/landing/SegmentUseCases";
@@ -37,6 +38,7 @@ export default function Home() {
           <HowItWorks />
           <FeaturesGrid />
           <StatsStrip />
+          <Methodology />
           <CICheckExample />
           <NextIntegration />
           <SegmentUseCases />

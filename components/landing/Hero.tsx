@@ -29,14 +29,24 @@ export function Hero() {
 
         <MotionWrap className="mt-9 max-w-5xl" delayMs={220}>
           <InstallCommands />
-          <a
-            href="https://github.com/f-campana/imageforge"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-block text-sm font-medium text-zinc-400 transition hover:text-emerald-300"
-          >
-            View docs and source on GitHub
-          </a>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <a
+              href="https://www.npmjs.com/package/@imageforge/cli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100"
+            >
+              Get Started (npm)
+            </a>
+            <a
+              href="https://github.com/f-campana/imageforge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:border-white/35 hover:bg-white/10 hover:text-white"
+            >
+              Read Docs (GitHub)
+            </a>
+          </div>
         </MotionWrap>
 
         <MotionWrap className="mt-12 md:mt-16" delayMs={280}>

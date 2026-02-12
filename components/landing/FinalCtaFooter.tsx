@@ -21,14 +21,43 @@ export function FinalCtaFooter() {
         </MotionWrap>
 
         <MotionWrap className="mt-5 text-center" delayMs={160}>
-          <a
-            href="https://github.com/f-campana/imageforge"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block text-sm font-medium text-zinc-400 transition hover:text-emerald-300"
-          >
-            View full docs on GitHub
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-400">
+            <a
+              href="https://github.com/f-campana/imageforge#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition hover:text-emerald-300"
+            >
+              Docs
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/f-campana/imageforge/blob/main/CHANGELOG.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition hover:text-emerald-300"
+            >
+              Changelog
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/f-campana/imageforge/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition hover:text-emerald-300"
+            >
+              Issues
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/f-campana/imageforge/blob/main/SECURITY.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition hover:text-emerald-300"
+            >
+              Security
+            </a>
+          </div>
         </MotionWrap>
 
         <MotionWrap
