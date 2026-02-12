@@ -93,17 +93,88 @@ function normalizeHrefForRoute(href) {
     : pathOnly;
 }
 
+function escapeRegex(input) {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function isDynamicSegment(segment) {
+  return /^\[[^/[\]]+\]$/.test(segment);
+}
+
+function isCatchAllSegment(segment) {
+  return /^\[\.\.\.[^/[\]]+\]$/.test(segment);
+}
+
+function isOptionalCatchAllSegment(segment) {
+  return /^\[\[\.\.\.[^/[\]]+\]\]$/.test(segment);
+}
+
+function isDynamicRoute(route) {
+  return route
+    .split("/")
+    .filter(Boolean)
+    .some(
+      (segment) =>
+        isDynamicSegment(segment) ||
+        isCatchAllSegment(segment) ||
+        isOptionalCatchAllSegment(segment),
+    );
+}
+
+function buildDynamicRouteRegex(route) {
+  const segments = route.split("/").filter(Boolean);
+  if (segments.length === 0) {
+    return /^\/$/;
+  }
+
+  let pattern = "^";
+
+  for (const segment of segments) {
+    if (isOptionalCatchAllSegment(segment)) {
+      pattern += "(?:/(?:[^/]+(?:/[^/]+)*))?";
+      continue;
+    }
+
+    if (isCatchAllSegment(segment)) {
+      pattern += "/(?:[^/]+(?:/[^/]+)*)";
+      continue;
+    }
+
+    if (isDynamicSegment(segment)) {
+      pattern += "/[^/]+";
+      continue;
+    }
+
+    pattern += `/${escapeRegex(segment)}`;
+  }
+
+  pattern += "$";
+
+  return new RegExp(pattern);
+}
+
 export function findBrokenInternalLinks(hrefs, routes) {
-  const normalizedRoutes = new Set(
-    routes.map((route) =>
-      route.endsWith("/") && route.length > 1 ? route.slice(0, -1) : route,
-    ),
+  const normalizedRoutes = routes.map((route) =>
+    route.endsWith("/") && route.length > 1 ? route.slice(0, -1) : route,
   );
+  const staticRoutes = new Set(normalizedRoutes.filter((route) => !isDynamicRoute(route)));
+  const dynamicRouteMatchers = normalizedRoutes
+    .filter((route) => isDynamicRoute(route))
+    .map((route) => ({
+      route,
+      matcher: buildDynamicRouteRegex(route),
+    }));
 
   return hrefs
     .filter(isInternalHref)
     .map(normalizeHrefForRoute)
-    .filter((href) => !normalizedRoutes.has(href));
+    .filter((href) => {
+      if (staticRoutes.has(href)) {
+        return false;
+      }
+
+      return !dynamicRouteMatchers.some((entry) => entry.matcher.test(href));
+    });
 }
 
 function includeInH1Audit(rootDir, filePath) {

@@ -94,36 +94,38 @@ function parseDeploymentCandidate(value) {
 }
 
 export function resolveSiteUrlFromEnv(env = process.env) {
-  const primary = parseSiteUrlCandidate(env.NEXT_PUBLIC_SITE_URL);
-  if (primary) {
-    return SiteResolutionSchema.parse({
-      url: primary.toString(),
-      source: "NEXT_PUBLIC_SITE_URL",
-      error: null,
-    });
-  }
+  const invalidCandidates = [];
 
-  if (env.NEXT_PUBLIC_SITE_URL?.trim()) {
-    return SiteResolutionSchema.parse({
-      url: null,
+  const primaryRaw = env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (primaryRaw) {
+    const primary = parseSiteUrlCandidate(primaryRaw);
+    if (primary) {
+      return SiteResolutionSchema.parse({
+        url: primary.toString(),
+        source: "NEXT_PUBLIC_SITE_URL",
+        error: null,
+      });
+    }
+
+    invalidCandidates.push({
       source: "NEXT_PUBLIC_SITE_URL",
       error:
         "NEXT_PUBLIC_SITE_URL is present but invalid. Use an absolute http(s) URL.",
     });
   }
 
-  const secondary = parseSiteUrlCandidate(env.SITE_URL);
-  if (secondary) {
-    return SiteResolutionSchema.parse({
-      url: secondary.toString(),
-      source: "SITE_URL",
-      error: null,
-    });
-  }
+  const secondaryRaw = env.SITE_URL?.trim();
+  if (secondaryRaw) {
+    const secondary = parseSiteUrlCandidate(secondaryRaw);
+    if (secondary) {
+      return SiteResolutionSchema.parse({
+        url: secondary.toString(),
+        source: "SITE_URL",
+        error: null,
+      });
+    }
 
-  if (env.SITE_URL?.trim()) {
-    return SiteResolutionSchema.parse({
-      url: null,
+    invalidCandidates.push({
       source: "SITE_URL",
       error: "SITE_URL is present but invalid. Use an absolute http(s) URL.",
     });
@@ -140,6 +142,15 @@ export function resolveSiteUrlFromEnv(env = process.env) {
         ? "VERCEL_PROJECT_PRODUCTION_URL"
         : "VERCEL_URL",
       error: null,
+    });
+  }
+
+  if (invalidCandidates.length > 0) {
+    const highestPriorityInvalid = invalidCandidates[0];
+    return SiteResolutionSchema.parse({
+      url: null,
+      source: highestPriorityInvalid.source,
+      error: highestPriorityInvalid.error,
     });
   }
 

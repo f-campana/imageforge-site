@@ -84,3 +84,24 @@ test("findBrokenInternalLinks returns unknown routes", () => {
 
   assert.deepEqual(broken, ["/pricing"]);
 });
+
+test("findBrokenInternalLinks accepts dynamic single-segment routes", () => {
+  const broken = findBrokenInternalLinks(["/blog/my-post"], ["/", "/blog/[slug]"]);
+
+  assert.deepEqual(broken, []);
+});
+
+test("findBrokenInternalLinks accepts catch-all routes", () => {
+  const broken = findBrokenInternalLinks(
+    ["/docs/getting-started/install"],
+    ["/", "/docs/[...slug]"],
+  );
+
+  assert.deepEqual(broken, []);
+});
+
+test("findBrokenInternalLinks accepts optional catch-all routes", () => {
+  const broken = findBrokenInternalLinks(["/docs"], ["/", "/docs/[[...slug]]"]);
+
+  assert.deepEqual(broken, []);
+});
