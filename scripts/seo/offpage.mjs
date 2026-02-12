@@ -1,6 +1,14 @@
+import path from "node:path";
+
 import { load } from "cheerio";
 
 import { makeCheck, makeOpportunity } from "./types.mjs";
+import { extractHrefs, listFilesRecursively, readTextOrNull } from "./utils.mjs";
+
+const GITHUB_REPO_PATTERN =
+  /^https?:\/\/(?:www\.)?github\.com\/f-campana\/imageforge(?:\/|$)/i;
+const NPM_PACKAGE_PATTERN =
+  /^https?:\/\/(?:www\.)?npmjs\.com\/package\/@imageforge\/cli(?:\/|$)/i;
 
 async function fetchHtml(url, timeoutMs = 8000) {
   const controller = new AbortController();
@@ -38,9 +46,50 @@ async function fetchHtml(url, timeoutMs = 8000) {
   }
 }
 
+export function evaluateBrandPresence(localHrefs, publicHrefs = []) {
+  const hasGithub = (hrefs) => hrefs.some((href) => GITHUB_REPO_PATTERN.test(href));
+  const hasNpm = (hrefs) => hrefs.some((href) => NPM_PACKAGE_PATTERN.test(href));
+
+  const localGithubFound = hasGithub(localHrefs);
+  const localNpmFound = hasNpm(localHrefs);
+  const publicGithubFound = hasGithub(publicHrefs);
+  const publicNpmFound = hasNpm(publicHrefs);
+
+  const githubFound = localGithubFound || publicGithubFound;
+  const npmFound = localNpmFound || publicNpmFound;
+
+  return {
+    status: githubFound && npmFound ? "pass" : "warn",
+    githubFound,
+    npmFound,
+    localGithubFound,
+    localNpmFound,
+    publicGithubFound,
+    publicNpmFound,
+    sources: [
+      ...(localHrefs.length > 0 ? ["local"] : []),
+      ...(publicHrefs.length > 0 ? ["public"] : []),
+    ],
+  };
+}
+
+async function collectLocalBrandHrefs(config) {
+  const pagePath = path.join(config.appDir, "page.tsx");
+  const landingDir = path.join(config.componentsDir, "landing");
+  const landingFiles = await listFilesRecursively(landingDir, (filePath) =>
+    /\.(tsx|ts)$/.test(filePath),
+  );
+  const files = [pagePath, ...landingFiles];
+  const sources = await Promise.all(files.map((filePath) => readTextOrNull(filePath)));
+
+  return sources.flatMap((source) => extractHrefs(source ?? ""));
+}
+
 export async function runOffpageChecks(config) {
   const checks = [];
   const opportunities = [];
+  const localHrefs = await collectLocalBrandHrefs(config);
+  let publicHrefs = [];
 
   if (config.site.url) {
     const homepage = await fetchHtml(config.site.url);
@@ -63,6 +112,7 @@ export async function runOffpageChecks(config) {
     );
 
     if (homepage.ok && homepage.html) {
+      publicHrefs = extractHrefs(homepage.html);
       const $ = load(homepage.html);
       const title = $("title").text().trim();
       const description =
@@ -100,15 +150,27 @@ export async function runOffpageChecks(config) {
     );
   }
 
+  const brandPresence = evaluateBrandPresence(localHrefs, publicHrefs);
+
   checks.push(
     makeCheck({
       id: "offpage.brand_presence_heuristic",
       suite: "offpage",
       severity: "low",
-      status: "pass",
-      message: "Brand references exist in first-party content and outbound profiles.",
-      evidence:
-        "Detected GitHub and npm profile links in landing components for entity association.",
+      status: brandPresence.status,
+      message:
+        brandPresence.status === "pass"
+          ? "Brand references include both GitHub and npm package profiles."
+          : "Missing GitHub or npm brand profile reference in audited sources.",
+      evidence: [
+        `githubFound=${brandPresence.githubFound}`,
+        `npmFound=${brandPresence.npmFound}`,
+        `localGithubFound=${brandPresence.localGithubFound}`,
+        `localNpmFound=${brandPresence.localNpmFound}`,
+        `publicGithubFound=${brandPresence.publicGithubFound}`,
+        `publicNpmFound=${brandPresence.publicNpmFound}`,
+        `sources=${brandPresence.sources.join(",") || "none"}`,
+      ].join("; "),
       fixHint: "Keep brand links consistent across metadata, docs, and social profiles.",
       file: "components/landing/FinalCtaFooter.tsx",
     }),

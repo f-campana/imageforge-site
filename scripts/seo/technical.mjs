@@ -37,8 +37,24 @@ export function evaluateMetadataFields(layoutSource) {
 export function evaluateSchemaPresence(pageSource, schemaSource) {
   return {
     jsonLdScript: /application\/ld\+json/.test(pageSource),
-    softwareApplicationSchema: /SoftwareApplication/.test(schemaSource),
-    websiteSchema: /WebSite|WebSiteSchema|WebSite\"/.test(schemaSource),
+    pageUsesHomepageSchemaBuilder: /buildHomepageSchemas\s*\(/.test(pageSource),
+    pageUsesJsonLdSerializer: /serializeJsonLd\s*\(/.test(pageSource),
+    websiteSchemaBuilder:
+      /export\s+function\s+buildWebsiteSchema\s*\(/.test(schemaSource) &&
+      /export\s+function\s+buildWebsiteSchema[\s\S]*?["']@type["']\s*:\s*["']WebSite["']/.test(
+        schemaSource,
+      ),
+    softwareApplicationSchemaBuilder:
+      /export\s+function\s+buildSoftwareApplicationSchema\s*\(/.test(schemaSource) &&
+      /export\s+function\s+buildSoftwareApplicationSchema[\s\S]*?["']@type["']\s*:\s*["']SoftwareApplication["']/.test(
+        schemaSource,
+      ),
+    homepageSchemaIncludesWebsite:
+      /export\s+function\s+buildHomepageSchemas[\s\S]*?buildWebsiteSchema\s*\(/.test(schemaSource),
+    homepageSchemaIncludesSoftwareApplication:
+      /export\s+function\s+buildHomepageSchemas[\s\S]*?buildSoftwareApplicationSchema\s*\(/.test(
+        schemaSource,
+      ),
   };
 }
 
@@ -230,8 +246,12 @@ export async function runTechnicalChecks(config) {
 
   const schemaPass =
     schema.jsonLdScript &&
-    schema.softwareApplicationSchema &&
-    schema.websiteSchema;
+    schema.pageUsesHomepageSchemaBuilder &&
+    schema.pageUsesJsonLdSerializer &&
+    schema.websiteSchemaBuilder &&
+    schema.softwareApplicationSchemaBuilder &&
+    schema.homepageSchemaIncludesWebsite &&
+    schema.homepageSchemaIncludesSoftwareApplication;
 
   checks.push(
     makeCheck({
@@ -241,8 +261,16 @@ export async function runTechnicalChecks(config) {
       status: schemaPass ? "pass" : "fail",
       message: schemaPass
         ? "Homepage includes required WebSite and SoftwareApplication JSON-LD."
-        : "Missing required homepage JSON-LD schema types.",
-      evidence: `${pagePath} + ${schemaPath}`,
+        : "Missing required homepage JSON-LD wiring or schema builders.",
+      evidence: [
+        `jsonLdScript=${schema.jsonLdScript}`,
+        `pageUsesHomepageSchemaBuilder=${schema.pageUsesHomepageSchemaBuilder}`,
+        `pageUsesJsonLdSerializer=${schema.pageUsesJsonLdSerializer}`,
+        `websiteSchemaBuilder=${schema.websiteSchemaBuilder}`,
+        `softwareApplicationSchemaBuilder=${schema.softwareApplicationSchemaBuilder}`,
+        `homepageSchemaIncludesWebsite=${schema.homepageSchemaIncludesWebsite}`,
+        `homepageSchemaIncludesSoftwareApplication=${schema.homepageSchemaIncludesSoftwareApplication}`,
+      ].join("; "),
       fixHint:
         "Inject application/ld+json scripts on homepage and include WebSite + SoftwareApplication schema definitions.",
       file: "app/page.tsx",

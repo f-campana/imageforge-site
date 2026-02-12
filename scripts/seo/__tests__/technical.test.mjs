@@ -32,15 +32,51 @@ test("evaluateMetadataFields flags missing canonical", async () => {
   assert.equal(result.canonical, false);
 });
 
-test("evaluateSchemaPresence requires both schema types", () => {
-  const result = evaluateSchemaPresence(
-    '<script type="application/ld+json"></script>',
-    '"@type": "SoftwareApplication"\n"@type": "WebSite"',
-  );
+test("evaluateSchemaPresence validates homepage JSON-LD wiring and schema builders", () => {
+  const pageSource = `
+    const homepageSchemas = buildHomepageSchemas(resolveSiteUrl());
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }} />
+  `;
+  const schemaSource = `
+    export function buildWebsiteSchema() {
+      return { "@type": "WebSite" };
+    }
+    export function buildSoftwareApplicationSchema() {
+      return { "@type": "SoftwareApplication" };
+    }
+    export function buildHomepageSchemas() {
+      return [buildWebsiteSchema(), buildSoftwareApplicationSchema()];
+    }
+  `;
+  const result = evaluateSchemaPresence(pageSource, schemaSource);
 
   assert.equal(result.jsonLdScript, true);
-  assert.equal(result.softwareApplicationSchema, true);
-  assert.equal(result.websiteSchema, true);
+  assert.equal(result.pageUsesHomepageSchemaBuilder, true);
+  assert.equal(result.pageUsesJsonLdSerializer, true);
+  assert.equal(result.websiteSchemaBuilder, true);
+  assert.equal(result.softwareApplicationSchemaBuilder, true);
+  assert.equal(result.homepageSchemaIncludesWebsite, true);
+  assert.equal(result.homepageSchemaIncludesSoftwareApplication, true);
+});
+
+test("evaluateSchemaPresence fails when homepage builder wiring is missing", () => {
+  const pageSource = '<script type="application/ld+json"></script>';
+  const schemaSource = `
+    export function buildWebsiteSchema() {
+      return { "@type": "WebSite" };
+    }
+    export function buildSoftwareApplicationSchema() {
+      return { "@type": "SoftwareApplication" };
+    }
+    export function buildHomepageSchemas() {
+      return [buildWebsiteSchema(), buildSoftwareApplicationSchema()];
+    }
+  `;
+  const result = evaluateSchemaPresence(pageSource, schemaSource);
+
+  assert.equal(result.jsonLdScript, true);
+  assert.equal(result.pageUsesHomepageSchemaBuilder, false);
+  assert.equal(result.pageUsesJsonLdSerializer, false);
 });
 
 test("findBrokenInternalLinks returns unknown routes", () => {
