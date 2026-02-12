@@ -1,5 +1,3 @@
-import path from "node:path";
-
 import { load } from "cheerio";
 
 import { makeCheck, makeOpportunity } from "./types.mjs";
@@ -74,12 +72,13 @@ export function evaluateBrandPresence(localHrefs, publicHrefs = []) {
 }
 
 async function collectLocalBrandHrefs(config) {
-  const pagePath = path.join(config.appDir, "page.tsx");
-  const landingDir = path.join(config.componentsDir, "landing");
-  const landingFiles = await listFilesRecursively(landingDir, (filePath) =>
+  const appFiles = await listFilesRecursively(config.appDir, (filePath) =>
+    /(page|layout)\.tsx$/.test(filePath),
+  );
+  const componentFiles = await listFilesRecursively(config.componentsDir, (filePath) =>
     /\.(tsx|ts)$/.test(filePath),
   );
-  const files = [pagePath, ...landingFiles];
+  const files = [...new Set([...appFiles, ...componentFiles])];
   const sources = await Promise.all(files.map((filePath) => readTextOrNull(filePath)));
 
   return sources.flatMap((source) => extractHrefs(source ?? ""));

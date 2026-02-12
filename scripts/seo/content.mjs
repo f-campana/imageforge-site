@@ -4,18 +4,90 @@ import { makeCheck, makeOpportunity } from "./types.mjs";
 import { seedKeywords } from "./seed-keywords.mjs";
 import { compactWhitespace, extractTextLike, listFilesRecursively, readTextOrNull } from "./utils.mjs";
 
-function parseMetadataValue(source, key) {
-  const quotedPattern = new RegExp(`${key}\\s*:\\s*"([^"]+)"`);
-  const singleQuotedPattern = new RegExp(`${key}\\s*:\\s*'([^']+)'`);
+function findMetadataObjectRange(source) {
+  const metadataDeclaration = /export\s+const\s+metadata\b[\s\S]*?=/.exec(source);
+  if (!metadataDeclaration) {
+    return null;
+  }
 
-  return (
-    source.match(quotedPattern)?.[1] ?? source.match(singleQuotedPattern)?.[1] ?? null
-  );
+  const assignmentIndex = metadataDeclaration.index + metadataDeclaration[0].length;
+  const objectStart = source.indexOf("{", assignmentIndex);
+  if (objectStart === -1) {
+    return null;
+  }
+
+  let depth = 0;
+  let inString = false;
+  let stringQuote = "";
+  let escaped = false;
+
+  for (let index = objectStart; index < source.length; index += 1) {
+    const character = source[index];
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+
+      if (character === "\\") {
+        escaped = true;
+        continue;
+      }
+
+      if (character === stringQuote) {
+        inString = false;
+      }
+
+      continue;
+    }
+
+    if (character === '"' || character === "'" || character === "`") {
+      inString = true;
+      stringQuote = character;
+      continue;
+    }
+
+    if (character === "{") {
+      depth += 1;
+      continue;
+    }
+
+    if (character === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        return { start: objectStart, end: index + 1 };
+      }
+    }
+  }
+
+  return null;
 }
 
-function collectTopLevelMetadataEntries(source, key) {
-  const pattern = new RegExp(`^\\s{2}${key}:\\s*[\"']([^\"']+)[\"']`, "gm");
-  return Array.from(source.matchAll(pattern), (match) => match[1]);
+export function collectTopLevelMetadataEntries(source, key) {
+  const range = findMetadataObjectRange(source);
+  if (!range) {
+    return [];
+  }
+
+  const metadataObject = source.slice(range.start, range.end);
+  const pattern = new RegExp(
+    `(?:^|\\n)\\s*${key}\\s*:\\s*(["'])((?:\\\\.|(?!\\1).)*)\\1\\s*,?\\s*(?=\\n|$)`,
+    "g",
+  );
+
+  const values = [];
+  for (const match of metadataObject.matchAll(pattern)) {
+    const before = metadataObject.slice(0, match.index);
+    const braceDepth =
+      (before.match(/{/g)?.length ?? 0) - (before.match(/}/g)?.length ?? 0);
+
+    if (braceDepth === 1) {
+      values.push(match[2].replaceAll("\\'", "'").replaceAll('\\"', '"'));
+    }
+  }
+
+  return values;
 }
 
 export function evaluateKeywordCoverage(text, keywords) {
@@ -66,8 +138,8 @@ export async function runContentChecks(config) {
   const layoutPath = path.join(config.appDir, "layout.tsx");
   const layoutSource = (await readTextOrNull(layoutPath)) ?? "";
 
-  const title = parseMetadataValue(layoutSource, "title");
-  const description = parseMetadataValue(layoutSource, "description");
+  const title = collectTopLevelMetadataEntries(layoutSource, "title")[0] ?? null;
+  const description = collectTopLevelMetadataEntries(layoutSource, "description")[0] ?? null;
   const titleDescriptionIssues = evaluateTitleDescription(title, description);
 
   checks.push(
