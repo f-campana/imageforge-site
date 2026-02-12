@@ -55,10 +55,20 @@ export function extractTextLike(input) {
 }
 
 export function extractHrefs(input) {
-  return Array.from(
-    input.matchAll(/href\s*=\s*["']([^"']+)["']/g),
-    (match) => match[1],
-  );
+  const hrefs = new Set();
+  const patterns = [
+    /href\s*=\s*["']([^"']+)["']/g,
+    /href\s*=\s*{\s*["']([^"']+)["']\s*}/g,
+    /href\s*=\s*{\s*`([^`$]+)`\s*}/g,
+  ];
+
+  for (const pattern of patterns) {
+    for (const match of input.matchAll(pattern)) {
+      hrefs.add(match[1]);
+    }
+  }
+
+  return [...hrefs];
 }
 
 export function extractTargetBlankAnchors(input) {
