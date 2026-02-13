@@ -455,7 +455,7 @@ const heroSrc = "/images/hero.jpg";
 
 <Image
   src={heroSrc}
-  alt="Hero"
+  alt="Product hero banner"
   width={hero.width}
   height={hero.height}
   placeholder="blur"

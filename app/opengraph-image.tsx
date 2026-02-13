@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "ImageForge CLI";
+export const alt =
+  "ImageForge CLI terminal view showing build-time WebP and AVIF optimization with CI checks";
 export const size = {
   width: 1200,
   height: 630,
