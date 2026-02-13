@@ -1,0 +1,60 @@
+name: Governance Cadence
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 14 * * 1"
+    - cron: "20 14 1 * *"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: governance-cadence-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  weekly-seo-review:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '15 14 * * 1'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: 22
+
+      - name: Upsert weekly SEO governance issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          PERIOD_KEY="$(date -u +'%G-W%V')"
+          ISSUE_KIND="seo-weekly" \
+            PERIOD_KEY="$PERIOD_KEY" \
+            node scripts/governance/upsert-review-issue.mjs
+
+  monthly-claims-review:
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '20 14 1 * *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: 22
+
+      - name: Upsert monthly claims governance issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          PERIOD_KEY="$(date -u +'%Y-%m')"
+          ISSUE_KIND="claims-monthly" \
+            PERIOD_KEY="$PERIOD_KEY" \
+            node scripts/governance/upsert-review-issue.mjs
