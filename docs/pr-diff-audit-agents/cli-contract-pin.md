@@ -1,6 +1,6 @@
 # CLI Contract Pin (Cross-Repo Handshake)
 
-- Status: Pending ImageForge Wave 2 completion
+- Status: Pinned
 - Last updated: 2026-02-13
 
 ## Source of Truth
@@ -11,9 +11,9 @@ Target contract file:
 
 ## Pin Record
 
-- ImageForge commit SHA: `PENDING_IMAGEFORGE_WAVE2_SHA`
-- Contract file exists at pinned SHA: `pending`
-- Reviewed by: `pending`
+- ImageForge commit SHA: `022957c640615c3abb45d1a7e3fb4cba961be558`
+- Contract file exists at pinned SHA: `yes`
+- Reviewed by: `f-campana`
 
 ## Invariants to Mirror on Site Claims
 

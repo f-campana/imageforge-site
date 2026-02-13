@@ -63,18 +63,15 @@ Additional bootstrap commits on integrator:
 
 ## Blockers
 
-1. Cross-repo contract pin is still pending:
-   - `/Users/fabiencampana/Documents/ImageForge/docs/product/responsive-widths-contract.md` does not exist yet on a pinned ImageForge commit in this workspace state.
-   - `docs/pr-diff-audit-agents/cli-contract-pin.md` still contains `PENDING_IMAGEFORGE_WAVE2_SHA`.
+1. No active blockers remain for this integration branch.
 
 ## Residual Risks
 
 1. Off-page SEO medium advisory remains (non-blocking by policy).
 2. Interactive landing surfaces still rely on lint/type/manual checks pending dedicated component interaction tests.
-3. Claim rows that depend on responsive width semantics remain tied to the pending ImageForge contract pin step.
+3. Claim rows that depend on responsive width semantics should continue to stay aligned to the pinned ImageForge SHA in `cli-contract-pin.md` as follow-up edits occur.
 
 ## Recommended Next Step
 
-1. Complete ImageForge Wave 2 and publish contract doc commit SHA.
-2. Update `docs/pr-diff-audit-agents/cli-contract-pin.md` with the exact SHA and reviewer sign-off.
-3. Re-run strict SEO verifier once claims are finalized against pinned CLI semantics.
+1. Keep `cli-contract-pin.md` synchronized if responsive contract behavior changes in future ImageForge releases.
+2. Re-run strict SEO verifier after any further claim copy updates tied to responsive behavior.
