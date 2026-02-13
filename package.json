@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "check:ci": "pnpm lint && pnpm typecheck && pnpm format && NEXT_PUBLIC_SITE_URL=https://example.com pnpm build && pnpm seo:test && NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check",
     "seo:tech": "node scripts/seo/run.mjs --suite tech --mode advisory",
     "seo:content": "node scripts/seo/run.mjs --suite content --mode advisory",
     "seo:offpage": "node scripts/seo/run.mjs --suite offpage --mode advisory",
