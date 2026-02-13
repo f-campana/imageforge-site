@@ -2,6 +2,7 @@ import { MotionWrap } from "@/components/landing/MotionWrap";
 import {
   COMPARISON_ROWS,
   PRICING_AS_OF,
+  PRICING_OWNER,
   PRICING_SOURCES,
 } from "@/components/landing/constants";
 
@@ -49,6 +50,9 @@ export function ComparisonAndCost() {
           </p>
           <p className="mx-auto mt-3 max-w-3xl text-center font-mono text-xs tracking-[0.1em] text-zinc-500 uppercase">
             As of {PRICING_AS_OF}
+          </p>
+          <p className="mx-auto mt-1 max-w-3xl text-center font-mono text-[0.68rem] tracking-[0.08em] text-zinc-600 uppercase">
+            Owner: {PRICING_OWNER}
           </p>
         </MotionWrap>
 

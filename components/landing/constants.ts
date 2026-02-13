@@ -64,6 +64,7 @@ export const IMAGEFORGE_VERSION =
 
 export const EXAMPLE_TIMESTAMP = "2026-02-11T09:30:00.000Z";
 export const PRICING_AS_OF = "February 11, 2026";
+export const PRICING_OWNER = "ImageForge Maintainers (Product + Growth)";
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Comparison", href: "#comparison" },
@@ -370,6 +371,13 @@ export const SEGMENT_CARDS: SegmentCard[] = [
 ];
 
 export const LIMITATIONS: LimitationItem[] = [
+  {
+    title: "Responsive widths are target-based and bounded",
+    limitation:
+      "In responsive width-set mode, requested widths are treated as targets. Effective generated widths can clamp to source dimensions and do not upscale.",
+    mitigation:
+      "Set width targets intentionally, inspect generated outputs, and keep width-set counts within the documented cap for your CLI version.",
+  },
   {
     title: "No runtime responsive resizing",
     limitation:
