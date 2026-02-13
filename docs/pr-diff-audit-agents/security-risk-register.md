@@ -5,13 +5,13 @@
 
 ## Ranked Risks
 
-| Rank | Risk | Severity | Status | Mitigation | Owner |
-|---|---|---|---|---|---|
-| 1 | GitHub Actions tag pinning enables mutable supply-chain updates | High | Mitigated | Pin all actions to commit SHAs in CI and weekly SEO workflows | Engineering |
-| 2 | Excessive default token privileges in workflows | Medium | Mitigated | Set explicit `permissions: contents: read` | Engineering |
-| 3 | Long-running or overlapping scheduled SEO jobs | Medium | Mitigated | Add `timeout-minutes` and workflow `concurrency` guard on weekly job | Engineering |
-| 4 | Transitive `qs` DoS advisory via `googleapis-common` | Low | Mitigated | Upgrade `googleapis` and enforce `qs >= 6.14.2` via pnpm override; verify with audit | Engineering |
-| 5 | Secrets exposure risk in weekly SEO job logs | Medium | Accepted with controls | Keep secrets in GitHub encrypted secrets and avoid echoing sensitive env values in scripts | Engineering |
+| Rank | Risk                                                            | Severity | Status                 | Mitigation                                                                                 | Owner       |
+| ---- | --------------------------------------------------------------- | -------- | ---------------------- | ------------------------------------------------------------------------------------------ | ----------- |
+| 1    | GitHub Actions tag pinning enables mutable supply-chain updates | High     | Mitigated              | Pin all actions to commit SHAs in CI and weekly SEO workflows                              | Engineering |
+| 2    | Excessive default token privileges in workflows                 | Medium   | Mitigated              | Set explicit `permissions: contents: read`                                                 | Engineering |
+| 3    | Long-running or overlapping scheduled SEO jobs                  | Medium   | Mitigated              | Add `timeout-minutes` and workflow `concurrency` guard on weekly job                       | Engineering |
+| 4    | Transitive `qs` DoS advisory via `googleapis-common`            | Low      | Mitigated              | Upgrade `googleapis` and enforce `qs >= 6.14.2` via pnpm override; verify with audit       | Engineering |
+| 5    | Secrets exposure risk in weekly SEO job logs                    | Medium   | Accepted with controls | Keep secrets in GitHub encrypted secrets and avoid echoing sensitive env values in scripts | Engineering |
 
 ## Dependency Remediation Decision
 

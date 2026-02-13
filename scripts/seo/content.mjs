@@ -2,15 +2,23 @@ import path from "node:path";
 
 import { makeCheck, makeOpportunity } from "./types.mjs";
 import { seedKeywords } from "./seed-keywords.mjs";
-import { compactWhitespace, extractTextLike, listFilesRecursively, readTextOrNull } from "./utils.mjs";
+import {
+  compactWhitespace,
+  extractTextLike,
+  listFilesRecursively,
+  readTextOrNull,
+} from "./utils.mjs";
 
 function findMetadataObjectRange(source) {
-  const metadataDeclaration = /export\s+const\s+metadata\b[\s\S]*?=/.exec(source);
+  const metadataDeclaration = /export\s+const\s+metadata\b[\s\S]*?=/.exec(
+    source,
+  );
   if (!metadataDeclaration) {
     return null;
   }
 
-  const assignmentIndex = metadataDeclaration.index + metadataDeclaration[0].length;
+  const assignmentIndex =
+    metadataDeclaration.index + metadataDeclaration[0].length;
   const objectStart = source.indexOf("{", assignmentIndex);
   if (objectStart === -1) {
     return null;
@@ -138,8 +146,10 @@ export async function runContentChecks(config) {
   const layoutPath = path.join(config.appDir, "layout.tsx");
   const layoutSource = (await readTextOrNull(layoutPath)) ?? "";
 
-  const title = collectTopLevelMetadataEntries(layoutSource, "title")[0] ?? null;
-  const description = collectTopLevelMetadataEntries(layoutSource, "description")[0] ?? null;
+  const title =
+    collectTopLevelMetadataEntries(layoutSource, "title")[0] ?? null;
+  const description =
+    collectTopLevelMetadataEntries(layoutSource, "description")[0] ?? null;
   const titleDescriptionIssues = evaluateTitleDescription(title, description);
 
   checks.push(
@@ -170,7 +180,9 @@ export async function runContentChecks(config) {
     landingComponentsDir,
     (filePath) => /\.(tsx|ts)$/.test(filePath),
   );
-  const crawlableContentFiles = [...new Set([...routePageFiles, ...landingContentFiles])];
+  const crawlableContentFiles = [
+    ...new Set([...routePageFiles, ...landingContentFiles]),
+  ];
 
   const sourceText = compactWhitespace(
     (
@@ -227,7 +239,9 @@ export async function runContentChecks(config) {
   );
 
   const metadataSources = await Promise.all(
-    metadataFiles.map(async (filePath) => (await readTextOrNull(filePath)) ?? ""),
+    metadataFiles.map(
+      async (filePath) => (await readTextOrNull(filePath)) ?? "",
+    ),
   );
 
   const topLevelTitles = metadataSources.flatMap((source) =>
@@ -247,7 +261,9 @@ export async function runContentChecks(config) {
     descriptionFrequency.set(value, (descriptionFrequency.get(value) ?? 0) + 1);
   }
 
-  const duplicateTitles = [...titleFrequency.entries()].filter(([, count]) => count > 1);
+  const duplicateTitles = [...titleFrequency.entries()].filter(
+    ([, count]) => count > 1,
+  );
   const duplicateDescriptions = [...descriptionFrequency.entries()].filter(
     ([, count]) => count > 1,
   );
@@ -269,7 +285,8 @@ export async function runContentChecks(config) {
         duplicateTitles.length > 0 || duplicateDescriptions.length > 0
           ? `duplicate titles=${duplicateTitles.map(([value]) => value).join(" | ") || "none"}, duplicate descriptions=${duplicateDescriptions.map(([value]) => value).join(" | ") || "none"}`
           : `route metadata files scanned=${metadataFiles.length}`,
-      fixHint: "Keep one authoritative title/description per route metadata object.",
+      fixHint:
+        "Keep one authoritative title/description per route metadata object.",
       file: "app",
     }),
   );

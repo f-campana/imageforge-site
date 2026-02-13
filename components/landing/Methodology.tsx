@@ -3,7 +3,10 @@ import { IMAGEFORGE_VERSION } from "@/components/landing/constants";
 
 export function Methodology() {
   return (
-    <section id="methodology" className="border-b border-white/10 py-20 md:py-24">
+    <section
+      id="methodology"
+      className="border-b border-white/10 py-20 md:py-24"
+    >
       <div className="section-shell">
         <MotionWrap>
           <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
@@ -19,7 +22,9 @@ export function Methodology() {
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <MotionWrap>
             <article className="panel-card h-full p-6">
-              <h3 className="text-lg font-semibold text-zinc-100">Sample Set</h3>
+              <h3 className="text-lg font-semibold text-zinc-100">
+                Sample Set
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                 12 JPEG/PNG source images with a combined input size of 8.4 MB.
                 Output target formats are WebP and AVIF.
@@ -47,8 +52,8 @@ export function Methodology() {
                 imageforge ./public/images -f webp,avif
               </p>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-                Example run includes hash-based cache support and blur placeholder
-                generation enabled in the workflow.
+                Example run includes hash-based cache support and blur
+                placeholder generation enabled in the workflow.
               </p>
             </article>
           </MotionWrap>
@@ -59,8 +64,9 @@ export function Methodology() {
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                 <strong>77%</strong> is the size reduction from 8.4 MB input to
-                1.9 MB generated outputs in that sample run. <strong>2.1s</strong>{" "}
-                is the total reported duration for that single example run.
+                1.9 MB generated outputs in that sample run.{" "}
+                <strong>2.1s</strong> is the total reported duration for that
+                single example run.
               </p>
             </article>
           </MotionWrap>

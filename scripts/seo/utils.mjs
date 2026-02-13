@@ -79,7 +79,9 @@ export function extractTargetBlankAnchors(input) {
 export function extractAltValues(input) {
   const values = [];
 
-  for (const match of input.matchAll(/<img\b[\s\S]*?alt\s*=\s*["']([^"']*)["']/g)) {
+  for (const match of input.matchAll(
+    /<img\b[\s\S]*?alt\s*=\s*["']([^"']*)["']/g,
+  )) {
     values.push(match[1]);
   }
 

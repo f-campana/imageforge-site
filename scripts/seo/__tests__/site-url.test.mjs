@@ -53,7 +53,9 @@ test("resolveSiteUrlFromEnv reports highest-priority invalid env when all candid
 
   assert.equal(result.url, null);
   assert.equal(result.source, "NEXT_PUBLIC_SITE_URL");
-  assert.ok(result.error?.includes("NEXT_PUBLIC_SITE_URL is present but invalid"));
+  assert.ok(
+    result.error?.includes("NEXT_PUBLIC_SITE_URL is present but invalid"),
+  );
 });
 
 test("resolveSiteUrlFromEnv reports missing URL when no sources exist", () => {

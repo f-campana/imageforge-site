@@ -3,7 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 
 function countIssues(checks, severity) {
   return checks.filter(
-    (check) => check.severity === severity && ["fail", "warn"].includes(check.status),
+    (check) =>
+      check.severity === severity && ["fail", "warn"].includes(check.status),
   ).length;
 }
 
@@ -31,7 +32,9 @@ function formatCheck(check) {
 function buildRemediationMap(checks) {
   const groups = new Map();
 
-  for (const check of checks.filter((item) => ["fail", "warn"].includes(item.status))) {
+  for (const check of checks.filter((item) =>
+    ["fail", "warn"].includes(item.status),
+  )) {
     const file = check.file ?? "(no file)";
     if (!groups.has(file)) {
       groups.set(file, []);

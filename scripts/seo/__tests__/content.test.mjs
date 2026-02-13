@@ -40,7 +40,10 @@ test("collectTopLevelMetadataEntries reads only root metadata fields", () => {
   `;
 
   const titles = collectTopLevelMetadataEntries(layoutSource, "title");
-  const descriptions = collectTopLevelMetadataEntries(layoutSource, "description");
+  const descriptions = collectTopLevelMetadataEntries(
+    layoutSource,
+    "description",
+  );
 
   assert.deepEqual(titles, ["Root title"]);
   assert.deepEqual(descriptions, ["Root description"]);
@@ -58,7 +61,10 @@ description:"Tight description",
   `;
 
   const titles = collectTopLevelMetadataEntries(layoutSource, "title");
-  const descriptions = collectTopLevelMetadataEntries(layoutSource, "description");
+  const descriptions = collectTopLevelMetadataEntries(
+    layoutSource,
+    "description",
+  );
 
   assert.deepEqual(titles, ["No indent title"]);
   assert.deepEqual(descriptions, ["Tight description"]);

@@ -18,7 +18,9 @@ const EXCLUDED_H1_AUDIT_FILES = new Set([
 
 export function evaluateMetadataFields(layoutSource) {
   const metadataBase = /metadataBase\s*:/.test(layoutSource);
-  const canonical = /alternates\s*:\s*{[\s\S]*?canonical\s*:/.test(layoutSource);
+  const canonical = /alternates\s*:\s*{[\s\S]*?canonical\s*:/.test(
+    layoutSource,
+  );
   const openGraphImage =
     /openGraph\s*:\s*{[\s\S]*?images\s*:\s*\[/.test(layoutSource) &&
     /opengraph-image/.test(layoutSource);
@@ -45,12 +47,16 @@ export function evaluateSchemaPresence(pageSource, schemaSource) {
         schemaSource,
       ),
     softwareApplicationSchemaBuilder:
-      /export\s+function\s+buildSoftwareApplicationSchema\s*\(/.test(schemaSource) &&
+      /export\s+function\s+buildSoftwareApplicationSchema\s*\(/.test(
+        schemaSource,
+      ) &&
       /export\s+function\s+buildSoftwareApplicationSchema[\s\S]*?["']@type["']\s*:\s*["']SoftwareApplication["']/.test(
         schemaSource,
       ),
     homepageSchemaIncludesWebsite:
-      /export\s+function\s+buildHomepageSchemas[\s\S]*?buildWebsiteSchema\s*\(/.test(schemaSource),
+      /export\s+function\s+buildHomepageSchemas[\s\S]*?buildWebsiteSchema\s*\(/.test(
+        schemaSource,
+      ),
     homepageSchemaIncludesSoftwareApplication:
       /export\s+function\s+buildHomepageSchemas[\s\S]*?buildSoftwareApplicationSchema\s*\(/.test(
         schemaSource,
@@ -157,7 +163,9 @@ export function findBrokenInternalLinks(hrefs, routes) {
   const normalizedRoutes = routes.map((route) =>
     route.endsWith("/") && route.length > 1 ? route.slice(0, -1) : route,
   );
-  const staticRoutes = new Set(normalizedRoutes.filter((route) => !isDynamicRoute(route)));
+  const staticRoutes = new Set(
+    normalizedRoutes.filter((route) => !isDynamicRoute(route)),
+  );
   const dynamicRouteMatchers = normalizedRoutes
     .filter((route) => isDynamicRoute(route))
     .map((route) => ({
@@ -203,7 +211,8 @@ export async function runTechnicalChecks(config) {
       message: config.site.url
         ? `Resolved canonical URL from ${config.site.source}.`
         : "Canonical site URL is unresolved.",
-      evidence: config.site.url ?? config.site.error ?? "No URL candidate found.",
+      evidence:
+        config.site.url ?? config.site.error ?? "No URL candidate found.",
       fixHint:
         "Set NEXT_PUBLIC_SITE_URL to an absolute URL (for example https://imageforge.dev).",
       file: ".env.example",
@@ -251,7 +260,9 @@ export async function runTechnicalChecks(config) {
       suite: "technical",
       severity: "critical",
       status: robotsExists ? "pass" : "fail",
-      message: robotsExists ? "robots route exists." : "Missing app/robots.ts route.",
+      message: robotsExists
+        ? "robots route exists."
+        : "Missing app/robots.ts route.",
       evidence: robotsPath,
       fixHint: "Add app/robots.ts and include a sitemap reference.",
       file: "app/robots.ts",
@@ -423,7 +434,9 @@ export async function runTechnicalChecks(config) {
 
   const insecureBlankAnchors = fileContents.flatMap((file) =>
     extractTargetBlankAnchors(file.content)
-      .filter((anchor) => !/rel\s*=\s*["'][^"']*noopener[^"']*["']/.test(anchor))
+      .filter(
+        (anchor) => !/rel\s*=\s*["'][^"']*noopener[^"']*["']/.test(anchor),
+      )
       .map(() => path.relative(config.rootDir, file.filePath)),
   );
 
@@ -441,17 +454,23 @@ export async function runTechnicalChecks(config) {
         insecureBlankAnchors.length === 0
           ? "No insecure target=_blank links found."
           : [...new Set(insecureBlankAnchors)].join(", "),
-      fixHint: "Add rel=\"noopener noreferrer\" to all target=_blank anchors.",
+      fixHint: 'Add rel="noopener noreferrer" to all target=_blank anchors.',
     }),
   );
 
-  const altValues = fileContents.flatMap((file) => extractAltValues(file.content));
+  const altValues = fileContents.flatMap((file) =>
+    extractAltValues(file.content),
+  );
   const missingOrWeakAlt = altValues.filter((value) => {
     const normalized = value.trim().toLowerCase();
-    return !normalized || normalized.length < 3 || GENERIC_ALT_TEXT.has(normalized);
+    return (
+      !normalized || normalized.length < 3 || GENERIC_ALT_TEXT.has(normalized)
+    );
   });
 
-  const hasImageComponents = fileContents.some((file) => /<img\b|<Image\b/.test(file.content));
+  const hasImageComponents = fileContents.some((file) =>
+    /<img\b|<Image\b/.test(file.content),
+  );
 
   checks.push(
     makeCheck({

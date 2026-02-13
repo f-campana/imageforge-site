@@ -1,6 +1,10 @@
 import path from "node:path";
 
-import { listFilesRecursively, readTextOrNull, extractTextLike } from "./utils.mjs";
+import {
+  listFilesRecursively,
+  readTextOrNull,
+  extractTextLike,
+} from "./utils.mjs";
 
 const STOP_WORDS = new Set([
   "the",
@@ -123,7 +127,10 @@ export async function seedKeywords(config) {
   );
 
   const tokens = texts.flatMap((entry) => tokenize(entry.text));
-  const dynamicTerms = [...topTerms(tokens, 18), ...topBigrams(tokens, 12)].filter(
+  const dynamicTerms = [
+    ...topTerms(tokens, 18),
+    ...topBigrams(tokens, 12),
+  ].filter(
     (term) =>
       term.includes("image") ||
       term.includes("forge") ||
@@ -139,6 +146,8 @@ export async function seedKeywords(config) {
     locale: config.locale,
     extractedAt: new Date().toISOString(),
     keywords: uniqueKeywords.slice(0, 30),
-    sources: sourceFiles.map((filePath) => path.relative(config.rootDir, filePath)),
+    sources: sourceFiles.map((filePath) =>
+      path.relative(config.rootDir, filePath),
+    ),
   };
 }

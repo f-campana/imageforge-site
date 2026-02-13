@@ -100,6 +100,8 @@ export function resolveSiteUrl(options: ResolveSiteUrlOptions = {}): URL {
   );
 }
 
-export function resolveSiteUrlString(options: ResolveSiteUrlOptions = {}): string {
+export function resolveSiteUrlString(
+  options: ResolveSiteUrlOptions = {},
+): string {
   return resolveSiteUrl(options).toString();
 }

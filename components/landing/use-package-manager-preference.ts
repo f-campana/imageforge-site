@@ -15,7 +15,9 @@ function resolveStoredPackageManager(): PackageManager {
     return DEFAULT_PACKAGE_MANAGER;
   }
 
-  const storedManager = window.localStorage.getItem(PACKAGE_MANAGER_STORAGE_KEY);
+  const storedManager = window.localStorage.getItem(
+    PACKAGE_MANAGER_STORAGE_KEY,
+  );
 
   if (storedManager && isPackageManager(storedManager)) {
     return storedManager;

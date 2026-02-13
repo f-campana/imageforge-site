@@ -1,7 +1,11 @@
 import { load } from "cheerio";
 
 import { makeCheck, makeOpportunity } from "./types.mjs";
-import { extractHrefs, listFilesRecursively, readTextOrNull } from "./utils.mjs";
+import {
+  extractHrefs,
+  listFilesRecursively,
+  readTextOrNull,
+} from "./utils.mjs";
 
 const GITHUB_REPO_PATTERN =
   /^https?:\/\/(?:www\.)?github\.com\/f-campana\/imageforge(?:\/|$)/i;
@@ -45,8 +49,10 @@ async function fetchHtml(url, timeoutMs = 8000) {
 }
 
 export function evaluateBrandPresence(localHrefs, publicHrefs = []) {
-  const hasGithub = (hrefs) => hrefs.some((href) => GITHUB_REPO_PATTERN.test(href));
-  const hasNpm = (hrefs) => hrefs.some((href) => NPM_PACKAGE_PATTERN.test(href));
+  const hasGithub = (hrefs) =>
+    hrefs.some((href) => GITHUB_REPO_PATTERN.test(href));
+  const hasNpm = (hrefs) =>
+    hrefs.some((href) => NPM_PACKAGE_PATTERN.test(href));
 
   const localGithubFound = hasGithub(localHrefs);
   const localNpmFound = hasNpm(localHrefs);
@@ -75,11 +81,14 @@ async function collectLocalBrandHrefs(config) {
   const appFiles = await listFilesRecursively(config.appDir, (filePath) =>
     /(page|layout)\.tsx$/.test(filePath),
   );
-  const componentFiles = await listFilesRecursively(config.componentsDir, (filePath) =>
-    /\.(tsx|ts)$/.test(filePath),
+  const componentFiles = await listFilesRecursively(
+    config.componentsDir,
+    (filePath) => /\.(tsx|ts)$/.test(filePath),
   );
   const files = [...new Set([...appFiles, ...componentFiles])];
-  const sources = await Promise.all(files.map((filePath) => readTextOrNull(filePath)));
+  const sources = await Promise.all(
+    files.map((filePath) => readTextOrNull(filePath)),
+  );
 
   return sources.flatMap((source) => extractHrefs(source ?? ""));
 }
@@ -103,7 +112,7 @@ export async function runOffpageChecks(config) {
           : "Could not verify public homepage crawlability.",
         evidence: homepage.ok
           ? `Fetched ${config.site.url} successfully.`
-          : homepage.error ?? "Request failed",
+          : (homepage.error ?? "Request failed"),
         fixHint:
           "Confirm deployment is public and use the production URL in NEXT_PUBLIC_SITE_URL.",
         file: "app/layout.tsx",
@@ -128,7 +137,8 @@ export async function runOffpageChecks(config) {
               ? "Public HTML includes title and meta description."
               : "Public HTML is missing title or meta description.",
           evidence: `title=\"${title}\" descriptionLength=${description.length}`,
-          fixHint: "Ensure metadata renders in production output for the root route.",
+          fixHint:
+            "Ensure metadata renders in production output for the root route.",
           file: "app/layout.tsx",
         }),
       );
@@ -140,7 +150,8 @@ export async function runOffpageChecks(config) {
         suite: "offpage",
         severity: "low",
         status: "skip",
-        message: "Skipped public crawlability check because site URL is unresolved.",
+        message:
+          "Skipped public crawlability check because site URL is unresolved.",
         evidence: config.site.error ?? "Missing site URL",
         fixHint:
           "Set NEXT_PUBLIC_SITE_URL to enable reachability/off-page verification.",
@@ -170,7 +181,8 @@ export async function runOffpageChecks(config) {
         `publicNpmFound=${brandPresence.publicNpmFound}`,
         `sources=${brandPresence.sources.join(",") || "none"}`,
       ].join("; "),
-      fixHint: "Keep brand links consistent across metadata, docs, and social profiles.",
+      fixHint:
+        "Keep brand links consistent across metadata, docs, and social profiles.",
       file: "components/landing/FinalCtaFooter.tsx",
     }),
   );
@@ -183,7 +195,8 @@ export async function runOffpageChecks(config) {
         severity: "low",
         status: "skip",
         message: "No competitor URLs configured; snapshot check skipped.",
-        evidence: "Set SEO_COMPETITOR_URLS to enable competitor metadata snapshots.",
+        evidence:
+          "Set SEO_COMPETITOR_URLS to enable competitor metadata snapshots.",
         fixHint: "Provide 2-5 competitor landing URLs via SEO_COMPETITOR_URLS.",
         file: ".env.example",
       }),
@@ -194,7 +207,13 @@ export async function runOffpageChecks(config) {
     for (const url of config.competitorUrls.slice(0, 5)) {
       const response = await fetchHtml(url);
       if (!response.ok || !response.html) {
-        snapshots.push({ url, ok: false, title: "", description: "", error: response.error });
+        snapshots.push({
+          url,
+          ok: false,
+          title: "",
+          description: "",
+          error: response.error,
+        });
         continue;
       }
 
@@ -203,7 +222,8 @@ export async function runOffpageChecks(config) {
         url,
         ok: true,
         title: $("title").text().trim(),
-        description: $("meta[name='description']").attr("content")?.trim() ?? "",
+        description:
+          $("meta[name='description']").attr("content")?.trim() ?? "",
       });
     }
 
@@ -222,8 +242,12 @@ export async function runOffpageChecks(config) {
             : "Some competitor URLs could not be fetched.",
         evidence:
           failed.length === 0
-            ? successful.map((entry) => `${entry.url} => ${entry.title}`).join(" | ")
-            : failed.map((entry) => `${entry.url} => ${entry.error}`).join(" | "),
+            ? successful
+                .map((entry) => `${entry.url} => ${entry.title}`)
+                .join(" | ")
+            : failed
+                .map((entry) => `${entry.url} => ${entry.error}`)
+                .join(" | "),
         fixHint:
           "Review competitor URLs and ensure they are crawlable from CI environment.",
         file: ".env.example",

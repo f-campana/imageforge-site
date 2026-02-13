@@ -3,9 +3,19 @@ import { z } from "zod";
 export const SeoModeSchema = z.enum(["advisory", "strict"]);
 export const SeoSuiteSchema = z.enum(["tech", "content", "offpage", "full"]);
 
-export const CheckSeveritySchema = z.enum(["critical", "high", "medium", "low"]);
+export const CheckSeveritySchema = z.enum([
+  "critical",
+  "high",
+  "medium",
+  "low",
+]);
 export const CheckStatusSchema = z.enum(["pass", "fail", "warn", "skip"]);
-export const CheckSuiteSchema = z.enum(["technical", "content", "offpage", "gsc"]);
+export const CheckSuiteSchema = z.enum([
+  "technical",
+  "content",
+  "offpage",
+  "gsc",
+]);
 
 export const SeoCheckSchema = z.object({
   id: z.string().min(1),

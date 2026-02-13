@@ -12,7 +12,10 @@ import {
 const fixturesDir = path.join(import.meta.dirname, "fixtures");
 
 test("evaluateMetadataFields detects canonical metadata", async () => {
-  const source = await readFile(path.join(fixturesDir, "layout-good.tsx"), "utf8");
+  const source = await readFile(
+    path.join(fixturesDir, "layout-good.tsx"),
+    "utf8",
+  );
   const result = evaluateMetadataFields(source);
 
   assert.equal(result.metadataBase, true);
@@ -80,13 +83,19 @@ test("evaluateSchemaPresence fails when homepage builder wiring is missing", () 
 });
 
 test("findBrokenInternalLinks returns unknown routes", () => {
-  const broken = findBrokenInternalLinks(["/", "/docs", "/pricing"], ["/", "/docs"]);
+  const broken = findBrokenInternalLinks(
+    ["/", "/docs", "/pricing"],
+    ["/", "/docs"],
+  );
 
   assert.deepEqual(broken, ["/pricing"]);
 });
 
 test("findBrokenInternalLinks accepts dynamic single-segment routes", () => {
-  const broken = findBrokenInternalLinks(["/blog/my-post"], ["/", "/blog/[slug]"]);
+  const broken = findBrokenInternalLinks(
+    ["/blog/my-post"],
+    ["/", "/blog/[slug]"],
+  );
 
   assert.deepEqual(broken, []);
 });

@@ -20,12 +20,12 @@ export function Hero() {
         <MotionWrap className="mt-6 max-w-3xl" delayMs={140}>
           <p className="text-lg leading-relaxed text-pretty text-zinc-300 md:text-[1.25rem] md:leading-relaxed">
             ImageForge is an <strong>image optimization CLI</strong> for{" "}
-            <strong>Next.js image optimization</strong> and static pipelines.
-            It performs <strong>build-time image optimization</strong> with
-            WebP conversion, AVIF conversion, blurDataURL generation, and
-            hash-based image caching, then writes{" "}
-            <code className="font-mono text-zinc-100">imageforge.json</code>{" "}
-            and enforces freshness in CI with{" "}
+            <strong>Next.js image optimization</strong> and static pipelines. It
+            performs <strong>build-time image optimization</strong> with WebP
+            conversion, AVIF conversion, blurDataURL generation, and hash-based
+            image caching, then writes{" "}
+            <code className="font-mono text-zinc-100">imageforge.json</code> and
+            enforces freshness in CI with{" "}
             <code className="font-mono text-zinc-100">--check</code>.
           </p>
         </MotionWrap>

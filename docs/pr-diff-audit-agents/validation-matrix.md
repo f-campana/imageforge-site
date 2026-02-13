@@ -6,25 +6,25 @@ Integration path based on `codex/staging-landing-seo-integration` with a11y delt
 
 ## Before
 
-| Gate | Enforced in CI | Notes |
-|---|---|---|
-| `pnpm lint` | Yes | Existing required check |
-| `pnpm typecheck` | Yes | Existing required check |
-| `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build` | Yes | Existing required check |
-| `pnpm format` | No | Formatting drift can ship |
-| `pnpm seo:test` | No | SEO unit regressions can ship |
-| `NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check` | Yes | Advisory by design |
+| Gate                                                                        | Enforced in CI | Notes                         |
+| --------------------------------------------------------------------------- | -------------- | ----------------------------- |
+| `pnpm lint`                                                                 | Yes            | Existing required check       |
+| `pnpm typecheck`                                                            | Yes            | Existing required check       |
+| `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build`                       | Yes            | Existing required check       |
+| `pnpm format`                                                               | No             | Formatting drift can ship     |
+| `pnpm seo:test`                                                             | No             | SEO unit regressions can ship |
+| `NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check` | Yes            | Advisory by design            |
 
 ## After
 
-| Gate | Enforced in CI | Policy |
-|---|---|---|
-| `pnpm lint` | Yes | Blocking |
-| `pnpm format` | Yes | Blocking |
-| `pnpm typecheck` | Yes | Blocking |
-| `pnpm seo:test` | Yes | Blocking |
-| `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build` | Yes | Blocking |
-| `NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check` | Yes | Advisory output + artifacts |
+| Gate                                                                        | Enforced in CI | Policy                      |
+| --------------------------------------------------------------------------- | -------------- | --------------------------- |
+| `pnpm lint`                                                                 | Yes            | Blocking                    |
+| `pnpm format`                                                               | Yes            | Blocking                    |
+| `pnpm typecheck`                                                            | Yes            | Blocking                    |
+| `pnpm seo:test`                                                             | Yes            | Blocking                    |
+| `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build`                       | Yes            | Blocking                    |
+| `NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check` | Yes            | Advisory output + artifacts |
 
 ## Release Verifier Add-on
 
