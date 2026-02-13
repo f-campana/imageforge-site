@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "ImageForge CLI";
+export const alt =
+  "ImageForge CLI social card highlighting deterministic build-time image optimization";
 export const size = {
   width: 1200,
   height: 630,

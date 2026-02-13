@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "ImageForge CLI",
+        alt: "ImageForge CLI showing build-time WebP and AVIF generation with CI guardrails",
       },
     ],
   },
@@ -50,7 +50,12 @@ export const metadata: Metadata = {
     title: "ImageForge CLI",
     description:
       "Optimize once, deploy everywhere, and keep recurring image optimization costs at zero.",
-    images: ["/twitter-image"],
+    images: [
+      {
+        url: "/twitter-image",
+        alt: "ImageForge CLI deterministic build-time optimization social card",
+      },
+    ],
   },
   icons: {
     icon: "/favicon.ico",
