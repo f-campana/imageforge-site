@@ -11,13 +11,23 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "check:ci": "pnpm lint && pnpm typecheck && pnpm format && NEXT_PUBLIC_SITE_URL=https://example.com pnpm build && pnpm seo:test && NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check",
+    "seo:tech": "node scripts/seo/run.mjs --suite tech --mode advisory",
+    "seo:content": "node scripts/seo/run.mjs --suite content --mode advisory",
+    "seo:offpage": "node scripts/seo/run.mjs --suite offpage --mode advisory",
+    "seo:full": "node scripts/seo/run.mjs --suite full --mode advisory",
+    "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
+    "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },
   "dependencies": {
+    "cheerio": "^1.1.2",
+    "googleapis": "^171.4.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -30,5 +40,10 @@
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "qs": ">=6.14.2"
+    }
   }
 }

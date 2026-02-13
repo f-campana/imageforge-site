@@ -1,0 +1,22 @@
+# Product Claim Matrix (Integration Branch)
+
+- Scope branch: `codex/staging-landing-seo-integration`
+- Governance owner: Product + Growth + CLI maintainers
+- Baseline date: 2026-02-13
+
+| Claim                                                                          | Source location                                                                    | Evidence class                          | Volatility | Owner              | Update cadence      |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------- | ---------- | ------------------ | ------------------- |
+| Build-time image optimization, not runtime transformation                      | `components/landing/Hero.tsx`, `components/landing/constants.ts`                   | CLI behavior + docs                     | Low        | CLI maintainers    | Per release         |
+| WebP/AVIF conversion support                                                   | `components/landing/constants.ts`, `app/layout.tsx`                                | CLI behavior + tests                    | Low        | CLI maintainers    | Per release         |
+| `blurDataURL` and manifest metadata support                                    | `components/landing/constants.ts`, `components/landing/ManifestExample.tsx`        | CLI behavior + tests                    | Low        | CLI maintainers    | Per release         |
+| Hash-based caching and rerun determinism                                       | `components/landing/constants.ts`, `components/landing/TerminalDemo.tsx`           | CLI behavior + tests                    | Medium     | CLI maintainers    | Per release         |
+| `--check` CI guard mode                                                        | `components/landing/constants.ts`, `components/landing/CICheckExample.tsx`         | CLI behavior + tests                    | Low        | CLI maintainers    | Per release         |
+| Comparison/pricing scenario statements                                         | `components/landing/ComparisonAndCost.tsx`, `components/landing/constants.ts`      | External references + dated assumptions | High       | Product + Growth   | Monthly             |
+| Air-gapped/local-processing compatibility statements                           | `components/landing/constants.ts`                                                  | Architectural behavior                  | Medium     | Product + Security | Quarterly           |
+| Responsive width-set semantics (requested vs effective, no upscale, width cap) | `components/landing/constants.ts`, `docs/pr-diff-audit-agents/cli-contract-pin.md` | Pending contract pin from ImageForge    | High       | CLI maintainers    | At Wave 2 + release |
+
+## Governance Notes
+
+1. Dated claims must include both `as-of` date and ownership.
+2. Any claim dependent on responsive width semantics remains conditional until `cli-contract-pin.md` is fully pinned.
+3. Source links for pricing claims must remain valid and be re-checked at each monthly review.

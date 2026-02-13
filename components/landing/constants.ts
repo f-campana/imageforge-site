@@ -25,10 +25,53 @@ export type StatItem = {
   accent?: boolean;
 };
 
+export type ComparisonRow = {
+  capability: string;
+  imageforge: string;
+  vercel: string;
+  cloudinary: string;
+  imgix: string;
+  sourceIds?: string[];
+};
+
+export type SourceLink = {
+  id: string;
+  label: string;
+  url: string;
+};
+
+export type SegmentCard = {
+  title: string;
+  profile: string;
+  pain: string;
+  fit: string;
+  command: string;
+};
+
+export type LimitationItem = {
+  title: string;
+  limitation: string;
+  mitigation: string;
+};
+
+export type NavItem = {
+  label: string;
+  href: string;
+};
+
 export const IMAGEFORGE_VERSION =
   process.env.NEXT_PUBLIC_IMAGEFORGE_VERSION ?? "local-dev";
 
 export const EXAMPLE_TIMESTAMP = "2026-02-11T09:30:00.000Z";
+export const PRICING_AS_OF = "February 11, 2026";
+export const PRICING_OWNER = "ImageForge Maintainers (Product + Growth)";
+
+export const NAV_ITEMS: NavItem[] = [
+  { label: "Comparison", href: "#comparison" },
+  { label: "Features", href: "#features" },
+  { label: "Use cases", href: "#use-cases" },
+  { label: "Limitations", href: "#limitations" },
+];
 
 export const TERMINAL_LINES: TerminalLine[] = [
   {
@@ -95,7 +138,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
   },
   { text: "", tone: "terminal-muted", delayMs: 2300 },
   {
-    text: "──────────────────────────────────────────────────",
+    text: "--------------------------------------------------",
     tone: "terminal-muted",
     delayMs: 2360,
   },
@@ -124,39 +167,39 @@ export const TERMINAL_LINES: TerminalLine[] = [
 
 export const FEATURES: FeatureItem[] = [
   {
-    title: "WebP + AVIF",
+    title: "Pay once at build time",
     description:
-      "Convert source images to modern formats with deterministic output paths.",
+      "Generate deterministic WebP/AVIF assets before deploy so production traffic does not trigger transformation bills.",
     flag: "-f webp,avif",
   },
   {
-    title: "Blur placeholders",
+    title: "CI guardrails by default",
     description:
-      "Generate blurDataURL values and dimensions for fast progressive rendering in Next.js.",
-    flag: "--blur",
-  },
-  {
-    title: "Hash cache",
-    description:
-      "Content and options hashing skips unchanged images so reruns stay fast and predictable.",
-    flag: "--cache",
-  },
-  {
-    title: "CI guard",
-    description:
-      "Use --check to exit non-zero when images need processing in CI.",
+      "Use --check to fail CI when source images changed without regenerated outputs.",
     flag: "--check",
   },
   {
-    title: "Bounded concurrency",
+    title: "Fast reruns with hash cache",
     description:
-      "Control parallel processing with --concurrency for stable local and CI resource usage.",
+      "Content and options hashing skips unchanged files, keeping local and CI reruns predictable.",
+    flag: "--cache",
+  },
+  {
+    title: "Blur placeholders and metadata",
+    description:
+      "Emit blurDataURL, dimensions, and output paths in imageforge.json for direct next/image usage.",
+    flag: "--blur",
+  },
+  {
+    title: "Bounded parallelism",
+    description:
+      "Set --concurrency to keep large catalogs under control without overloading build workers.",
     flag: "--concurrency",
   },
   {
-    title: "JSON output",
+    title: "Machine-readable run output",
     description:
-      "Use --json to emit a structured run report to stdout for CI logs and automation.",
+      "Use --json for structured logs in CI pipelines and internal automation tooling.",
     flag: "--json",
   },
 ];
@@ -166,23 +209,23 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
     number: "1",
     title: "Run",
     description:
-      "Point ImageForge at your source directory. It converts files to WebP/AVIF and generates blurDataURL placeholders.",
+      "Point ImageForge at your source directory to generate WebP/AVIF derivatives and blur placeholders at build time.",
     code: "imageforge ./public/images -f webp,avif",
     language: "bash",
   },
   {
     number: "2",
-    title: "Cache",
+    title: "Check",
     description:
-      "Future runs reuse hash-based cache data so only modified images are processed.",
-    code: "imageforge ./public/images --concurrency 4\n# example: 3 processed, 47 cached",
+      "Add --check in CI so stale outputs fail the pipeline with a rerun command your team can copy and paste.",
+    code: "imageforge ./public/images --check\n# fails if outputs are stale",
     language: "bash",
   },
   {
     number: "3",
     title: "Ship",
     description:
-      "Consume imageforge.json in app code for dimensions, format outputs, and placeholders.",
+      "Read imageforge.json inside your app for dimensions, blurDataURL, and deterministic output paths.",
     code: `{
   "generated": "${EXAMPLE_TIMESTAMP}",
   "images": {
@@ -209,10 +252,153 @@ export const STATS: StatItem[] = [
   {
     label: "Saved",
     value: "77%",
-    subtext: "smaller on disk",
+    subtext: "smaller static assets",
     accent: true,
   },
-  { label: "Time", value: "2.1s", subtext: "example run duration" },
+  {
+    label: "Recurring",
+    value: "$0",
+    subtext: "runtime transform spend",
+  },
+];
+
+export const COMPARISON_ROWS: ComparisonRow[] = [
+  {
+    capability: "Processing model",
+    imageforge: "Build-time pre-generation",
+    vercel: "Runtime/on-demand optimization",
+    cloudinary: "Runtime API transformations",
+    imgix: "Runtime URL transformations",
+  },
+  {
+    capability: "Entry pricing",
+    imageforge: "$0 (open source)",
+    vercel: "Free tier + paid usage beyond limits",
+    cloudinary: "Plus plan from about $89-$99/mo",
+    imgix: "Credit bundles from $25/mo + custom enterprise",
+    sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
+  },
+  {
+    capability: "Illustrative 28K-image monthly scenario",
+    imageforge: "$0 recurring",
+    vercel: "About $115 overage on top of a Pro plan in one reported case",
+    cloudinary: "$224+ estimated at similar scale",
+    imgix: "Custom quote, often modeled as high three-figure+ monthly",
+    sourceIds: [
+      "howdygo-case",
+      "vercel-pricing",
+      "cloudinary-pricing",
+      "imgix-pricing",
+    ],
+  },
+  {
+    capability: "CI quality gate",
+    imageforge: "Built-in --check",
+    vercel: "Not a CLI check mode",
+    cloudinary: "Not a CLI check mode",
+    imgix: "Not a CLI check mode",
+  },
+  {
+    capability: "Air-gapped compatibility",
+    imageforge: "Local processing, no external image API",
+    vercel: "Requires external runtime service",
+    cloudinary: "Managed external service",
+    imgix: "Managed external service",
+  },
+];
+
+export const PRICING_SOURCES: SourceLink[] = [
+  {
+    id: "vercel-pricing",
+    label: "Vercel limits and pricing",
+    url: "https://vercel.com/docs/image-optimization/limits-and-pricing",
+  },
+  {
+    id: "cloudinary-pricing",
+    label: "Cloudinary pricing",
+    url: "https://cloudinary.com/pricing",
+  },
+  {
+    id: "imgix-pricing",
+    label: "imgix pricing",
+    url: "https://www.imgix.com/pricing",
+  },
+  {
+    id: "howdygo-case",
+    label: "HowdyGo cost case study",
+    url: "https://www.howdygo.com/blog/cutting-howdygos-vercel-costs-by-80-without-compromising-ux-or-dx",
+  },
+  {
+    id: "next-discussion",
+    label: "Next.js build-time discussion #19065",
+    url: "https://github.com/vercel/next.js/discussions/19065",
+  },
+];
+
+export const SEGMENT_CARDS: SegmentCard[] = [
+  {
+    title: "cost-conscious teams",
+    profile:
+      "Profile: small product teams and agencies that need predictable hosting costs.",
+    pain: "Pain: per-request optimization pricing grows faster than traffic budgets.",
+    fit: "ImageForge fit: pre-generate optimized assets once and keep recurring image optimization spend at $0.",
+    command: "npx @imageforge/cli ./public/images -f webp,avif",
+  },
+  {
+    title: "CI/CD teams",
+    profile:
+      "Profile: engineering orgs that already enforce lint, typecheck, and formatting in pipeline gates.",
+    pain: "Pain: unoptimized assets slip into deploys because image checks are manual.",
+    fit: "ImageForge fit: add --check so stale images fail fast with an exact remediation command.",
+    command: "imageforge ./public/images --check",
+  },
+  {
+    title: "air-gapped/compliance teams",
+    profile:
+      "Profile: security-sensitive environments with strict data residency and egress controls.",
+    pain: "Pain: external image APIs can violate compliance boundaries or security policy.",
+    fit: "ImageForge fit: all processing is local in the build environment, with no third-party upload path.",
+    command: "imageforge ./secure-assets -f webp,avif --concurrency 4",
+  },
+  {
+    title: "Vercel-to-self-host migrations",
+    profile:
+      "Profile: teams moving to VPS, Kubernetes, or self-managed hosting for cost and control.",
+    pain: "Pain: runtime image optimization becomes migration friction and infrastructure overhead.",
+    fit: "ImageForge fit: generate static derivatives at build time and serve from any CDN or static host.",
+    command: "imageforge ./public/images --out-dir ./public/optimized",
+  },
+];
+
+export const LIMITATIONS: LimitationItem[] = [
+  {
+    title: "Responsive widths are target-based and bounded",
+    limitation:
+      "In responsive width-set mode, requested widths are treated as targets. Effective generated widths can clamp to source dimensions and do not upscale.",
+    mitigation:
+      "Set width targets intentionally, inspect generated outputs, and keep width-set counts within the documented cap for your CLI version.",
+  },
+  {
+    title: "No runtime responsive resizing",
+    limitation:
+      "ImageForge generates a fixed derivative set at build time. It does not resize images on-the-fly per request.",
+    mitigation:
+      "Generate the sizes you need ahead of time or pair outputs with a CDN strategy.",
+  },
+  {
+    title: "No bundled global CDN",
+    limitation:
+      "ImageForge writes static assets and metadata, but it does not include global delivery infrastructure.",
+    mitigation:
+      "Deploy outputs behind Cloudflare, CloudFront, Fastly, or your existing CDN layer.",
+  },
+  {
+    title: "First run scales with catalog size",
+    limitation:
+      "Large first-time catalogs can take minutes to process because work scales with source file count.",
+    mitigation:
+      "Hash caching keeps subsequent runs fast by processing only changed files.",
+  },
 ];
 
 export const MANIFEST_EXAMPLE = `{
@@ -269,7 +455,7 @@ const heroSrc = "/images/hero.jpg";
 
 <Image
   src={heroSrc}
-  alt="Hero"
+  alt="Product hero banner"
   width={hero.width}
   height={hero.height}
   placeholder="blur"

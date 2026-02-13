@@ -1,0 +1,57 @@
+name: SEO Weekly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 14 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-weekly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  seo-weekly:
+    name: seo-weekly
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SEO_MODE: advisory
+      SEO_LOCALE: en-US
+      SEO_GSC_CLIENT_EMAIL: ${{ secrets.SEO_GSC_CLIENT_EMAIL }}
+      SEO_GSC_PRIVATE_KEY: ${{ secrets.SEO_GSC_PRIVATE_KEY }}
+      SEO_GSC_PROPERTY_URI: ${{ secrets.SEO_GSC_PROPERTY_URI }}
+      SEO_COMPETITOR_URLS: ${{ vars.SEO_COMPETITOR_URLS }}
+      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run weekly SEO audit
+        run: pnpm seo:full
+
+      - name: Upload SEO report artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: seo-weekly-report
+          path: |
+            .tmp/seo/report.md
+            .tmp/seo/report.json
+          if-no-files-found: warn
