@@ -40,6 +40,7 @@ Open [http://localhost:3000](http://localhost:3000).
 pnpm dev         # run dev server
 pnpm lint        # eslint
 pnpm typecheck   # typescript checks
+pnpm check:ci    # local CI-parity gate (recommended before opening PR)
 pnpm build       # production build
 pnpm start       # run production server
 pnpm seo:tech    # technical SEO checks
@@ -74,6 +75,7 @@ Verification snapshot (2026-02-11):
 
 `NEXT_PUBLIC_IMAGEFORGE_VERSION` is used for public version display in the UI.
 `NEXT_PUBLIC_SITE_URL` defines canonical/metadata base URL and should match production.
+In non-development flows (CI, release verification, local production build checks), this value is required.
 `SEO_MODE` controls audit mode (`advisory` or `strict`).
 `SEO_LOCALE` defaults keyword/report locale (`en-US`).
 `SEO_COMPETITOR_URLS` optionally enables competitor snapshot checks.
@@ -83,9 +85,20 @@ Example:
 
 ```bash
 NEXT_PUBLIC_IMAGEFORGE_VERSION=0.1.3
+NEXT_PUBLIC_SITE_URL=https://imageforge.dev
 ```
 
 If unset, the site falls back to `local-dev`.
+
+### Non-dev command contract
+
+Use this command to reproduce the CI-required quality gate locally:
+
+```bash
+pnpm check:ci
+```
+
+This command intentionally uses `NEXT_PUBLIC_SITE_URL=https://example.com` for deterministic local parity.
 
 ## Deploy to Vercel
 
