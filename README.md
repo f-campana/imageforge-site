@@ -84,7 +84,7 @@ In non-development flows (CI, release verification, local production build check
 Example:
 
 ```bash
-NEXT_PUBLIC_IMAGEFORGE_VERSION=0.1.3
+NEXT_PUBLIC_IMAGEFORGE_VERSION=0.1.6
 NEXT_PUBLIC_SITE_URL=https://imageforge.dev
 ```
 
@@ -105,7 +105,7 @@ This command intentionally uses `NEXT_PUBLIC_SITE_URL=https://example.com` for d
 1. Push this repository to GitHub.
 2. In Vercel, create a new project and import the repository.
 3. Keep framework preset as **Next.js**.
-4. Set environment variable `NEXT_PUBLIC_IMAGEFORGE_VERSION` (optional but recommended).
+4. Set environment variables `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_IMAGEFORGE_VERSION` (required for release alignment and canonical metadata parity).
 5. Deploy.
 
 Vercel build command and output settings can remain default for Next.js.

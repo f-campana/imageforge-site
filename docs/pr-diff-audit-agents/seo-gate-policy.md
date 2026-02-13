@@ -32,3 +32,10 @@ With `NEXT_PUBLIC_SITE_URL` set:
 5. `SEO_MODE=strict pnpm seo:check` passes (no critical failures)
 
 Without `NEXT_PUBLIC_SITE_URL`, advisory checks report one critical URL-resolution failure by design.
+
+## Governance Cadence
+
+1. Weekly SEO review issue creation is automated by `.github/workflows/governance-cadence.yml`.
+2. Monthly claims/source review issue creation is automated by `.github/workflows/governance-cadence.yml`.
+3. Default owner is `@f-campana`, with review expected within 2 business days.
+4. Weekly and monthly reviews are idempotent per period key to prevent duplicate open issues.
