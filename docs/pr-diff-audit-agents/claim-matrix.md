@@ -2,7 +2,7 @@
 
 - Scope branch: `codex/staging-landing-seo-integration`
 - Governance owner: Product + Growth + CLI maintainers
-- Baseline date: 2026-02-13
+- Baseline date: 2026-02-15
 
 | Claim                                                                          | Source location                                                                    | Evidence class                                       | Volatility | Owner              | Update cadence                   |
 | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------- | ------------------ | -------------------------------- |
@@ -11,6 +11,7 @@
 | `blurDataURL` and manifest metadata support                                    | `components/landing/constants.ts`, `components/landing/ManifestExample.tsx`        | CLI behavior + tests                                 | Low        | CLI maintainers    | Per release                      |
 | Hash-based caching and rerun determinism                                       | `components/landing/constants.ts`, `components/landing/TerminalDemo.tsx`           | CLI behavior + tests                                 | Medium     | CLI maintainers    | Per release                      |
 | `--check` CI guard mode                                                        | `components/landing/constants.ts`, `components/landing/CICheckExample.tsx`         | CLI behavior + tests                                 | Low        | CLI maintainers    | Per release                      |
+| Benchmark evidence and methodology numbers                                     | `components/landing/benchmark-evidence.ts`, `components/landing/Methodology.tsx`   | CLI benchmark artifacts + governance review          | High       | CLI + Growth       | Monthly                          |
 | Comparison/pricing scenario statements                                         | `components/landing/ComparisonAndCost.tsx`, `components/landing/constants.ts`      | External references + dated assumptions              | High       | Product + Growth   | Monthly                          |
 | Air-gapped/local-processing compatibility statements                           | `components/landing/constants.ts`                                                  | Architectural behavior                               | Medium     | Product + Security | Quarterly                        |
 | Responsive width-set semantics (requested vs effective, no upscale, width cap) | `components/landing/constants.ts`, `docs/pr-diff-audit-agents/cli-contract-pin.md` | Pinned to `022957c640615c3abb45d1a7e3fb4cba961be558` | High       | CLI maintainers    | At release + per contract change |

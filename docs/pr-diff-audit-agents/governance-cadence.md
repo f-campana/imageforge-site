@@ -32,4 +32,6 @@ Automation runs from `.github/workflows/governance-cadence.yml` and creates issu
 
 1. Verify pricing and external comparison claims still map to active sources.
 2. Confirm responsive-width claims remain aligned to `cli-contract-pin.md`.
-3. Update claim matrix `as-of` evidence references when source facts shift.
+3. Verify benchmark evidence metadata in `components/landing/benchmark-evidence.ts`:
+   `asOfDate`, owner, dataset version, runner, profile, scenario, and artifact URL.
+4. Update claim matrix `as-of` evidence references when source facts shift.

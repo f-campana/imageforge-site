@@ -1,3 +1,9 @@
+import {
+  BENCHMARK_EVIDENCE,
+  formatMegabytes,
+  reductionPercent,
+} from "@/components/landing/benchmark-evidence";
+
 export type TerminalLine = {
   text: string;
   tone: string;
@@ -65,6 +71,16 @@ export const IMAGEFORGE_VERSION =
 export const EXAMPLE_TIMESTAMP = "2026-02-11T09:30:00.000Z";
 export const PRICING_AS_OF = "February 11, 2026";
 export const PRICING_OWNER = "ImageForge Maintainers (Product + Growth)";
+const BENCHMARK_INPUT_MB = formatMegabytes(
+  BENCHMARK_EVIDENCE.sampleSet.inputBytes,
+);
+const BENCHMARK_OUTPUT_MB = formatMegabytes(
+  BENCHMARK_EVIDENCE.sampleSet.outputBytes,
+);
+const BENCHMARK_SAVED_PCT = reductionPercent(
+  BENCHMARK_EVIDENCE.sampleSet.inputBytes,
+  BENCHMARK_EVIDENCE.sampleSet.outputBytes,
+);
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Comparison", href: "#comparison" },
@@ -75,7 +91,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const TERMINAL_LINES: TerminalLine[] = [
   {
-    text: "$ imageforge ./public/images -f webp,avif",
+    text: `$ ${BENCHMARK_EVIDENCE.run.command}`,
     tone: "terminal-command",
     delayMs: 0,
   },
@@ -91,7 +107,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
     delayMs: 500,
   },
   {
-    text: "Build-time optimization pass for 12 files",
+    text: `Build-time optimization pass for ${BENCHMARK_EVIDENCE.sampleSet.imageCount.toString()} files`,
     tone: "terminal-default",
     delayMs: 680,
   },
@@ -144,17 +160,17 @@ export const TERMINAL_LINES: TerminalLine[] = [
   },
   { text: "", tone: "terminal-muted", delayMs: 2420 },
   {
-    text: "Done in 2.1s (example)",
+    text: `Done in ${BENCHMARK_EVIDENCE.run.durationSeconds.toFixed(1)}s (example)`,
     tone: "terminal-strong",
     delayMs: 2500,
   },
   {
-    text: "  9 processed, 3 cached",
+    text: `  ${BENCHMARK_EVIDENCE.run.processed.toString()} processed, ${BENCHMARK_EVIDENCE.run.cached.toString()} cached`,
     tone: "terminal-success",
     delayMs: 2660,
   },
   {
-    text: "  Total: 8.4MB -> 1.9MB (-77%)",
+    text: `  Total: ${BENCHMARK_INPUT_MB.replace(" ", "")} -> ${BENCHMARK_OUTPUT_MB.replace(" ", "")} (-${BENCHMARK_SAVED_PCT.toString()}%)`,
     tone: "terminal-success",
     delayMs: 2800,
   },
@@ -245,13 +261,17 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
 export const STATS: StatItem[] = [
   {
     label: "Input",
-    value: "8.4 MB",
-    subtext: "12 JPEGs + PNGs",
+    value: BENCHMARK_INPUT_MB,
+    subtext: `${BENCHMARK_EVIDENCE.sampleSet.imageCount.toString()} source images`,
   },
-  { label: "Output", value: "1.9 MB", subtext: "WebP/AVIF derivatives" },
+  {
+    label: "Output",
+    value: BENCHMARK_OUTPUT_MB,
+    subtext: BENCHMARK_EVIDENCE.sampleSet.outputLabel,
+  },
   {
     label: "Saved",
-    value: "77%",
+    value: `${BENCHMARK_SAVED_PCT.toString()}%`,
     subtext: "smaller static assets",
     accent: true,
   },
