@@ -25,7 +25,16 @@ export function Methodology() {
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
             Headline benchmark numbers are sourced from a documented benchmark
-            evidence record and are updated via monthly claim governance.
+            evidence record and are updated through approval-gated sync PRs.
+          </p>
+          <p className="mt-3 text-center text-sm text-zinc-400">
+            <a
+              href="/benchmarks/latest"
+              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+            >
+              View the full benchmark report
+            </a>{" "}
+            for cold/warm charts, deltas, and run metadata.
           </p>
         </MotionWrap>
 
@@ -68,7 +77,8 @@ export function Methodology() {
               </p>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                 Benchmark evidence source: {BENCHMARK_EVIDENCE.sourceWorkflow}.
-                Manual sync path: monthly governance review.
+                Sync path: automated nightly snapshot PR to imageforge-site with
+                manual reviewer approval.
               </p>
             </article>
           </MotionWrap>

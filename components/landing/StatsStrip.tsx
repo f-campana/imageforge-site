@@ -19,6 +19,13 @@ export function StatsStrip() {
               className="font-medium text-emerald-300 transition hover:text-emerald-200"
             >
               Methodology
+            </a>{" "}
+            or browse the{" "}
+            <a
+              href="/benchmarks/latest"
+              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+            >
+              full evidence page
             </a>
             .
           </p>

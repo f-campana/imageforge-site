@@ -42,8 +42,9 @@ function issueTemplate(kind, periodKey) {
         "Checklist:",
         "1. Re-verify external pricing/comparison sources used on landing.",
         "2. Confirm responsive-width claims still align with pinned CLI contract SHA.",
-        "3. Verify benchmark evidence metadata in components/landing/benchmark-evidence.ts is current (as-of date, owner, dataset, runner, profile, scenario, artifact URL).",
-        "4. Update claim matrix evidence notes for any changed facts.",
+        "3. Verify benchmark snapshot freshness and lineage in data/benchmarks/latest.json and /benchmarks/latest.",
+        "4. Confirm landing benchmark evidence remains derived from the latest approved snapshot.",
+        "5. Update claim matrix evidence notes for any changed facts.",
       ].join("\n"),
     };
   }

@@ -1,7 +1,6 @@
 import {
   BENCHMARK_EVIDENCE,
   formatMegabytes,
-  reductionPercent,
 } from "@/components/landing/benchmark-evidence";
 
 export type TerminalLine = {
@@ -77,10 +76,10 @@ const BENCHMARK_INPUT_MB = formatMegabytes(
 const BENCHMARK_OUTPUT_MB = formatMegabytes(
   BENCHMARK_EVIDENCE.sampleSet.outputBytes,
 );
-const BENCHMARK_SAVED_PCT = reductionPercent(
-  BENCHMARK_EVIDENCE.sampleSet.inputBytes,
-  BENCHMARK_EVIDENCE.sampleSet.outputBytes,
-);
+const BENCHMARK_COLD_SECONDS =
+  BENCHMARK_EVIDENCE.run.durationSeconds.toFixed(2);
+const BENCHMARK_WARM_P50_MS = BENCHMARK_EVIDENCE.metrics.warmP50Ms.toFixed(1);
+const BENCHMARK_SPEEDUP = BENCHMARK_EVIDENCE.metrics.speedup.toFixed(2);
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Comparison", href: "#comparison" },
@@ -165,12 +164,12 @@ export const TERMINAL_LINES: TerminalLine[] = [
     delayMs: 2500,
   },
   {
-    text: `  ${BENCHMARK_EVIDENCE.run.processed.toString()} processed, ${BENCHMARK_EVIDENCE.run.cached.toString()} cached`,
+    text: `  ${BENCHMARK_EVIDENCE.run.processed.toString()} processed, ${BENCHMARK_EVIDENCE.run.cached.toString()} cached (cold run)`,
     tone: "terminal-success",
     delayMs: 2660,
   },
   {
-    text: `  Total: ${BENCHMARK_INPUT_MB.replace(" ", "")} -> ${BENCHMARK_OUTPUT_MB.replace(" ", "")} (-${BENCHMARK_SAVED_PCT.toString()}%)`,
+    text: `  Warm p50: ${BENCHMARK_WARM_P50_MS}ms  Speedup: ${BENCHMARK_SPEEDUP}x`,
     tone: "terminal-success",
     delayMs: 2800,
   },
@@ -260,25 +259,25 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
 
 export const STATS: StatItem[] = [
   {
-    label: "Input",
-    value: BENCHMARK_INPUT_MB,
-    subtext: `${BENCHMARK_EVIDENCE.sampleSet.imageCount.toString()} source images`,
+    label: "Dataset",
+    value: `${BENCHMARK_EVIDENCE.sampleSet.imageCount.toString()} images`,
+    subtext: `${BENCHMARK_EVIDENCE.profileId} / ${BENCHMARK_EVIDENCE.scenario}`,
   },
   {
-    label: "Output",
-    value: BENCHMARK_OUTPUT_MB,
-    subtext: BENCHMARK_EVIDENCE.sampleSet.outputLabel,
+    label: "Cold wall",
+    value: `${BENCHMARK_COLD_SECONDS}s`,
+    subtext: `input ${BENCHMARK_INPUT_MB}, generated ${BENCHMARK_OUTPUT_MB}`,
   },
   {
-    label: "Saved",
-    value: `${BENCHMARK_SAVED_PCT.toString()}%`,
-    subtext: "smaller static assets",
+    label: "Warm p50",
+    value: `${BENCHMARK_WARM_P50_MS}ms`,
+    subtext: `${BENCHMARK_EVIDENCE.metrics.warmImagesPerSec.toFixed(1)} img/s`,
     accent: true,
   },
   {
-    label: "Recurring",
-    value: "$0",
-    subtext: "runtime transform spend",
+    label: "Speedup",
+    value: `${BENCHMARK_SPEEDUP}x`,
+    subtext: "cold vs warm mean wall",
   },
 ];
 
