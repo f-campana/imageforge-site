@@ -1,4 +1,5 @@
 import { MotionWrap } from "@/components/landing/MotionWrap";
+import { BENCHMARK_EVIDENCE } from "@/components/landing/benchmark-evidence";
 import { STATS } from "@/components/landing/constants";
 
 export function StatsStrip() {
@@ -7,17 +8,30 @@ export function StatsStrip() {
       <div className="section-shell">
         <MotionWrap>
           <p className="mb-9 text-center font-mono text-[0.72rem] tracking-[0.2em] text-zinc-400 uppercase md:mb-10">
-            Example run proof - 12 source images, one command, zero runtime cost
+            Evidence snapshot -{" "}
+            {BENCHMARK_EVIDENCE.sampleSet.imageCount.toString()} source images,{" "}
+            {BENCHMARK_EVIDENCE.profileId} / {BENCHMARK_EVIDENCE.scenario}
           </p>
-          <p className="mb-8 text-center text-sm text-zinc-400 md:mb-10">
+          <p className="mb-2 text-center text-sm text-zinc-400 md:mb-3">
             See benchmark details in{" "}
             <a
               href="#methodology"
               className="font-medium text-emerald-300 transition hover:text-emerald-200"
             >
               Methodology
+            </a>{" "}
+            or browse the{" "}
+            <a
+              href="/benchmarks/latest"
+              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+            >
+              full evidence page
             </a>
             .
+          </p>
+          <p className="mb-8 text-center text-xs text-zinc-500 md:mb-10">
+            As of {BENCHMARK_EVIDENCE.asOfDate} - owner{" "}
+            {BENCHMARK_EVIDENCE.owner}
           </p>
         </MotionWrap>
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">

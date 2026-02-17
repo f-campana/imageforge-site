@@ -18,6 +18,7 @@
     "seo:full": "node scripts/seo/run.mjs --suite full --mode advisory",
     "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
     "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",
+    "benchmark:test": "node --test scripts/benchmark/__tests__/*.test.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },
