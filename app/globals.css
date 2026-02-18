@@ -124,6 +124,50 @@ header {
     0 28px 80px rgba(0, 0, 0, 0.48);
 }
 
+.ui-interact-control {
+  transition-property: color, background-color, border-color, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ui-interact-link {
+  transition-property: color, transform, filter;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ui-interact-link:hover {
+  filter: brightness(1.08);
+}
+
+.ui-interact-card {
+  transition-property: border-color, background-color, transform;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ui-interact-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(11, 16, 24, 0.92);
+}
+
+.ui-focus-ring:focus-visible {
+  outline: 2px solid rgba(66, 217, 167, 0.85);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ui-interact-control:hover,
+  .ui-interact-link:hover,
+  .ui-interact-card:hover {
+    transform: translate3d(0, -1px, 0);
+  }
+
+  .ui-interact-control:active {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .motion-rise {
   animation: rise-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }

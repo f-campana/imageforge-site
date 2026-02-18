@@ -21,7 +21,9 @@ export function CodeBlock({
     kind === "default" ? "panel-card" : "panel-card-strong";
 
   return (
-    <div className={`${containerClass} w-full min-w-0 overflow-hidden`}>
+    <div
+      className={`${containerClass} ui-interact-card w-full min-w-0 overflow-hidden`}
+    >
       {showHeader ? (
         <div className="flex items-center justify-between border-b border-white/12 bg-white/[0.04] px-4 py-3">
           <span className="font-mono text-[0.68rem] tracking-[0.16em] text-zinc-400 uppercase">

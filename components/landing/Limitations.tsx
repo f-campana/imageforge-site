@@ -21,7 +21,7 @@ export function Limitations() {
         <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-3">
           {LIMITATIONS.map((item, index) => (
             <MotionWrap key={item.title} delayMs={index * 70}>
-              <article className="panel-card h-full p-6">
+              <article className="panel-card ui-interact-card h-full p-6">
                 <h3 className="text-lg font-semibold tracking-tight text-zinc-100">
                   {item.title}
                 </h3>

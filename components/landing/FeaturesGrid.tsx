@@ -17,7 +17,7 @@ export function FeaturesGrid() {
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {FEATURES.map((feature, index) => (
             <MotionWrap key={feature.title} delayMs={index * 70}>
-              <article className="panel-card h-full p-6">
+              <article className="panel-card ui-interact-card h-full p-6">
                 <h3 className="text-2xl font-semibold tracking-tight text-zinc-100">
                   {feature.title}
                 </h3>
