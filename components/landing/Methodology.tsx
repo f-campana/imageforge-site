@@ -30,7 +30,7 @@ export function Methodology() {
           <p className="mt-3 text-center text-sm text-zinc-400">
             <a
               href="/benchmarks/latest"
-              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+              className="ui-interact-link ui-focus-ring font-medium text-emerald-300 hover:text-emerald-200"
             >
               View the full benchmark report
             </a>{" "}
@@ -40,7 +40,7 @@ export function Methodology() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           <MotionWrap>
-            <article className="panel-card h-full p-6">
+            <article className="panel-card ui-interact-card h-full p-6">
               <h3 className="text-lg font-semibold text-zinc-100">
                 Sample Set
               </h3>
@@ -54,7 +54,7 @@ export function Methodology() {
           </MotionWrap>
 
           <MotionWrap delayMs={70}>
-            <article className="panel-card h-full p-6">
+            <article className="panel-card ui-interact-card h-full p-6">
               <h3 className="text-lg font-semibold text-zinc-100">
                 Runtime Environment
               </h3>
@@ -68,7 +68,7 @@ export function Methodology() {
           </MotionWrap>
 
           <MotionWrap delayMs={120}>
-            <article className="panel-card h-full p-6">
+            <article className="panel-card ui-interact-card h-full p-6">
               <h3 className="text-lg font-semibold text-zinc-100">
                 Command and Options
               </h3>
@@ -84,7 +84,7 @@ export function Methodology() {
           </MotionWrap>
 
           <MotionWrap delayMs={180}>
-            <article className="panel-card h-full p-6">
+            <article className="panel-card ui-interact-card h-full p-6">
               <h3 className="text-lg font-semibold text-zinc-100">
                 What the Headline Numbers Mean
               </h3>
@@ -102,7 +102,7 @@ export function Methodology() {
                 {BENCHMARK_EVIDENCE.owner}. Artifact:{" "}
                 <a
                   href={BENCHMARK_EVIDENCE.artifactUrl}
-                  className="text-emerald-300 transition hover:text-emerald-200"
+                  className="ui-interact-link ui-focus-ring text-emerald-300 hover:text-emerald-200"
                 >
                   benchmark workflow
                 </a>

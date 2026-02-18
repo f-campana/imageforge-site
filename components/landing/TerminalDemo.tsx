@@ -111,7 +111,7 @@ export function TerminalDemo() {
 
   return (
     <div ref={containerRef} className="mx-auto w-full max-w-[760px]">
-      <div className="panel-card-strong overflow-hidden">
+      <div className="panel-card-strong ui-interact-card overflow-hidden">
         <div className="flex items-center gap-2 border-b border-white/14 bg-white/[0.05] px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
@@ -148,7 +148,7 @@ export function TerminalDemo() {
           <button
             type="button"
             onClick={handleShowFullOutput}
-            className="rounded-md border border-white/18 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-300 uppercase transition hover:border-white/28 hover:text-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+            className="ui-interact-control ui-focus-ring rounded-md border border-white/18 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-300 uppercase hover:border-white/28 hover:text-zinc-100"
           >
             Show full output
           </button>

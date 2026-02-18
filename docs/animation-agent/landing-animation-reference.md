@@ -2,7 +2,7 @@
 
 Date: 2026-02-18
 Scope mode: Landing + benchmark-focused
-Enforcement mode: Core safety strict in CI + advisory style scoring (cycle 4)
+Enforcement mode: Core safety strict in CI + advisory style scoring (cycle 5)
 
 ## Purpose
 
@@ -102,6 +102,37 @@ Out of scope for cycle 1:
 
 - Cycle 4 benchmark updates are limited to low-amplitude in-view section reveals plus micro-interaction polish.
 - No decorative loops or layout-affecting animation properties were added.
+
+## Cycle 5 Landing Smoothing and Micro-Interaction Decisions (2026-02-18)
+
+1. Top-entry pacing is softened with explicit 3-step sequencing
+
+- Top load-once budget was increased to:
+  - `maxDurationSeconds: 0.32`
+  - `maxDelayMs: 220`
+  - `maxDistancePx: 6`
+- Landing top sequence now uses explicit timing:
+  - nav group: `0ms`
+  - hero headline/body: `80ms` / `140ms`
+  - install + CTA cluster: `220ms`
+
+2. Nav row is animated as a single coherent unit
+
+- Brand + nav links are now inside one load-once `MotionWrap` to avoid split/static top-step perception.
+
+3. Terminal entry model stays in-view
+
+- Terminal wrapper remains `in-view` and is offset to `delayMs=120` so it does not compete with top-step readability.
+
+4. Landing-wide micro-interaction tokens are standardized
+
+- Added reusable CSS tokens in `/Users/fabiencampana/Documents/imageforge-site/app/globals.css`:
+  - `ui-interact-control`
+  - `ui-interact-link`
+  - `ui-interact-card`
+  - `ui-focus-ring`
+- Scope is landing-wide and includes non-clickable cards by design.
+- Transform micro-motion remains guarded by `@media (prefers-reduced-motion: no-preference)`.
 
 ## Animation Usage Model
 
@@ -325,6 +356,48 @@ Observed highlights:
   - delta cards `3/3` rendered per sampled viewport
   - recent cards `2/2` rendered per sampled viewport
 
+## Cycle 5 Verification Notes (2026-02-18)
+
+Evidence collected with cycle-4 committed safety scripts after cycle-5 landing changes:
+
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/run-check.sh`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/collect-matrix.mts`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/assert-core-safety.mts`
+
+Observed highlights:
+
+1. Core safety gates remain healthy
+
+- Canonical matrix: `.tmp/animation/matrix-canonical.json` (`generatedAt=2026-02-18T23:29:18.250Z`)
+- Fixture matrix: `.tmp/animation/matrix-fixture.json` (`generatedAt=2026-02-18T23:29:59.083Z`)
+- Overflow remained `0` for landing and benchmark.
+- Reduced-motion parity remained `24/24` with reduced wrapper average `0.00`.
+- Hero claim and primary CTA presence remained `0` missing across landing cells.
+
+2. Target landing viewport/motion subset passed
+
+- Route `/` verification subset used:
+  - portrait: `320x800`, `390x844`, `768x1024`, `1280x800`, `1440x900`
+  - landscape: `812x375`
+  - both default and reduced motion modes
+- Results:
+  - `12/12` subset cells had no overflow
+  - `0` reduced-motion parity failures
+  - `0` hero/CTA visibility failures
+
+3. Top-sequence behavior is now explicitly encoded in source
+
+- Softened budget and stagger values are locked in:
+  - `/Users/fabiencampana/Documents/imageforge-site/lib/animation/config.ts`
+  - `/Users/fabiencampana/Documents/imageforge-site/components/landing/Hero.tsx`
+  - `/Users/fabiencampana/Documents/imageforge-site/components/landing/HeaderNav.tsx`
+- This provides deterministic pacing with nav-first, hero text second, and install/CTA third.
+
+4. Landing-wide interaction consistency expanded
+
+- `ui-interact-*` + `ui-focus-ring` are now applied across landing controls, links, and card surfaces.
+- Style-density scoring remains advisory while core safety stays strict.
+
 ## Standard Audit Command Set
 
 Use this command sequence during future animation assessments:
@@ -365,11 +438,12 @@ Tie-breakers:
 
 ## Assumptions and Defaults
 
-- Core safety checks are strict in cycle 4; style/density remains advisory.
+- Core safety checks are strict in cycle 5; style/density remains advisory.
 - Landing + benchmark-focused scope remains default.
 - Current animation baseline is `motion` + existing CSS/JS reduced-motion controls.
 - Cycle-3 reintroduction scope remains limited to nav+hero load-once plus subtle micro-interactions.
 - Cycle-4 benchmark enhancement is intentionally subtle and validated in canonical + fixture builds.
+- Cycle-5 implementation is landing-focused for smoothing and micro-interaction consistency; benchmark behavior remains unchanged.
 
 ## Sources
 
