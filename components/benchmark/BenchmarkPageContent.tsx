@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { MotionWrap } from "@/components/landing/MotionWrap";
+import { BENCHMARK_SEQUENCE_DELAYS_MS } from "@/lib/animation/config";
 import type { SiteBenchmarkSnapshot } from "@/lib/benchmark/types";
 
 type BenchmarkPageContentProps = {
@@ -14,12 +15,11 @@ const PROFILE_COLORS: Record<string, string> = {
   P3: "bg-cyan-300/85",
 };
 
-const BENCHMARK_CARD_INTERACTION_CLASS =
-  "transition-[border-color,background-color] duration-150 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px";
+const BENCHMARK_CARD_INTERACTION_CLASS = "ui-interact-card";
 const BENCHMARK_TABLE_ROW_INTERACTION_CLASS =
   "border-b border-white/8 transition-colors duration-150 hover:bg-white/[0.02]";
-const BENCHMARK_LINK_INTERACTION_CLASS =
-  "transition-[color,border-color,background-color] duration-150 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px";
+const BENCHMARK_CONTROL_INTERACTION_CLASS = "ui-interact-control ui-focus-ring";
+const BENCHMARK_LINK_INTERACTION_CLASS = "ui-interact-link ui-focus-ring";
 
 function formatNumber(value: number, digits = 2): string {
   return Number.isFinite(value) ? value.toFixed(digits) : "0.00";
@@ -150,7 +150,7 @@ export function BenchmarkPageContent({
               <p className="mt-6">
                 <Link
                   href="/"
-                  className={`inline-flex rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100 ${BENCHMARK_LINK_INTERACTION_CLASS}`}
+                  className={`inline-flex rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100 ${BENCHMARK_CONTROL_INTERACTION_CLASS}`}
                 >
                   Back to landing
                 </Link>
@@ -213,7 +213,11 @@ export function BenchmarkPageContent({
             </div>
           </MotionWrap>
 
-          <MotionWrap surface="benchmark" className="mt-10" delayMs={40}>
+          <MotionWrap
+            surface="benchmark"
+            className="mt-10"
+            delayMs={BENCHMARK_SEQUENCE_DELAYS_MS.summary}
+          >
             <div className="grid gap-4 md:grid-cols-3">
               <div
                 className={`panel-card h-full p-5 ${BENCHMARK_CARD_INTERACTION_CLASS}`}
@@ -269,7 +273,7 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap surface="benchmark">
+          <MotionWrap surface="benchmark" mode="static">
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
               Cold wall time
             </h2>
@@ -284,7 +288,7 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap surface="benchmark" delayMs={24}>
+          <MotionWrap surface="benchmark" mode="static">
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
               Warm p50 wall time
             </h2>
@@ -299,7 +303,10 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap surface="benchmark" delayMs={36}>
+          <MotionWrap
+            surface="benchmark"
+            delayMs={BENCHMARK_SEQUENCE_DELAYS_MS.deltas}
+          >
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
               Head vs base deltas
             </h2>
@@ -419,7 +426,10 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap surface="benchmark" delayMs={52}>
+          <MotionWrap
+            surface="benchmark"
+            delayMs={BENCHMARK_SEQUENCE_DELAYS_MS.throughput}
+          >
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
               Throughput (batch-all, warm)
             </h2>
@@ -461,7 +471,10 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap surface="benchmark" delayMs={68}>
+          <MotionWrap
+            surface="benchmark"
+            delayMs={BENCHMARK_SEQUENCE_DELAYS_MS.recent}
+          >
             <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
               Recent approved snapshots
             </h2>
@@ -501,7 +514,7 @@ export function BenchmarkPageContent({
                       href={entry.source.runUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex rounded-md border border-white/20 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-200 uppercase hover:border-white/30 hover:text-zinc-100 ${BENCHMARK_LINK_INTERACTION_CLASS}`}
+                      className={`inline-flex rounded-md border border-white/20 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-200 uppercase hover:border-white/30 hover:text-zinc-100 ${BENCHMARK_CONTROL_INTERACTION_CLASS}`}
                     >
                       Open run
                     </a>

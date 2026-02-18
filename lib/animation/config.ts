@@ -44,6 +44,13 @@ export const CYCLE3_TOP_HALF_BUDGET = {
   maxDistancePx: 6,
 } as const;
 
+export const BENCHMARK_SEQUENCE_DELAYS_MS = {
+  summary: 0,
+  deltas: 40,
+  throughput: 80,
+  recent: 120,
+} as const;
+
 export const TERMINAL_ANIMATION = {
   previewLines: 6,
   observerThreshold: 0.12,
