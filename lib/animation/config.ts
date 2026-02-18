@@ -39,9 +39,9 @@ export const REVEAL_BUDGET = {
 } as const;
 
 export const CYCLE3_TOP_HALF_BUDGET = {
-  maxDurationSeconds: 0.24,
-  maxDelayMs: 120,
-  maxDistancePx: 8,
+  maxDurationSeconds: 0.32,
+  maxDelayMs: 220,
+  maxDistancePx: 6,
 } as const;
 
 export const TERMINAL_ANIMATION = {
