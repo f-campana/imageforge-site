@@ -20,6 +20,8 @@ type MatrixRow = {
   primaryCtaPresent: boolean | null;
   primaryCtaHref: string | null;
   benchmarkHeadingPresent: boolean | null;
+  benchmarkMobileDeltaCardCount: number | null;
+  benchmarkMobileRecentCardCount: number | null;
 };
 
 type MatrixOutput = {
@@ -127,6 +129,14 @@ async function main(): Promise<void> {
                   ),
                 );
 
+                const benchmarkMobileDeltaCardCount = document.querySelectorAll(
+                  "[data-benchmark-mobile-delta-card]",
+                ).length;
+                const benchmarkMobileRecentCardCount =
+                  document.querySelectorAll(
+                    "[data-benchmark-mobile-recent-card]",
+                  ).length;
+
                 return {
                   hasRootOverflow,
                   scrollWidth: doc.scrollWidth,
@@ -138,6 +148,8 @@ async function main(): Promise<void> {
                   primaryCtaPresent: primaryCta !== undefined,
                   primaryCtaHref,
                   benchmarkHeadingPresent,
+                  benchmarkMobileDeltaCardCount,
+                  benchmarkMobileRecentCardCount,
                 };
               });
 
@@ -160,6 +172,14 @@ async function main(): Promise<void> {
                 benchmarkHeadingPresent:
                   route === "/benchmarks/latest"
                     ? metrics.benchmarkHeadingPresent
+                    : null,
+                benchmarkMobileDeltaCardCount:
+                  route === "/benchmarks/latest"
+                    ? metrics.benchmarkMobileDeltaCardCount
+                    : null,
+                benchmarkMobileRecentCardCount:
+                  route === "/benchmarks/latest"
+                    ? metrics.benchmarkMobileRecentCardCount
                     : null,
               });
             } finally {

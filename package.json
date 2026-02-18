@@ -21,7 +21,7 @@
     "benchmark:test": "node --test scripts/benchmark/__tests__/*.test.mjs",
     "animation:matrix": "node --experimental-strip-types scripts/animation/collect-matrix.mts",
     "animation:safety": "node --experimental-strip-types scripts/animation/assert-core-safety.mts",
-    "animation:check": "pnpm animation:matrix -- --output .tmp/animation/matrix-canonical.json && pnpm animation:safety -- --matrix .tmp/animation/matrix-canonical.json && BENCHMARK_ENABLE_LOCAL_FIXTURE=1 BENCHMARK_SNAPSHOT_FIXTURE=sample pnpm animation:matrix -- --output .tmp/animation/matrix-fixture.json && pnpm animation:safety -- --matrix .tmp/animation/matrix-fixture.json",
+    "animation:check": "bash scripts/animation/run-check.sh",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },

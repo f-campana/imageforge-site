@@ -38,24 +38,8 @@ jobs:
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Build
-        run: pnpm build
-
       - name: Run animation safety checks
-        run: |
-          pnpm exec next start --hostname 127.0.0.1 --port 3205 >/tmp/next-start.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill "$SERVER_PID" >/dev/null 2>&1 || true' EXIT
-
-          for i in {1..60}; do
-            if curl -fsS "$BASE_URL" >/dev/null; then
-              break
-            fi
-            sleep 1
-          done
-
-          curl -fsS "$BASE_URL" >/dev/null
-          pnpm animation:check
+        run: pnpm animation:check
 
       - name: Upload animation matrix artifacts
         if: always()

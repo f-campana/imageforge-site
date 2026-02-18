@@ -16,20 +16,20 @@ export const MOTION_SURFACE_PRESETS: Record<
   MotionSurfacePreset
 > = {
   landing: {
-    distancePx: 12,
-    durationSeconds: 0.34,
+    distancePx: 10,
+    durationSeconds: 0.3,
     ease: STANDARD_EASE,
-    maxDelayMs: 180,
-    viewportAmount: 0.22,
-    viewportMargin: "0px 0px -8% 0px",
+    maxDelayMs: 160,
+    viewportAmount: 0.2,
+    viewportMargin: "0px 0px -6% 0px",
   },
   benchmark: {
-    distancePx: 8,
-    durationSeconds: 0.28,
+    distancePx: 7,
+    durationSeconds: 0.24,
     ease: STANDARD_EASE,
-    maxDelayMs: 120,
-    viewportAmount: 0.18,
-    viewportMargin: "0px 0px -5% 0px",
+    maxDelayMs: 100,
+    viewportAmount: 0.16,
+    viewportMargin: "0px 0px -4% 0px",
   },
 };
 
