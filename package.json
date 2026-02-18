@@ -19,6 +19,9 @@
     "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
     "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",
     "benchmark:test": "node --test scripts/benchmark/__tests__/*.test.mjs",
+    "animation:matrix": "node --experimental-strip-types scripts/animation/collect-matrix.mts",
+    "animation:safety": "node --experimental-strip-types scripts/animation/assert-core-safety.mts",
+    "animation:check": "pnpm animation:matrix -- --output .tmp/animation/matrix-canonical.json && pnpm animation:safety -- --matrix .tmp/animation/matrix-canonical.json && BENCHMARK_ENABLE_LOCAL_FIXTURE=1 BENCHMARK_SNAPSHOT_FIXTURE=sample pnpm animation:matrix -- --output .tmp/animation/matrix-fixture.json && pnpm animation:safety -- --matrix .tmp/animation/matrix-fixture.json",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },
@@ -33,6 +36,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@playwright/test": "^1.56.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
