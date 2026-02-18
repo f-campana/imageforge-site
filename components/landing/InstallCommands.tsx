@@ -17,14 +17,14 @@ type InstallCommandsProps = {
 
 function CommandCard({ command }: { command: string }) {
   return (
-    <div className="panel-card-strong flex w-full flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <div className="flex items-center gap-2 overflow-x-auto font-mono text-sm text-zinc-100 md:text-base">
+    <div className="panel-card-strong flex w-full min-w-0 flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="max-w-full min-w-0 flex-1">
+        <div className="flex max-w-full min-w-0 items-center gap-2 overflow-x-auto font-mono text-sm text-zinc-100 md:text-base">
           <span className="text-zinc-500 select-none">$</span>
-          <code className="whitespace-nowrap">{command}</code>
+          <code className="min-w-max whitespace-nowrap">{command}</code>
         </div>
       </div>
-      <div className="self-start sm:self-auto">
+      <div className="shrink-0 self-start sm:self-auto">
         <CopyButton text={command} />
       </div>
     </div>

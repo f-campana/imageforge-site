@@ -28,7 +28,7 @@ export default function Home() {
           }}
         />
       ))}
-      <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <div className="relative min-h-screen overflow-x-clip bg-[var(--background)] text-[var(--foreground)]">
         <div className="site-grid-layer" aria-hidden="true" />
         <HeaderNav />
         <main>
