@@ -2,7 +2,7 @@
 
 Date: 2026-02-18
 Scope mode: Landing + benchmark-focused
-Enforcement mode: Advisory-first (cycle 1 baseline + cycle 2 fixes + cycle 3 reintroduction)
+Enforcement mode: Core safety strict in CI + advisory style scoring (cycle 4)
 
 ## Purpose
 
@@ -77,6 +77,31 @@ Out of scope for cycle 1:
 
 - Added subtle nav/hero interaction polish only (links, CTAs, install command controls).
 - No long staggers, no decorative infinite loops, no layout-affecting animation properties.
+
+## Cycle 4 Safety and Enhancement Decisions (2026-02-18)
+
+1. Core safety gates are now merge-blocking
+
+- CI workflow `/Users/fabiencampana/Documents/imageforge-site/.github/workflows/animation-safety.yml` blocks merges on:
+  - root overflow regression (`documentElement.scrollWidth <= innerWidth`)
+  - reduced-motion parity regression (no non-essential `MotionWrap` output in reduced mode)
+  - interaction-gated critical content regression (hero claim + primary CTA/link presence)
+
+2. Canonical + fixture validation is now reproducible
+
+- `animation:check` now runs two full passes:
+  - canonical build + matrix + safety assertion
+  - fixture build (`BENCHMARK_ENABLE_LOCAL_FIXTURE=1`, `BENCHMARK_SNAPSHOT_FIXTURE=sample`) + matrix + safety assertion
+
+3. Style/density remains advisory
+
+- Core safety checks are strict.
+- Entry-density tuning and visual polish remain advisory and are tracked in the risk register.
+
+4. Benchmark enhancement remains subtle
+
+- Cycle 4 benchmark updates are limited to low-amplitude in-view section reveals plus micro-interaction polish.
+- No decorative loops or layout-affecting animation properties were added.
 
 ## Animation Usage Model
 
@@ -270,6 +295,36 @@ Observed highlights:
 - Benchmark default wrapper density remained `1.00`.
 - Fixture portrait checks (`320-412`) retained mobile-card availability in `10/10` cells.
 
+## Cycle 4 Verification Notes (2026-02-18)
+
+Evidence collected with committed animation scripts:
+
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/run-check.sh`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/collect-matrix.mts`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/assert-core-safety.mts`
+
+Observed highlights:
+
+1. Core safety gates passed in both builds
+
+- Canonical matrix: `.tmp/animation/matrix-canonical.json` (`generatedAt=2026-02-18T17:54:14.751Z`)
+- Fixture matrix: `.tmp/animation/matrix-fixture.json` (`generatedAt=2026-02-18T17:54:56.493Z`)
+- Overflow remained `0` for landing and benchmark.
+- Reduced-motion media match remained `24/24`; reduced-mode wrapper average remained `0.00`.
+- Hero claim and primary CTA/link were present in all landing cells.
+
+2. Landing density remained stable during cycle 4 polish
+
+- Landing default wrapper average remained `49.00`.
+- Cycle 4 did not add additional landing choreography.
+
+3. Fixture benchmark branch now validates data-rich behavior
+
+- Fixture benchmark default wrapper average is `6.00` (vs `1.00` in canonical fallback build).
+- Fixture mobile checks retained benchmark card availability in all sampled portrait cells:
+  - delta cards `3/3` rendered per sampled viewport
+  - recent cards `2/2` rendered per sampled viewport
+
 ## Standard Audit Command Set
 
 Use this command sequence during future animation assessments:
@@ -279,6 +334,7 @@ pnpm lint
 pnpm typecheck
 NEXT_PUBLIC_SITE_URL=https://example.com pnpm build
 NEXT_PUBLIC_SITE_URL=https://example.com pnpm seo:full -- --mode advisory
+NEXT_PUBLIC_SITE_URL=https://example.com pnpm animation:check
 ```
 
 ## Prioritization Rules for Implementation
@@ -309,10 +365,11 @@ Tie-breakers:
 
 ## Assumptions and Defaults
 
-- Advisory-first scoring remains active through cycle 3.
+- Core safety checks are strict in cycle 4; style/density remains advisory.
 - Landing + benchmark-focused scope remains default.
 - Current animation baseline is `motion` + existing CSS/JS reduced-motion controls.
-- Cycle-3 reintroduction scope is limited to nav+hero load-once plus subtle micro-interactions.
+- Cycle-3 reintroduction scope remains limited to nav+hero load-once plus subtle micro-interactions.
+- Cycle-4 benchmark enhancement is intentionally subtle and validated in canonical + fixture builds.
 
 ## Sources
 
