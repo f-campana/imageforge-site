@@ -38,6 +38,12 @@ export const REVEAL_BUDGET = {
   benchmarkAboveFoldAnimatedBlocks: 2,
 } as const;
 
+export const CYCLE3_TOP_HALF_BUDGET = {
+  maxDurationSeconds: 0.24,
+  maxDelayMs: 120,
+  maxDistancePx: 8,
+} as const;
+
 export const TERMINAL_ANIMATION = {
   previewLines: 6,
   observerThreshold: 0.12,
@@ -49,4 +55,25 @@ export const TERMINAL_ANIMATION = {
 export function clampMotionDelay(surface: MotionSurface, delayMs = 0): number {
   const safeDelay = Number.isFinite(delayMs) ? Math.max(0, delayMs) : 0;
   return Math.min(safeDelay, MOTION_SURFACE_PRESETS[surface].maxDelayMs);
+}
+
+export function clampCycle3TopHalfDelay(delayMs = 0): number {
+  const safeDelay = Number.isFinite(delayMs) ? Math.max(0, delayMs) : 0;
+  return Math.min(safeDelay, CYCLE3_TOP_HALF_BUDGET.maxDelayMs);
+}
+
+export function clampCycle3TopHalfDuration(durationSeconds: number): number {
+  if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) {
+    return CYCLE3_TOP_HALF_BUDGET.maxDurationSeconds;
+  }
+
+  return Math.min(durationSeconds, CYCLE3_TOP_HALF_BUDGET.maxDurationSeconds);
+}
+
+export function clampCycle3TopHalfDistance(distancePx: number): number {
+  if (!Number.isFinite(distancePx) || distancePx <= 0) {
+    return CYCLE3_TOP_HALF_BUDGET.maxDistancePx;
+  }
+
+  return Math.min(distancePx, CYCLE3_TOP_HALF_BUDGET.maxDistancePx);
 }

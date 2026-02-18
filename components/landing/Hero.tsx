@@ -10,14 +10,14 @@ export function Hero() {
     >
       <div className="hero-grid-overlay" aria-hidden="true" />
       <div className="section-shell relative pt-24 pb-20 md:pt-32 md:pb-28">
-        <MotionWrap className="max-w-4xl" mode="static">
+        <MotionWrap className="max-w-4xl" mode="load-once">
           <h1 className="max-w-3xl text-5xl leading-[1.03] font-semibold tracking-[-0.03em] text-balance text-white md:text-7xl">
             Optimize once, deploy everywhere,{" "}
             <span className="text-emerald-300">pay nothing monthly</span>.
           </h1>
         </MotionWrap>
 
-        <MotionWrap className="mt-6 max-w-3xl" mode="static">
+        <MotionWrap className="mt-6 max-w-3xl" mode="load-once" delayMs={48}>
           <p className="text-lg leading-relaxed text-pretty text-zinc-300 md:text-[1.25rem] md:leading-relaxed">
             ImageForge is an <strong>image optimization CLI</strong> for{" "}
             <strong>Next.js image optimization</strong> and static pipelines. It
@@ -30,7 +30,7 @@ export function Hero() {
           </p>
         </MotionWrap>
 
-        <MotionWrap className="mt-9 max-w-5xl" mode="static">
+        <MotionWrap className="mt-9 max-w-5xl" mode="load-once" delayMs={96}>
           <InstallCommands />
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <a
