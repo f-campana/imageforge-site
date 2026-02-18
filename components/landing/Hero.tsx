@@ -37,7 +37,7 @@ export function Hero() {
               href="https://www.npmjs.com/package/@imageforge/cli"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100"
+              className="inline-flex items-center rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition-[border-color,background-color,color] duration-150 hover:border-emerald-200 hover:bg-emerald-300/20 hover:text-emerald-100 focus-visible:border-emerald-200 focus-visible:bg-emerald-300/20 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0"
             >
               Get Started
             </a>
@@ -45,7 +45,7 @@ export function Hero() {
               href="https://github.com/f-campana/imageforge"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 transition hover:border-white/35 hover:bg-white/10 hover:text-white"
+              className="inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 transition-[border-color,background-color,color] duration-150 hover:border-white/35 hover:bg-white/10 hover:text-white focus-visible:border-white/35 focus-visible:bg-white/10 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0"
             >
               Read Docs (GitHub)
             </a>

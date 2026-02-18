@@ -7,7 +7,7 @@ export function HeaderNav() {
       <div className="section-shell flex items-center justify-between gap-3 py-4 md:py-5">
         <a
           href="#top"
-          className="shrink-0 font-mono text-lg font-semibold tracking-tight text-zinc-100"
+          className="shrink-0 font-mono text-lg font-semibold tracking-tight text-zinc-100 transition-colors duration-150 hover:text-white focus-visible:text-white motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px"
         >
           imageforge
         </a>
@@ -21,7 +21,7 @@ export function HeaderNav() {
               <a
                 key={item.href}
                 href={item.href}
-                className="transition hover:text-zinc-100"
+                className="transition-colors duration-150 hover:text-zinc-100 focus-visible:text-zinc-100 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px"
               >
                 {item.label}
               </a>
@@ -31,7 +31,7 @@ export function HeaderNav() {
             href="https://github.com/f-campana/imageforge"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:text-zinc-100"
+            className="transition-colors duration-150 hover:text-zinc-100 focus-visible:text-zinc-100 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px"
           >
             GitHub
           </a>
@@ -39,7 +39,7 @@ export function HeaderNav() {
             href="https://www.npmjs.com/package/@imageforge/cli"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden transition hover:text-zinc-100 sm:inline"
+            className="hidden transition-colors duration-150 hover:text-zinc-100 focus-visible:text-zinc-100 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-px sm:inline"
           >
             npm package
           </a>

@@ -2,7 +2,7 @@
 
 Date: 2026-02-18
 Scope mode: Landing + benchmark-focused
-Enforcement mode: Advisory-first (cycle 1 baseline + cycle 2 fixes)
+Enforcement mode: Advisory-first (cycle 1 baseline + cycle 2 fixes + cycle 3 reintroduction)
 
 ## Purpose
 
@@ -54,6 +54,29 @@ Out of scope for cycle 1:
   - `BENCHMARK_ENABLE_LOCAL_FIXTURE=1`
   - `BENCHMARK_SNAPSHOT_FIXTURE=sample`
 - Canonical `data/benchmarks/latest.json` remains unchanged during animation audits and fixes.
+
+## Cycle 3 Reintroduction Decisions (2026-02-18)
+
+1. Top-half reintroduction scope
+
+- Reintroduced motion is limited to top nav + hero only.
+- No additional section-entry choreography was added in cycle 3.
+
+2. Trigger model
+
+- Top nav + hero use `load-once` entry behavior (`initial + animate`), not in-view replay.
+- Behavior runs once on initial load and does not depend on scroll replay.
+
+3. Motion budget for reintroduction
+
+- top-half max duration: `<= 0.24s`
+- top-half max delay: `<= 120ms`
+- top-half max translation: `<= 8px`
+
+4. Micro-interaction policy
+
+- Added subtle nav/hero interaction polish only (links, CTAs, install command controls).
+- No long staggers, no decorative infinite loops, no layout-affecting animation properties.
 
 ## Animation Usage Model
 
@@ -179,8 +202,8 @@ Animation performance rules:
 
 1. `/Users/fabiencampana/Documents/imageforge-site/components/landing/MotionWrap.tsx`
 
-- Evidence: reusable reveal wrapper applies delayed `motion-rise` animation via `animationDelay`.
-- Risk theme: reveal density and first-view readability when many blocks animate together.
+- Evidence: reusable wrapper now supports `in-view`, `load-once`, and `static` modes with `motion/react`, plus strict reduced-motion fallback.
+- Risk theme: reveal density and top-half readability when load-once motion is reintroduced.
 
 2. `/Users/fabiencampana/Documents/imageforge-site/components/landing/TerminalDemo.tsx`
 
@@ -194,15 +217,15 @@ Animation performance rules:
 
 4. `/Users/fabiencampana/Documents/imageforge-site/app/globals.css`
 
-- Evidence: `motion-rise` keyframes, terminal cursor loop, and reduced-motion override block.
-- Risk theme: global animation policy consistency and compositor/paint cost.
+- Evidence: terminal cursor styling and reduced-motion CSS override block remain active.
+- Risk theme: global reduced-motion consistency and loop intensity control.
 
 5. `/Users/fabiencampana/Documents/imageforge-site/components/benchmark/BenchmarkPageContent.tsx`
 
 - Evidence: benchmark route reuses shared `MotionWrap` across headline, cards, chart sections, and tables in data-rich branch.
 - Risk theme: shared-motion spillover and potential entrance-density/perf risk when benchmark data is populated.
 
-## Runtime Baseline Notes (2026-02-18)
+## Runtime Baseline Notes (Cycle 1 Historical, 2026-02-18)
 
 Evidence collected using production server (`next start`) and automated viewport/motion matrix checks for `/` and `/benchmarks/latest`.
 
@@ -225,6 +248,27 @@ Observed highlights:
 4. Keyboard focus continuity (sampled matrix)
 
 - Focus remained visible across all sampled cells; benchmark fallback route exposed a reachable “Back to landing” anchor as first tab stop.
+
+## Cycle 3 Verification Notes (2026-02-18)
+
+Evidence collected with the same matrix method used in cycle 2, on both canonical and fixture data modes.
+
+Observed highlights:
+
+1. Safety checks remain healthy
+
+- Root overflow remained `0` for landing and benchmark across the full matrix.
+- Reduced-motion media preference matched in `24/24` reduced cells with reduced-mode animated wrapper average `0.00`.
+
+2. Reintroduction effect is measurable
+
+- Landing default wrapper density returned to `49` average cells after top nav + hero load-once reintroduction.
+- This increase is expected and remains advisory for tuning in cycle 4.
+
+3. Benchmark behavior remained stable
+
+- Benchmark default wrapper density remained `1.00`.
+- Fixture portrait checks (`320-412`) retained mobile-card availability in `10/10` cells.
 
 ## Standard Audit Command Set
 
@@ -265,10 +309,10 @@ Tie-breakers:
 
 ## Assumptions and Defaults
 
-- Advisory-first scoring for the first animation audit cycle.
-- Landing + benchmark-focused scope.
-- No code implementation changes in this research phase.
-- Current animation stack remains CSS + existing JS hooks in cycle 1.
+- Advisory-first scoring remains active through cycle 3.
+- Landing + benchmark-focused scope remains default.
+- Current animation baseline is `motion` + existing CSS/JS reduced-motion controls.
+- Cycle-3 reintroduction scope is limited to nav+hero load-once plus subtle micro-interactions.
 
 ## Sources
 
