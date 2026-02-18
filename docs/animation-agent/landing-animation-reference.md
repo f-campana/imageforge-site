@@ -1,12 +1,12 @@
-# Landing Animation Reference
+# Landing and Benchmark Animation Reference
 
-Date: 2026-02-13
-Scope mode: Landing-focused
+Date: 2026-02-18
+Scope mode: Landing + benchmark-focused
 Enforcement mode: Advisory-first (cycle 1)
 
 ## Purpose
 
-Define where and how animations should be applied on the ImageForge landing page, and how to assess animation risks across performance, accessibility, and SEO before implementation work.
+Define where and how animations should be applied on the ImageForge landing and benchmark surfaces, and how to assess animation risks across performance, accessibility, and SEO before implementation work.
 
 This document is the canonical reference for future animation audits and implementation planning.
 
@@ -15,12 +15,14 @@ This document is the canonical reference for future animation audits and impleme
 In scope:
 
 - `/Users/fabiencampana/Documents/imageforge-site/app/page.tsx`
+- `/Users/fabiencampana/Documents/imageforge-site/app/benchmarks/latest/page.tsx`
 - `/Users/fabiencampana/Documents/imageforge-site/components/landing/*`
+- `/Users/fabiencampana/Documents/imageforge-site/components/benchmark/*`
 - `/Users/fabiencampana/Documents/imageforge-site/app/globals.css`
 
 Out of scope for cycle 1:
 
-- Non-landing routes
+- Non-landing and non-benchmark routes
 - Runtime production telemetry changes
 - Product code implementation changes
 
@@ -166,6 +168,35 @@ Animation performance rules:
 - Evidence: `motion-rise` keyframes, terminal cursor loop, and reduced-motion override block.
 - Risk theme: global animation policy consistency and compositor/paint cost.
 
+5. `/Users/fabiencampana/Documents/imageforge-site/components/benchmark/BenchmarkPageContent.tsx`
+
+- Evidence: benchmark route reuses shared `MotionWrap` across headline, cards, chart sections, and tables in data-rich branch.
+- Risk theme: shared-motion spillover and potential entrance-density/perf risk when benchmark data is populated.
+
+## Runtime Baseline Notes (2026-02-18)
+
+Evidence collected using production server (`next start`) and automated viewport/motion matrix checks for `/` and `/benchmarks/latest`.
+
+Observed highlights:
+
+1. Reduced-motion parity
+
+- `motion-rise` usage dropped to zero for all reduced-motion checks (`24/24` cells), confirming JS/CSS suppression path is active.
+
+2. Horizontal overflow on narrow landing viewports
+
+- Root-level horizontal scroll occurred at `320x800` and `360x800` (default and reduced modes).
+- Benchmark route did not show root-level horizontal scroll in the same matrix.
+
+3. Terminal timeline behavior variability
+
+- Progressive terminal reveal advanced only in the tall desktop portrait case (`1024x1366`) where observer threshold was met on initial load.
+- Most viewports remained at preview line count without progression unless additional scrolling occurred.
+
+4. Keyboard focus continuity (sampled matrix)
+
+- Focus remained visible across all sampled cells; benchmark fallback route exposed a reachable “Back to landing” anchor as first tab stop.
+
 ## Standard Audit Command Set
 
 Use this command sequence during future animation assessments:
@@ -206,7 +237,7 @@ Tie-breakers:
 ## Assumptions and Defaults
 
 - Advisory-first scoring for the first animation audit cycle.
-- Landing-focused scope only.
+- Landing + benchmark-focused scope.
 - No code implementation changes in this research phase.
 - Current animation stack remains CSS + existing JS hooks in cycle 1.
 

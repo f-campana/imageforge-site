@@ -1,10 +1,12 @@
-# Animation Audit Checklist (Landing, Advisory Cycle 1)
+# Animation Audit Checklist (Landing + Benchmark, Advisory Cycle 1)
 
 ## 1. Preflight
 
 1. Confirm scope:
    - `app/page.tsx`
+   - `app/benchmarks/latest/page.tsx`
    - `components/landing/*`
+   - `components/benchmark/*`
    - `app/globals.css`
 2. Load:
    - `docs/animation-agent/landing-animation-reference.md`
@@ -44,6 +46,7 @@ For each matrix cell, verify:
 3. Animation does not hide or delay meaningful links/content.
 4. Keyboard focus remains visible during animated state changes.
 5. Reduced-motion behavior disables or minimizes non-essential movement.
+6. Route fallback states and data-rich states preserve equivalent animation safety constraints.
 
 ## 4. Performance Checks
 
@@ -77,9 +80,10 @@ At minimum, inspect:
 
 - `components/landing/MotionWrap.tsx`
 - `components/landing/TerminalDemo.tsx`
+- `components/benchmark/BenchmarkPageContent.tsx`
 - `hooks/usePrefersReducedMotion.ts`
 - `app/globals.css`
-- any landing component using animation/transition classes
+- any landing or benchmark component using animation/transition classes
 
 ## 8. Reporting
 

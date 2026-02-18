@@ -1,6 +1,6 @@
 ---
 name: animation-agent
-description: Landing-focused animation analysis workflow for ImageForge with advisory-first performance, accessibility, and SEO risk scoring.
+description: Landing and benchmark-focused animation analysis workflow for ImageForge with advisory-first performance, accessibility, and SEO risk scoring.
 ---
 
 # Animation Agent
@@ -9,10 +9,12 @@ Use this skill when a request mentions micro-animations, animation behavior, mot
 
 ## Scope
 
-Default scope is landing-focused:
+Default scope is landing and benchmark-focused:
 
 - `/Users/fabiencampana/Documents/imageforge-site/app/page.tsx`
+- `/Users/fabiencampana/Documents/imageforge-site/app/benchmarks/latest/page.tsx`
 - `/Users/fabiencampana/Documents/imageforge-site/components/landing/*`
+- `/Users/fabiencampana/Documents/imageforge-site/components/benchmark/*`
 - `/Users/fabiencampana/Documents/imageforge-site/app/globals.css`
 
 ## Canonical References
@@ -36,7 +38,7 @@ Default scope is landing-focused:
    - `pnpm typecheck`
    - `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build`
    - `NEXT_PUBLIC_SITE_URL=https://example.com pnpm seo:full -- --mode advisory`
-3. Inspect landing files for animation behavior by viewport/motion matrix and anti-pattern catalog.
+3. Inspect landing and benchmark files for animation behavior by viewport/motion matrix and anti-pattern catalog.
 4. Score each finding with the severity rubric.
 5. Output findings strictly using the output contract.
 6. Cross-check recommendations against existing SEO pipeline constraints (`scripts/seo/*`) and current product messaging boundaries.
@@ -50,8 +52,9 @@ Default scope is landing-focused:
 ## Repository Alignment
 
 1. Keep guidance compatible with existing metadata/canonical/schema behavior in `app/layout.tsx`, `app/page.tsx`, and `lib/seo/*`.
-2. Preserve ImageForge messaging scope from `README.md` and landing component copy.
+2. Preserve ImageForge messaging scope from `README.md` and route-specific copy on landing and benchmark pages.
 3. Keep recommendations compatible with existing motion baseline in `hooks/usePrefersReducedMotion.ts`, `components/landing/MotionWrap.tsx`, and `components/landing/TerminalDemo.tsx`.
+4. Keep recommendations compatible with benchmark presentation in `components/benchmark/BenchmarkPageContent.tsx`.
 
 ## Output Expectations
 
