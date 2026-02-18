@@ -1,3 +1,5 @@
+import fixtureHistorySampleRaw from "@/data/benchmarks/fixtures/history-sample.json";
+import fixtureLatestSampleRaw from "@/data/benchmarks/fixtures/latest-sample.json";
 import historyRaw from "@/data/benchmarks/history.json";
 import latestRaw from "@/data/benchmarks/latest.json";
 
@@ -179,12 +181,43 @@ function parseHistory(value: unknown): BenchmarkHistoryFile {
   };
 }
 
+function resolveFixture() {
+  const fixtureEnabled = process.env.BENCHMARK_ENABLE_LOCAL_FIXTURE === "1";
+  const fixtureName = process.env.BENCHMARK_SNAPSHOT_FIXTURE;
+  const isProdDeployment = process.env.VERCEL_ENV === "production";
+
+  if (!fixtureEnabled || isProdDeployment || !fixtureName) {
+    return null;
+  }
+
+  if (fixtureName === "sample") {
+    return {
+      latest: fixtureLatestSampleRaw,
+      history: fixtureHistorySampleRaw,
+    };
+  }
+
+  return null;
+}
+
+function resolveBenchmarkRawInputs() {
+  const fixture = resolveFixture();
+  if (fixture) {
+    return fixture;
+  }
+
+  return {
+    latest: latestRaw,
+    history: historyRaw,
+  };
+}
+
 export function getLatestBenchmarkSnapshot(): SiteBenchmarkSnapshot | null {
-  return parseSnapshot(latestRaw);
+  return parseSnapshot(resolveBenchmarkRawInputs().latest);
 }
 
 export function getBenchmarkHistory(): SiteBenchmarkSnapshot[] {
-  return parseHistory(historyRaw).items;
+  return parseHistory(resolveBenchmarkRawInputs().history).items;
 }
 
 export function getScenarioMetrics(

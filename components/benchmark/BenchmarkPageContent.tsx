@@ -93,7 +93,7 @@ function renderBars(
               return (
                 <div
                   key={`${metricKey}-${profileId}-${scenario}`}
-                  className="grid grid-cols-[120px_1fr_92px] items-center gap-3"
+                  className="grid grid-cols-[minmax(84px,96px)_minmax(0,1fr)_74px] items-center gap-2 sm:grid-cols-[120px_1fr_92px] sm:gap-3"
                 >
                   <p className="truncate text-right font-mono text-[0.68rem] tracking-[0.08em] text-zinc-500 uppercase">
                     {scenario}
@@ -104,7 +104,7 @@ function renderBars(
                       style={{ width: `${width.toString()}%` }}
                     />
                   </div>
-                  <p className="font-mono text-xs text-zinc-200">
+                  <p className="text-right font-mono text-[0.68rem] text-zinc-200 sm:text-xs">
                     {metricKey === "coldWallMs"
                       ? formatMs(value)
                       : `${formatNumber(value, 2)} ${unitLabel}`}
@@ -127,7 +127,7 @@ export function BenchmarkPageContent({
     return (
       <main className="border-b border-white/10 py-24">
         <div className="section-shell">
-          <MotionWrap>
+          <MotionWrap surface="benchmark">
             <div className="panel-card mx-auto max-w-3xl p-8 text-center md:p-10">
               <p className="font-mono text-[0.72rem] tracking-[0.2em] text-zinc-500 uppercase">
                 Benchmark Evidence
@@ -179,7 +179,7 @@ export function BenchmarkPageContent({
     <main>
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
+          <MotionWrap surface="benchmark" mode="static">
             <p className="font-mono text-[0.72rem] tracking-[0.2em] text-zinc-500 uppercase">
               Benchmark Evidence
             </p>
@@ -206,8 +206,8 @@ export function BenchmarkPageContent({
             </div>
           </MotionWrap>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            <MotionWrap delayMs={70}>
+          <MotionWrap surface="benchmark" className="mt-10" delayMs={60}>
+            <div className="grid gap-4 md:grid-cols-3">
               <div className="panel-card h-full p-5">
                 <p className="font-mono text-[0.68rem] tracking-[0.15em] text-zinc-500 uppercase">
                   Peak throughput
@@ -222,8 +222,6 @@ export function BenchmarkPageContent({
                   batch-all warm cache
                 </p>
               </div>
-            </MotionWrap>
-            <MotionWrap delayMs={120}>
               <div className="panel-card h-full p-5">
                 <p className="font-mono text-[0.68rem] tracking-[0.15em] text-zinc-500 uppercase">
                   Max cold→warm speedup
@@ -238,8 +236,6 @@ export function BenchmarkPageContent({
                   across profiles and scenarios
                 </p>
               </div>
-            </MotionWrap>
-            <MotionWrap delayMs={170}>
               <div className="panel-card h-full p-5">
                 <p className="font-mono text-[0.68rem] tracking-[0.15em] text-zinc-500 uppercase">
                   Headline scenario
@@ -253,18 +249,16 @@ export function BenchmarkPageContent({
                     : "Not available"}
                 </p>
               </div>
-            </MotionWrap>
-          </div>
+            </div>
+          </MotionWrap>
         </div>
       </section>
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
-              Cold wall time
-            </h2>
-          </MotionWrap>
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+            Cold wall time
+          </h2>
           <div className="panel-card mt-6 p-5 md:p-6">
             {renderBars(latest, "coldWallMs", "ms")}
           </div>
@@ -273,11 +267,9 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
-              Warm p50 wall time
-            </h2>
-          </MotionWrap>
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+            Warm p50 wall time
+          </h2>
           <div className="panel-card mt-6 p-5 md:p-6">
             {renderBars(latest, "warmP50Ms", "ms")}
           </div>
@@ -286,12 +278,57 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
-              Head vs base deltas
-            </h2>
-          </MotionWrap>
-          <div className="panel-card mt-6 overflow-x-auto p-0">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+            Head vs base deltas
+          </h2>
+          <div className="mt-6 grid gap-3 md:hidden">
+            {latest.deltas.map((entry) => (
+              <article
+                key={`mobile-${entry.profileId}-${entry.scenario}`}
+                className="panel-card p-4"
+                data-benchmark-mobile-delta-card="true"
+              >
+                <p className="font-mono text-[0.68rem] tracking-[0.12em] text-zinc-500 uppercase">
+                  {entry.profileId} / {entry.scenario}
+                </p>
+                <dl className="mt-3 space-y-2">
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <dt className="text-zinc-400">Warm p50</dt>
+                    <dd
+                      className={`font-mono text-xs ${metricClass(entry.warmP50Pct)}`}
+                    >
+                      {formatPct(entry.warmP50Pct)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <dt className="text-zinc-400">Warm p95</dt>
+                    <dd
+                      className={`font-mono text-xs ${metricClass(entry.warmP95Pct)}`}
+                    >
+                      {formatPct(entry.warmP95Pct)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <dt className="text-zinc-400">Cold</dt>
+                    <dd
+                      className={`font-mono text-xs ${metricClass(entry.coldPct)}`}
+                    >
+                      {formatPct(entry.coldPct)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 text-sm">
+                    <dt className="text-zinc-400">Alerts</dt>
+                    <dd className="max-w-[62%] text-right font-mono text-[0.7rem] text-zinc-400">
+                      {entry.alerts.length === 0
+                        ? "none"
+                        : entry.alerts.join(", ")}
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+          <div className="panel-card mt-6 hidden overflow-x-auto p-0 md:block">
             <table className="min-w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.03] text-left text-zinc-400">
@@ -357,11 +394,9 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
-              Throughput (batch-all, warm)
-            </h2>
-          </MotionWrap>
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+            Throughput (batch-all, warm)
+          </h2>
           <div className="panel-card mt-6 p-5 md:p-6">
             {batchThroughput.map((entry) => {
               const width =
@@ -396,12 +431,54 @@ export function BenchmarkPageContent({
 
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
-          <MotionWrap>
-            <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
-              Recent approved snapshots
-            </h2>
-          </MotionWrap>
-          <div className="panel-card mt-6 overflow-x-auto p-0">
+          <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-4xl">
+            Recent approved snapshots
+          </h2>
+          <div className="mt-6 grid gap-3 md:hidden">
+            {recent.map((entry) => (
+              <article
+                key={`recent-mobile-${entry.snapshotId}`}
+                className="panel-card p-4"
+                data-benchmark-mobile-recent-card="true"
+              >
+                <p className="font-mono text-[0.68rem] tracking-[0.12em] text-zinc-500 uppercase">
+                  Snapshot
+                </p>
+                <p className="mt-1 font-mono text-sm text-zinc-100">
+                  {entry.snapshotId}
+                </p>
+                <dl className="mt-3 space-y-2 text-sm">
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-zinc-400">As of</dt>
+                    <dd className="text-zinc-300">{entry.asOfDate}</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-zinc-400">Tier</dt>
+                    <dd className="font-mono text-xs text-zinc-300">
+                      {entry.source.tier}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-zinc-400">Alerts</dt>
+                    <dd className="font-mono text-xs text-zinc-300">
+                      {entry.summary.alertCount.toString()}
+                    </dd>
+                  </div>
+                </dl>
+                <p className="mt-4">
+                  <a
+                    href={entry.source.runUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-md border border-white/20 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-200 uppercase transition hover:border-white/30 hover:text-zinc-100"
+                  >
+                    Open run
+                  </a>
+                </p>
+              </article>
+            ))}
+          </div>
+          <div className="panel-card mt-6 hidden overflow-x-auto p-0 md:block">
             <table className="min-w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.03] text-left text-zinc-400">

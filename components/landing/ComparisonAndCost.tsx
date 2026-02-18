@@ -56,8 +56,8 @@ export function ComparisonAndCost() {
           </p>
         </MotionWrap>
 
-        <MotionWrap className="mt-10" delayMs={120}>
-          <div className="hidden overflow-x-auto md:block">
+        <MotionWrap className="mt-10" delayMs={90}>
+          <div className="hidden w-full max-w-full overflow-x-auto md:block">
             <table className="panel-card w-full min-w-[940px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02]">

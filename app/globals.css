@@ -184,11 +184,11 @@ header {
 
 .terminal-cursor {
   display: inline-block;
-  width: 8px;
-  height: 1.05rem;
+  width: 6px;
+  height: 0.95rem;
   vertical-align: middle;
-  background: #4ce9af;
-  animation: terminal-caret 1.1s steps(1, end) infinite;
+  background: rgba(76, 233, 175, 0.92);
+  animation: terminal-caret 1.6s steps(1, end) infinite;
 }
 
 @keyframes terminal-caret {
