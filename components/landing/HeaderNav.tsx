@@ -13,7 +13,8 @@ export function HeaderNav() {
         </a>
         <MotionWrap
           className="flex items-center gap-3 text-sm text-zinc-400 md:gap-5"
-          mode="static"
+          mode="load-once"
+          delayMs={20}
         >
           <div className="hidden items-center gap-4 md:flex md:gap-5">
             {NAV_ITEMS.map((item) => (

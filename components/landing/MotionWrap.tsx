@@ -6,6 +6,9 @@ import { type ReactNode } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import {
   MOTION_SURFACE_PRESETS,
+  clampCycle3TopHalfDelay,
+  clampCycle3TopHalfDistance,
+  clampCycle3TopHalfDuration,
   clampMotionDelay,
   type MotionSurface,
 } from "@/lib/animation/config";
@@ -15,7 +18,7 @@ type MotionWrapProps = {
   className?: string;
   delayMs?: number;
   surface?: MotionSurface;
-  mode?: "in-view" | "static";
+  mode?: "in-view" | "load-once" | "static";
 };
 
 export function MotionWrap({
@@ -27,23 +30,53 @@ export function MotionWrap({
 }: MotionWrapProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const reduceMotionFromMotion = useReducedMotion();
-  const shouldAnimate =
-    prefersReducedMotion === false &&
-    reduceMotionFromMotion !== true &&
-    mode === "in-view";
+  const canAnimate =
+    prefersReducedMotion === false && reduceMotionFromMotion !== true;
 
-  if (!shouldAnimate) {
+  if (!canAnimate || mode === "static") {
     return <div className={className}>{children}</div>;
   }
 
   const preset = MOTION_SURFACE_PRESETS[surface];
-  const delaySeconds = clampMotionDelay(surface, delayMs) / 1000;
+  const delayMsClamped =
+    mode === "load-once"
+      ? clampCycle3TopHalfDelay(delayMs)
+      : clampMotionDelay(surface, delayMs);
+  const durationSeconds =
+    mode === "load-once"
+      ? clampCycle3TopHalfDuration(preset.durationSeconds)
+      : preset.durationSeconds;
+  const distancePx =
+    mode === "load-once"
+      ? clampCycle3TopHalfDistance(preset.distancePx)
+      : preset.distancePx;
+  const delaySeconds = delayMsClamped / 1000;
+
+  if (mode === "load-once") {
+    return (
+      <motion.div
+        className={className}
+        data-motion-wrap={surface}
+        data-motion-mode="load-once"
+        initial={{ opacity: 0, y: distancePx }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: durationSeconds,
+          delay: delaySeconds,
+          ease: preset.ease,
+        }}
+      >
+        {children}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
       className={className}
       data-motion-wrap={surface}
-      initial={{ opacity: 0, y: preset.distancePx }}
+      data-motion-mode="in-view"
+      initial={{ opacity: 0, y: distancePx }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{
         once: true,
@@ -51,7 +84,7 @@ export function MotionWrap({
         margin: preset.viewportMargin,
       }}
       transition={{
-        duration: preset.durationSeconds,
+        duration: durationSeconds,
         delay: delaySeconds,
         ease: preset.ease,
       }}
