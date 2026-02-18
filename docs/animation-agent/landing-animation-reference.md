@@ -2,7 +2,7 @@
 
 Date: 2026-02-18
 Scope mode: Landing + benchmark-focused
-Enforcement mode: Advisory-first (cycle 1)
+Enforcement mode: Advisory-first (cycle 1 baseline + cycle 2 fixes)
 
 ## Purpose
 
@@ -25,6 +25,35 @@ Out of scope for cycle 1:
 - Non-landing and non-benchmark routes
 - Runtime production telemetry changes
 - Product code implementation changes
+
+## Cycle 2 Implementation Decisions (2026-02-18)
+
+1. Animation baseline
+
+- `motion` is the active UI animation baseline for landing and benchmark entry transitions.
+- Existing CSS and hook-based reduced-motion behavior remains mandatory and is enforced alongside `motion`.
+
+2. Deferred platform API
+
+- `<ViewTransition>` remains deferred in this cycle.
+- Revisit once browser/runtime support and framework integration are stable for our route model.
+
+3. React hook policy for motion-adjacent behavior
+
+- `useLayoutEffect` is allowed only for pre-paint layout reads/writes that cannot be deferred to `useEffect`.
+- `useTransition` is reserved for non-urgent state updates and must not be used as the animation engine.
+
+4. Reduced-motion and SEO parity
+
+- Reduced-motion parity is required across CSS, JS, and `motion` paths.
+- Core claims, CTA paths, and crawlable links must remain visible without interaction-gated animation.
+
+5. Local benchmark fixture policy
+
+- Data-rich benchmark animation validation uses a local fixture switch only:
+  - `BENCHMARK_ENABLE_LOCAL_FIXTURE=1`
+  - `BENCHMARK_SNAPSHOT_FIXTURE=sample`
+- Canonical `data/benchmarks/latest.json` remains unchanged during animation audits and fixes.
 
 ## Animation Usage Model
 
