@@ -53,6 +53,22 @@ pnpm format      # prettier check
 pnpm format:write
 ```
 
+## Analytics
+
+- Vercel Web Analytics is enabled via `@vercel/analytics` in
+  `app/layout.tsx`.
+- Mode is environment-aware:
+  - `production` only when `VERCEL_ENV=production`
+  - `development` for local and preview environments
+- This keeps production metrics clean while avoiding free-tier noise from
+  preview traffic.
+- A vendor-neutral helper lives at `lib/analytics/track-event.ts` for future
+  event instrumentation and eventual PostHog expansion.
+- Custom event emission is disabled by default and gated by
+  `NEXT_PUBLIC_ANALYTICS_CUSTOM_EVENTS=1`.
+- Event names and planned payloads are documented in
+  `docs/analytics/event-taxonomy.md`.
+
 ## Accessibility
 
 - Contrast target: WCAG 2.1 AA for normal text (`>= 4.5:1`).
