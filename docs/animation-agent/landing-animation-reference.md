@@ -2,7 +2,7 @@
 
 Date: 2026-02-18
 Scope mode: Landing + benchmark-focused
-Enforcement mode: Core safety strict in CI + advisory style scoring (cycle 5)
+Enforcement mode: Core safety strict in CI + advisory style scoring (cycle 6)
 
 ## Purpose
 
@@ -133,6 +133,37 @@ Out of scope for cycle 1:
   - `ui-focus-ring`
 - Scope is landing-wide and includes non-clickable cards by design.
 - Transform micro-motion remains guarded by `@media (prefers-reduced-motion: no-preference)`.
+
+## Cycle 6 Benchmark Density and Interaction Decisions (2026-02-18)
+
+1. Benchmark implementation focus is density reduction first
+
+- Benchmark default entry density target is locked to fixture average `<= 4`.
+- Benchmark hero block remains static (`mode="static"`) to preserve immediate readability.
+
+2. Animated benchmark sections are intentionally limited to four
+
+- Remaining animated wrappers are:
+  - summary cards
+  - head-vs-base deltas
+  - throughput
+  - recent snapshots/governance
+- Cold wall and warm p50 sections are static in cycle 6.
+
+3. Benchmark sequencing is explicit and centralized
+
+- Sequence delays are now constant-driven in `/Users/fabiencampana/Documents/imageforge-site/lib/animation/config.ts`:
+  - summary: `0ms`
+  - deltas: `40ms`
+  - throughput: `80ms`
+  - recent: `120ms`
+
+4. Benchmark interaction policy now uses shared utility tokens
+
+- Card surfaces use `ui-interact-card`.
+- Button-like controls use `ui-interact-control ui-focus-ring`.
+- Inline links use `ui-interact-link ui-focus-ring`.
+- Table-row hover remains color-only to avoid transform density drift.
 
 ## Animation Usage Model
 
@@ -278,8 +309,8 @@ Animation performance rules:
 
 5. `/Users/fabiencampana/Documents/imageforge-site/components/benchmark/BenchmarkPageContent.tsx`
 
-- Evidence: benchmark route reuses shared `MotionWrap` across headline, cards, chart sections, and tables in data-rich branch.
-- Risk theme: shared-motion spillover and potential entrance-density/perf risk when benchmark data is populated.
+- Evidence: benchmark route now keeps headline plus cold/warm sections static while limiting data-rich reveal wrappers to four sections and using shared `ui-interact-*` tokens.
+- Risk theme: maintain benchmark density at or below cycle-6 target while preserving readability and reduced-motion parity.
 
 ## Runtime Baseline Notes (Cycle 1 Historical, 2026-02-18)
 
@@ -398,6 +429,36 @@ Observed highlights:
 - `ui-interact-*` + `ui-focus-ring` are now applied across landing controls, links, and card surfaces.
 - Style-density scoring remains advisory while core safety stays strict.
 
+## Cycle 6 Verification Notes (2026-02-18)
+
+Evidence collected with the committed safety scripts after cycle-6 benchmark changes:
+
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/run-check.sh`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/collect-matrix.mts`
+- `/Users/fabiencampana/Documents/imageforge-site/scripts/animation/assert-core-safety.mts`
+
+Observed highlights:
+
+1. Core safety gates remain healthy after benchmark tuning
+
+- Canonical matrix: `.tmp/animation/matrix-canonical.json` (`generatedAt=2026-02-18T23:56:42.494Z`)
+- Fixture matrix: `.tmp/animation/matrix-fixture.json` (`generatedAt=2026-02-18T23:57:23.748Z`)
+- Overflow remained `0` in canonical + fixture runs.
+- Reduced-motion parity remained `24/24` with benchmark reduced wrapper average `0.00`.
+- Landing hero claim/primary CTA checks remained present in all landing cells.
+
+2. Benchmark density target is met in fixture mode
+
+- Fixture benchmark default wrapper average is now `4.00` (down from cycle-5 `6.00`).
+- Canonical benchmark default wrapper average remains `1.00` for fallback branch behavior.
+
+3. Narrow-viewport benchmark readability remains stable
+
+- Fixture portrait checks for `320/360/375/390/412` continue to render:
+  - delta cards `3/3`
+  - recent cards `2/2`
+- Root overflow remains `0` for benchmark route across sampled cells.
+
 ## Standard Audit Command Set
 
 Use this command sequence during future animation assessments:
@@ -443,7 +504,8 @@ Tie-breakers:
 - Current animation baseline is `motion` + existing CSS/JS reduced-motion controls.
 - Cycle-3 reintroduction scope remains limited to nav+hero load-once plus subtle micro-interactions.
 - Cycle-4 benchmark enhancement is intentionally subtle and validated in canonical + fixture builds.
-- Cycle-5 implementation is landing-focused for smoothing and micro-interaction consistency; benchmark behavior remains unchanged.
+- Cycle-5 implementation is landing-focused for smoothing and micro-interaction consistency.
+- Cycle-6 implementation is benchmark-focused for density reduction and interaction-token consistency.
 
 ## Sources
 
