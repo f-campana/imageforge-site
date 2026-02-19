@@ -11,15 +11,15 @@ Validate social sharing output for:
 
 ## Platform Matrix
 
-| Platform | Desktop | Mobile | Primary check |
-| --- | --- | --- | --- |
-| Slack | Yes | Yes | Card title/description and image readability |
-| X | Yes | Yes | Summary large image rendering and text clipping |
-| LinkedIn | Yes | Yes | Open Graph title/description parity |
-| Facebook | Yes | Yes | Open Graph image, title, and URL correctness |
-| Discord | Yes | Yes | Link embed card rendering and image crop |
-| iMessage | N/A | Yes | Preview title and image crop behavior |
-| WhatsApp | Web | Yes | Preview title/description and image legibility |
+| Platform | Desktop | Mobile | Primary check                                   |
+| -------- | ------- | ------ | ----------------------------------------------- |
+| Slack    | Yes     | Yes    | Card title/description and image readability    |
+| X        | Yes     | Yes    | Summary large image rendering and text clipping |
+| LinkedIn | Yes     | Yes    | Open Graph title/description parity             |
+| Facebook | Yes     | Yes    | Open Graph image, title, and URL correctness    |
+| Discord  | Yes     | Yes    | Link embed card rendering and image crop        |
+| iMessage | N/A     | Yes    | Preview title and image crop behavior           |
+| WhatsApp | Web     | Yes    | Preview title/description and image legibility  |
 
 ## Expected Metadata Signals
 

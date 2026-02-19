@@ -7,7 +7,8 @@ import {
   getLatestBenchmarkSnapshot,
 } from "@/lib/benchmark/load";
 
-const BENCHMARK_TITLE = "ImageForge Benchmark Evidence | Latest Approved Snapshot";
+const BENCHMARK_TITLE =
+  "ImageForge Benchmark Evidence | Latest Approved Snapshot";
 const BENCHMARK_DESCRIPTION =
   "Approved benchmark evidence for ImageForge CLI, generated from benchmark CI runs and synced through review-gated PRs.";
 

@@ -17,13 +17,7 @@ const EXCLUDED_H1_AUDIT_FILES = new Set([
   "app/benchmarks/latest/opengraph-image.tsx",
   "app/benchmarks/latest/twitter-image.tsx",
 ]);
-const MODULE_RESOLUTION_EXTENSIONS = [
-  ".tsx",
-  ".ts",
-  ".jsx",
-  ".js",
-  ".mjs",
-];
+const MODULE_RESOLUTION_EXTENSIONS = [".tsx", ".ts", ".jsx", ".js", ".mjs"];
 
 export function evaluateMetadataFields(layoutSource) {
   const metadataBase = /metadataBase\s*:/.test(layoutSource);
@@ -527,8 +521,8 @@ export async function runTechnicalChecks(config) {
       const h1Count = auditedFiles.reduce(
         (count, sourceFilePath) =>
           count +
-          ((fileContentsByPath.get(sourceFilePath)?.match(/<h1\b/g)?.length ??
-            0)),
+          (fileContentsByPath.get(sourceFilePath)?.match(/<h1\b/g)?.length ??
+            0),
         0,
       );
 
