@@ -139,9 +139,9 @@ export function BenchmarkPageContent({
               <p className="font-mono text-[0.72rem] tracking-[0.2em] text-zinc-500 uppercase">
                 Benchmark Evidence
               </p>
-              <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-100 md:text-5xl">
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-100 md:text-5xl">
                 No approved benchmark snapshot yet.
-              </h1>
+              </h2>
               <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-zinc-400 md:text-base">
                 This page is generated from approved benchmark sync PRs. Once
                 the first snapshot is merged, detailed cold/warm performance and
