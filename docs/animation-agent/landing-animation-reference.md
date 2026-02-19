@@ -165,6 +165,37 @@ Out of scope for cycle 1:
 - Inline links use `ui-interact-link ui-focus-ring`.
 - Table-row hover remains color-only to avoid transform density drift.
 
+## Cycle 7 Regression Quality Gate Decisions (2026-02-19)
+
+1. Advisory regression gate stack is now active
+
+- Added four advisory checks for landing + benchmark quality drift:
+  - Vitest unit/component coverage (`tests/unit/**`)
+  - Playwright smoke E2E (`tests/e2e/**`)
+  - Playwright visual diff snapshots (`tests/visual/**`)
+  - Lighthouse CI lab checks (`lighthouserc.json`)
+
+2. Visual baseline ownership is explicit
+
+- Critical route/state snapshots are committed in-repo and reviewed in PRs.
+- Baseline updates require explicit maintainer intent via:
+  `pnpm test:visual:update`.
+
+3. Deterministic benchmark fixture mode is mandatory for quality gates
+
+- Quality-gate runs use:
+  - `BENCHMARK_ENABLE_LOCAL_FIXTURE=1`
+  - `BENCHMARK_SNAPSHOT_FIXTURE=sample`
+- This avoids benchmark page visual and metric drift caused by asynchronous
+  snapshot churn.
+
+4. Phase posture remains non-blocking while signal quality is tuned
+
+- Workflow `.github/workflows/quality-gates.yml` publishes advisory outcomes and
+  artifacts.
+- Merge-blocking animation safety checks remain in
+  `.github/workflows/animation-safety.yml`.
+
 ## Animation Usage Model
 
 Use motion to improve comprehension, not to decorate by default.
