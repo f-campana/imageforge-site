@@ -26,6 +26,7 @@
     "format:write": "prettier --write ."
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "cheerio": "^1.1.2",
     "googleapis": "^171.4.0",
     "motion": "^12.34.2",
@@ -35,8 +36,8 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@playwright/test": "^1.56.1",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
