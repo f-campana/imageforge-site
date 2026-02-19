@@ -16,46 +16,48 @@ export default function OpenGraphImage() {
         width: "100%",
         height: "100%",
         background:
-          "radial-gradient(circle at top left, #1f4f42 0%, #0a1220 55%, #05080f 100%)",
+          "linear-gradient(135deg, #0b1220 0%, #102236 48%, #0d3d34 100%)",
         color: "#f4f8f7",
         fontFamily: "sans-serif",
-        padding: "72px",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "48px",
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
-          maxWidth: "820px",
+          gap: "14px",
+          width: "100%",
+          maxWidth: "760px",
+          textAlign: "center",
         }}
       >
         <p
           style={{
             margin: 0,
-            fontSize: 34,
+            fontSize: 30,
             color: "#82f5d2",
-            letterSpacing: 0.3,
+            letterSpacing: 0.4,
           }}
         >
           Build-time image optimization
         </p>
-        <h1
+        <p
           style={{
             margin: 0,
-            fontSize: 84,
-            lineHeight: 1.05,
+            fontSize: 74,
+            lineHeight: 1.04,
             fontWeight: 700,
           }}
         >
           ImageForge CLI
-        </h1>
+        </p>
         <p
           style={{
             margin: 0,
-            fontSize: 34,
+            fontSize: 30,
             color: "#d2dbd9",
           }}
         >

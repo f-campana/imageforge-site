@@ -14,7 +14,10 @@ const GENERIC_ALT_TEXT = new Set(["image", "photo", "picture", "hero"]);
 const EXCLUDED_H1_AUDIT_FILES = new Set([
   "app/opengraph-image.tsx",
   "app/twitter-image.tsx",
+  "app/benchmarks/latest/opengraph-image.tsx",
+  "app/benchmarks/latest/twitter-image.tsx",
 ]);
+const MODULE_RESOLUTION_EXTENSIONS = [".tsx", ".ts", ".jsx", ".js", ".mjs"];
 
 export function evaluateMetadataFields(layoutSource) {
   const metadataBase = /metadataBase\s*:/.test(layoutSource);
@@ -188,6 +191,126 @@ export function findBrokenInternalLinks(hrefs, routes) {
 function includeInH1Audit(rootDir, filePath) {
   const relativePath = path.relative(rootDir, filePath).replaceAll("\\", "/");
   return !EXCLUDED_H1_AUDIT_FILES.has(relativePath);
+}
+
+function extractModuleSpecifiers(source) {
+  const specifiers = [];
+  const pattern =
+    /(?:^|\s)(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?["']([^"']+)["']/gm;
+
+  for (const match of source.matchAll(pattern)) {
+    if (match[1]) {
+      specifiers.push(match[1]);
+    }
+  }
+
+  return specifiers;
+}
+
+function resolveModuleFromSpecifier(
+  importerPath,
+  specifier,
+  rootDir,
+  knownSourceFiles,
+) {
+  let unresolvedPath = null;
+
+  if (specifier.startsWith("./") || specifier.startsWith("../")) {
+    unresolvedPath = path.resolve(path.dirname(importerPath), specifier);
+  } else if (specifier.startsWith("@/")) {
+    unresolvedPath = path.resolve(rootDir, specifier.slice(2));
+  } else {
+    return null;
+  }
+
+  if (knownSourceFiles.has(unresolvedPath)) {
+    return unresolvedPath;
+  }
+
+  if (!path.extname(unresolvedPath)) {
+    for (const extension of MODULE_RESOLUTION_EXTENSIONS) {
+      const candidate = `${unresolvedPath}${extension}`;
+      if (knownSourceFiles.has(candidate)) {
+        return candidate;
+      }
+    }
+  }
+
+  for (const extension of MODULE_RESOLUTION_EXTENSIONS) {
+    const indexCandidate = path.join(unresolvedPath, `index${extension}`);
+    if (knownSourceFiles.has(indexCandidate)) {
+      return indexCandidate;
+    }
+  }
+
+  return null;
+}
+
+function collectRouteSourceGraph(entryFilePath, fileContentsByPath, rootDir) {
+  const knownSourceFiles = new Set(fileContentsByPath.keys());
+  const visited = new Set();
+  const queue = [path.resolve(entryFilePath)];
+
+  while (queue.length > 0) {
+    const currentPath = queue.pop();
+    if (!currentPath || visited.has(currentPath)) {
+      continue;
+    }
+
+    if (!knownSourceFiles.has(currentPath)) {
+      continue;
+    }
+
+    visited.add(currentPath);
+    const source = fileContentsByPath.get(currentPath) ?? "";
+
+    for (const specifier of extractModuleSpecifiers(source)) {
+      const resolved = resolveModuleFromSpecifier(
+        currentPath,
+        specifier,
+        rootDir,
+        knownSourceFiles,
+      );
+      if (resolved && !visited.has(resolved)) {
+        queue.push(resolved);
+      }
+    }
+  }
+
+  return [...visited];
+}
+
+export function evaluateRouteH1Coverage(routeEntries) {
+  if (routeEntries.length === 0) {
+    return {
+      status: "warn",
+      message: "No indexable routes were found for H1 audit.",
+      evidence: "No app/**/page.tsx files discovered.",
+    };
+  }
+
+  const invalidEntries = routeEntries.filter((entry) => entry.h1Count !== 1);
+  const evidence = routeEntries
+    .map(
+      (entry) =>
+        `${entry.route}=${entry.h1Count}h1 (source=${entry.sourceFile}, files=${entry.auditedFileCount})`,
+    )
+    .join("; ");
+
+  if (invalidEntries.length === 0) {
+    return {
+      status: "pass",
+      message: "Each indexable route resolves to exactly one H1.",
+      evidence,
+    };
+  }
+
+  return {
+    status: "warn",
+    message:
+      "Some indexable routes do not resolve to exactly one H1 in audited source.",
+    evidence,
+  };
 }
 
 export async function runTechnicalChecks(config) {
@@ -374,39 +497,59 @@ export async function runTechnicalChecks(config) {
       content: (await readTextOrNull(filePath)) ?? "",
     })),
   );
-
-  const h1AuditFiles = fileContents.filter((file) =>
-    includeInH1Audit(config.rootDir, file.filePath),
+  const fileContentsByPath = new Map(
+    fileContents.map((file) => [path.resolve(file.filePath), file.content]),
   );
-
-  const h1Count = h1AuditFiles.reduce(
-    (count, file) => count + (file.content.match(/<h1\b/g)?.length ?? 0),
-    0,
+  const pageFiles = await listFilesRecursively(config.appDir, (filePath) =>
+    /page\.tsx$/.test(filePath),
   );
+  const routeH1Entries = pageFiles
+    .map((pageFilePath) => {
+      const route = resolveRouteFromFile(config.appDir, pageFilePath);
+      if (!route) {
+        return null;
+      }
 
-  const h1Status = h1Count === 1 ? "pass" : "warn";
+      const routeSourceGraph = collectRouteSourceGraph(
+        pageFilePath,
+        fileContentsByPath,
+        config.rootDir,
+      );
+      const auditedFiles = routeSourceGraph.filter((sourceFilePath) =>
+        includeInH1Audit(config.rootDir, sourceFilePath),
+      );
+      const h1Count = auditedFiles.reduce(
+        (count, sourceFilePath) =>
+          count +
+          (fileContentsByPath.get(sourceFilePath)?.match(/<h1\b/g)?.length ??
+            0),
+        0,
+      );
+
+      return {
+        route,
+        h1Count,
+        sourceFile: path.relative(config.rootDir, pageFilePath),
+        auditedFileCount: auditedFiles.length,
+      };
+    })
+    .filter(Boolean);
+
+  const h1Coverage = evaluateRouteH1Coverage(routeH1Entries);
   checks.push(
     makeCheck({
       id: "technical.heading_h1",
       suite: "technical",
       severity: "high",
-      status: h1Status,
-      message:
-        h1Status === "pass"
-          ? "Exactly one H1 appears across page sections."
-          : `Expected one H1, found ${h1Count}.`,
-      evidence: h1AuditFiles
-        .map((file) => path.relative(config.rootDir, file.filePath))
-        .join(", "),
+      status: h1Coverage.status,
+      message: h1Coverage.message,
+      evidence: h1Coverage.evidence,
       fixHint: "Ensure each indexable page renders exactly one descriptive H1.",
-      file: "app/page.tsx",
+      file: "app",
     }),
   );
 
   const hrefs = fileContents.flatMap((file) => extractHrefs(file.content));
-  const pageFiles = await listFilesRecursively(config.appDir, (filePath) =>
-    /page\.tsx$/.test(filePath),
-  );
   const routes = pageFiles
     .map((filePath) => resolveRouteFromFile(config.appDir, filePath))
     .filter(Boolean);

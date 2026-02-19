@@ -7,12 +7,41 @@ import {
   getLatestBenchmarkSnapshot,
 } from "@/lib/benchmark/load";
 
+const BENCHMARK_TITLE =
+  "ImageForge Benchmark Evidence | Latest Approved Snapshot";
+const BENCHMARK_DESCRIPTION =
+  "Approved benchmark evidence for ImageForge CLI, generated from benchmark CI runs and synced through review-gated PRs.";
+
 export const metadata: Metadata = {
-  title: "ImageForge Benchmark Evidence | Latest Approved Snapshot",
-  description:
-    "Approved benchmark evidence for ImageForge CLI, generated from benchmark CI runs and synced through review-gated PRs.",
+  title: BENCHMARK_TITLE,
+  description: BENCHMARK_DESCRIPTION,
   alternates: {
     canonical: "/benchmarks/latest",
+  },
+  openGraph: {
+    title: BENCHMARK_TITLE,
+    description: BENCHMARK_DESCRIPTION,
+    type: "website",
+    url: "/benchmarks/latest",
+    images: [
+      {
+        url: "/benchmarks/latest/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "ImageForge benchmark evidence social card",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BENCHMARK_TITLE,
+    description: BENCHMARK_DESCRIPTION,
+    images: [
+      {
+        url: "/benchmarks/latest/twitter-image",
+        alt: "ImageForge benchmark evidence preview card",
+      },
+    ],
   },
 };
 
