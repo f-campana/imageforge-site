@@ -17,22 +17,22 @@ All events below are **planned** and are **not emitted in phase 1**.
 
 ## Planned events
 
-| Event name | Status | Planned properties |
-| --- | --- | --- |
-| `hero_get_started_click` | planned | `target` (`"npm"`), `section` (`"hero"`), `href` |
-| `hero_read_docs_click` | planned | `target` (`"github"`), `section` (`"hero"`), `href` |
-| `install_command_copied` | planned | `packageManager`, `commandType` (`"install"` \| `"run_once"`), `surface` (`"hero"` \| `"footer"`), `success` |
-| `install_package_manager_selected` | planned | `packageManager`, `surface` (`"hero"` \| `"footer"`), `previousPackageManager` |
-| `header_nav_item_click` | planned | `label`, `href`, `section` (`"header"`), `isExternal` |
-| `header_github_click` | planned | `section` (`"header"`), `href` |
-| `header_npm_click` | planned | `section` (`"header"`), `href` |
-| `footer_docs_click` | planned | `section` (`"footer"`), `href` |
-| `footer_changelog_click` | planned | `section` (`"footer"`), `href` |
-| `footer_issues_click` | planned | `section` (`"footer"`), `href` |
-| `footer_security_click` | planned | `section` (`"footer"`), `href` |
-| `footer_github_click` | planned | `section` (`"footer"`), `href` |
-| `footer_npm_click` | planned | `section` (`"footer"`), `href` |
-| `benchmark_back_to_landing_click` | planned | `section` (`"benchmark_header"`), `href` |
+| Event name                         | Status  | Planned properties                                                                                           |
+| ---------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ |
+| `hero_get_started_click`           | planned | `target` (`"npm"`), `section` (`"hero"`), `href`                                                             |
+| `hero_read_docs_click`             | planned | `target` (`"github"`), `section` (`"hero"`), `href`                                                          |
+| `install_command_copied`           | planned | `packageManager`, `commandType` (`"install"` \| `"run_once"`), `surface` (`"hero"` \| `"footer"`), `success` |
+| `install_package_manager_selected` | planned | `packageManager`, `surface` (`"hero"` \| `"footer"`), `previousPackageManager`                               |
+| `header_nav_item_click`            | planned | `label`, `href`, `section` (`"header"`), `isExternal`                                                        |
+| `header_github_click`              | planned | `section` (`"header"`), `href`                                                                               |
+| `header_npm_click`                 | planned | `section` (`"header"`), `href`                                                                               |
+| `footer_docs_click`                | planned | `section` (`"footer"`), `href`                                                                               |
+| `footer_changelog_click`           | planned | `section` (`"footer"`), `href`                                                                               |
+| `footer_issues_click`              | planned | `section` (`"footer"`), `href`                                                                               |
+| `footer_security_click`            | planned | `section` (`"footer"`), `href`                                                                               |
+| `footer_github_click`              | planned | `section` (`"footer"`), `href`                                                                               |
+| `footer_npm_click`                 | planned | `section` (`"footer"`), `href`                                                                               |
+| `benchmark_back_to_landing_click`  | planned | `section` (`"benchmark_header"`), `href`                                                                     |
 
 ## Future instrumentation targets
 
