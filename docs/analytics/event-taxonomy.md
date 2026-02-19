@@ -6,10 +6,12 @@ All events below are **planned** and are **not emitted in phase 1**.
 ## Status
 
 - Tracking in production today: pageviews only (Vercel Web Analytics).
+- Vercel Speed Insights is enabled in production only with `sampleRate=1`.
 - Custom events: gated by `NEXT_PUBLIC_ANALYTICS_CUSTOM_EVENTS=1`.
 - Default gate value: `0` (disabled).
 - Owner browser opt-out: visit with `?analytics=off` once to stop counting
-  traffic in that browser. Re-enable with `?analytics=on`.
+  analytics and speed insights traffic in that browser. Re-enable with
+  `?analytics=on`.
 
 ## Event contract
 
