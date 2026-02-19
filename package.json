@@ -11,6 +11,13 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test -c playwright.config.ts",
+    "test:visual": "playwright test -c playwright.visual.config.ts",
+    "test:visual:update": "playwright test -c playwright.visual.config.ts --update-snapshots",
+    "lhci": "lhci autorun --config=./lighthouserc.json",
+    "quality:gates:local": "pnpm test:unit && pnpm test:e2e && pnpm test:visual && pnpm lhci",
     "check:ci": "pnpm lint && pnpm typecheck && pnpm format && NEXT_PUBLIC_SITE_URL=https://example.com pnpm build && pnpm seo:test && NEXT_PUBLIC_SITE_URL=https://example.com SEO_MODE=advisory pnpm seo:check",
     "seo:tech": "node scripts/seo/run.mjs --suite tech --mode advisory",
     "seo:content": "node scripts/seo/run.mjs --suite content --mode advisory",
@@ -37,17 +44,23 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "jsdom": "^28.1.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   },
   "pnpm": {
     "overrides": {

@@ -1,0 +1,118 @@
+name: Quality Gates (Advisory)
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates-advisory:
+    name: quality-gates-advisory
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_PUBLIC_SITE_URL: https://example.com
+      BENCHMARK_ENABLE_LOCAL_FIXTURE: "1"
+      BENCHMARK_SNAPSHOT_FIXTURE: sample
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run unit tests (advisory)
+        id: unit
+        run: |
+          set +e
+          pnpm test:unit
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Run E2E tests (advisory)
+        id: e2e
+        run: |
+          set +e
+          pnpm test:e2e
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Run visual tests (advisory)
+        id: visual
+        run: |
+          set +e
+          pnpm test:visual
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Run Lighthouse CI (advisory)
+        id: lhci
+        run: |
+          set +e
+          pnpm lhci
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload quality-gate artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: quality-gates-artifacts
+          path: |
+            playwright-report/e2e/**
+            playwright-report/visual/**
+            test-results/e2e/**
+            test-results/visual/**
+            .tmp/lhci/**
+          if-no-files-found: warn
+
+      - name: Publish advisory summary
+        if: always()
+        run: |
+          unit_status="${{ steps.unit.outputs.status }}"
+          e2e_status="${{ steps.e2e.outputs.status }}"
+          visual_status="${{ steps.visual.outputs.status }}"
+          lhci_status="${{ steps.lhci.outputs.status }}"
+
+          format_status() {
+            if [ "$1" = "0" ]; then
+              echo "PASS"
+            else
+              echo "ADVISORY_FAIL"
+            fi
+          }
+
+          {
+            echo "## Advisory Quality Gates"
+            echo ""
+            echo "| Gate | Exit Code | Result |"
+            echo "| --- | ---: | --- |"
+            echo "| Vitest unit | ${unit_status:-unknown} | $(format_status "${unit_status:-1}") |"
+            echo "| Playwright e2e | ${e2e_status:-unknown} | $(format_status "${e2e_status:-1}") |"
+            echo "| Playwright visual | ${visual_status:-unknown} | $(format_status "${visual_status:-1}") |"
+            echo "| Lighthouse CI | ${lhci_status:-unknown} | $(format_status "${lhci_status:-1}") |"
+            echo ""
+            echo "This workflow is advisory in Phase 3 and does not block merges."
+          } >> "$GITHUB_STEP_SUMMARY"
