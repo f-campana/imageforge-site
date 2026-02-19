@@ -66,6 +66,9 @@ pnpm format:write
   event instrumentation and eventual PostHog expansion.
 - Custom event emission is disabled by default and gated by
   `NEXT_PUBLIC_ANALYTICS_CUSTOM_EVENTS=1`.
+- You can opt your own browser out of analytics counting by visiting any page
+  once with `?analytics=off`. To opt back in for that browser, visit with
+  `?analytics=on`.
 - Event names and planned payloads are documented in
   `docs/analytics/event-taxonomy.md`.
 

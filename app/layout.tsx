@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 
+import { VercelAnalytics } from "@/components/analytics/VercelAnalytics";
 import { resolveSiteUrl } from "@/lib/seo/site-url";
 
 import "./globals.css";
@@ -77,7 +77,7 @@ export default function RootLayout({
         className={`${headingFont.variable} ${monoFont.variable} antialiased`}
       >
         {children}
-        <Analytics mode={analyticsMode} debug={false} />
+        <VercelAnalytics mode={analyticsMode} />
       </body>
     </html>
   );
