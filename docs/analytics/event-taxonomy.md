@@ -8,6 +8,8 @@ All events below are **planned** and are **not emitted in phase 1**.
 - Tracking in production today: pageviews only (Vercel Web Analytics).
 - Custom events: gated by `NEXT_PUBLIC_ANALYTICS_CUSTOM_EVENTS=1`.
 - Default gate value: `0` (disabled).
+- Owner browser opt-out: visit with `?analytics=off` once to stop counting
+  traffic in that browser. Re-enable with `?analytics=on`.
 
 ## Event contract
 
