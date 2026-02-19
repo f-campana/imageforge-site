@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 
 import { VercelAnalytics } from "@/components/analytics/VercelAnalytics";
+import { VercelSpeedInsights } from "@/components/analytics/VercelSpeedInsights";
 import { resolveSiteUrl } from "@/lib/seo/site-url";
 
 import "./globals.css";
 
 const siteUrl = resolveSiteUrl();
-const analyticsMode =
-  process.env.VERCEL_ENV === "production" ? "production" : "development";
+const isVercelProduction = process.env.VERCEL_ENV === "production";
+const analyticsMode = isVercelProduction ? "production" : "development";
 
 const headingFont = Space_Grotesk({
   subsets: ["latin"],
@@ -78,6 +79,7 @@ export default function RootLayout({
       >
         {children}
         <VercelAnalytics mode={analyticsMode} />
+        {isVercelProduction ? <VercelSpeedInsights /> : null}
       </body>
     </html>
   );
