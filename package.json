@@ -24,6 +24,7 @@
     "seo:offpage": "node scripts/seo/run.mjs --suite offpage --mode advisory",
     "seo:full": "node scripts/seo/run.mjs --suite full --mode advisory",
     "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
+    "audit:prod:reliable": "node scripts/security/audit-prod-deps.mjs",
     "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",
     "benchmark:test": "node --test scripts/benchmark/__tests__/*.test.mjs",
     "animation:matrix": "node --experimental-strip-types scripts/animation/collect-matrix.mts",
