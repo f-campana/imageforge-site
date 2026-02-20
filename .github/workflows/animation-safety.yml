@@ -1,0 +1,50 @@
+name: Animation Safety
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  animation-safety:
+    name: animation-safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NEXT_PUBLIC_SITE_URL: https://example.com
+      BASE_URL: http://127.0.0.1:3205
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run animation safety checks
+        run: pnpm animation:check
+
+      - name: Upload animation matrix artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-matrix
+          path: .tmp/animation/*.json
+          if-no-files-found: warn

@@ -16,14 +16,14 @@ export function StatsStrip() {
             See benchmark details in{" "}
             <a
               href="#methodology"
-              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+              className="ui-interact-link ui-focus-ring font-medium text-emerald-300 hover:text-emerald-200"
             >
               Methodology
             </a>{" "}
             or browse the{" "}
             <a
               href="/benchmarks/latest"
-              className="font-medium text-emerald-300 transition hover:text-emerald-200"
+              className="ui-interact-link ui-focus-ring font-medium text-emerald-300 hover:text-emerald-200"
             >
               full evidence page
             </a>
@@ -37,7 +37,7 @@ export function StatsStrip() {
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
           {STATS.map((stat, index) => (
             <MotionWrap key={stat.label} delayMs={index * 90}>
-              <div className="panel-card h-full p-5 text-center md:p-6">
+              <div className="panel-card ui-interact-card h-full p-5 text-center md:p-6">
                 <p className="mb-1 font-mono text-[0.7rem] tracking-[0.16em] text-zinc-400 uppercase">
                   {stat.label}
                 </p>

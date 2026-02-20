@@ -16,34 +16,37 @@ export default function TwitterImage() {
         width: "100%",
         height: "100%",
         background:
-          "linear-gradient(140deg, #0b1220 0%, #102236 45%, #0d3d34 100%)",
+          "radial-gradient(circle at 80% 20%, #1c5b4f 0%, #0d2033 52%, #060c16 100%)",
         color: "#f4f8f7",
         fontFamily: "sans-serif",
-        padding: "68px",
+        padding: "48px",
         alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "16px",
-          maxWidth: "940px",
+          gap: "14px",
+          width: "100%",
+          maxWidth: "760px",
+          textAlign: "center",
         }}
       >
-        <p style={{ margin: 0, fontSize: 28, color: "#8af7d4" }}>
+        <p style={{ margin: 0, fontSize: 30, color: "#8af7d4" }}>
           Ship smaller images automatically
         </p>
-        <h1
+        <p
           style={{
             margin: 0,
-            fontSize: 78,
-            lineHeight: 1.05,
+            fontSize: 72,
+            lineHeight: 1.04,
             fontWeight: 700,
           }}
         >
           ImageForge CLI
-        </h1>
+        </p>
         <p style={{ margin: 0, fontSize: 30, color: "#d2dbd9" }}>
           Deterministic optimization for modern web pipelines.
         </p>

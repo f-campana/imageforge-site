@@ -26,7 +26,7 @@ export function FinalCtaFooter() {
               href="https://github.com/f-campana/imageforge#readme"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition hover:text-emerald-300"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Docs
             </a>
@@ -35,7 +35,7 @@ export function FinalCtaFooter() {
               href="https://github.com/f-campana/imageforge/blob/main/CHANGELOG.md"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition hover:text-emerald-300"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Changelog
             </a>
@@ -44,7 +44,7 @@ export function FinalCtaFooter() {
               href="https://github.com/f-campana/imageforge/issues"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition hover:text-emerald-300"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Issues
             </a>
@@ -53,7 +53,7 @@ export function FinalCtaFooter() {
               href="https://github.com/f-campana/imageforge/blob/main/SECURITY.md"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition hover:text-emerald-300"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Security
             </a>
@@ -68,7 +68,7 @@ export function FinalCtaFooter() {
             href="https://github.com/f-campana/imageforge"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:text-zinc-200 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+            className="ui-interact-link ui-focus-ring hover:text-zinc-200"
           >
             GitHub
           </a>
@@ -77,7 +77,7 @@ export function FinalCtaFooter() {
             href="https://www.npmjs.com/package/@imageforge/cli"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition hover:text-zinc-200 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+            className="ui-interact-link ui-focus-ring hover:text-zinc-200"
           >
             npm package
           </a>

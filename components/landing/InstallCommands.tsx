@@ -17,14 +17,14 @@ type InstallCommandsProps = {
 
 function CommandCard({ command }: { command: string }) {
   return (
-    <div className="panel-card-strong flex w-full flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="min-w-0">
-        <div className="flex items-center gap-2 overflow-x-auto font-mono text-sm text-zinc-100 md:text-base">
+    <div className="panel-card-strong ui-interact-card flex w-full min-w-0 flex-col gap-3 border border-white/10 px-4 py-3.5 focus-within:border-emerald-300/35 sm:flex-row sm:items-center sm:justify-between">
+      <div className="max-w-full min-w-0 flex-1">
+        <div className="flex max-w-full min-w-0 items-center gap-2 overflow-x-auto font-mono text-sm text-zinc-100 md:text-base">
           <span className="text-zinc-500 select-none">$</span>
-          <code className="whitespace-nowrap">{command}</code>
+          <code className="min-w-max whitespace-nowrap">{command}</code>
         </div>
       </div>
-      <div className="self-start sm:self-auto">
+      <div className="shrink-0 self-start sm:self-auto">
         <CopyButton text={command} />
       </div>
     </div>
@@ -75,7 +75,7 @@ export function InstallCommands({
       <div
         role="tablist"
         aria-label="Package managers"
-        className="panel-card-strong flex gap-2 overflow-x-auto border border-white/12 bg-white/[0.04] p-2"
+        className="panel-card-strong ui-interact-card flex gap-2 overflow-x-auto border border-white/12 bg-white/[0.04] p-2"
       >
         {PACKAGE_MANAGERS.map((manager, index) => {
           const commands = PACKAGE_MANAGER_COMMANDS[manager];
@@ -95,11 +95,11 @@ export function InstallCommands({
               aria-controls={panelId}
               onClick={() => setPreferredPackageManager(manager)}
               onKeyDown={(event) => handleTabKeyDown(event, index)}
-              className={`rounded-md border px-3 py-1.5 text-sm font-medium whitespace-nowrap transition ${
+              className={`ui-interact-control ui-focus-ring rounded-md border px-3 py-1.5 text-sm font-medium whitespace-nowrap ${
                 isSelected
                   ? "border-emerald-300/55 bg-emerald-300/12 text-emerald-200"
                   : "border-white/15 bg-white/[0.02] text-zinc-400 hover:border-white/25 hover:text-zinc-200"
-              } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400`}
+              }`}
             >
               {commands.label}
             </button>

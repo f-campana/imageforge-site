@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   evaluateMetadataFields,
+  evaluateRouteH1Coverage,
   evaluateSchemaPresence,
   findBrokenInternalLinks,
 } from "../technical.mjs";
@@ -113,4 +114,48 @@ test("findBrokenInternalLinks accepts optional catch-all routes", () => {
   const broken = findBrokenInternalLinks(["/docs"], ["/", "/docs/[[...slug]]"]);
 
   assert.deepEqual(broken, []);
+});
+
+test("evaluateRouteH1Coverage passes when each route has one H1", () => {
+  const result = evaluateRouteH1Coverage([
+    {
+      route: "/",
+      h1Count: 1,
+      sourceFile: "app/page.tsx",
+      auditedFileCount: 5,
+    },
+    {
+      route: "/benchmarks/latest",
+      h1Count: 1,
+      sourceFile: "app/benchmarks/latest/page.tsx",
+      auditedFileCount: 4,
+    },
+  ]);
+
+  assert.equal(result.status, "pass");
+  assert.match(result.message, /exactly one H1/i);
+  assert.match(result.evidence, /\/=1h1/);
+  assert.match(result.evidence, /\/benchmarks\/latest=1h1/);
+});
+
+test("evaluateRouteH1Coverage warns when a route has zero or multiple H1 entries", () => {
+  const result = evaluateRouteH1Coverage([
+    {
+      route: "/",
+      h1Count: 2,
+      sourceFile: "app/page.tsx",
+      auditedFileCount: 6,
+    },
+    {
+      route: "/benchmarks/latest",
+      h1Count: 0,
+      sourceFile: "app/benchmarks/latest/page.tsx",
+      auditedFileCount: 3,
+    },
+  ]);
+
+  assert.equal(result.status, "warn");
+  assert.match(result.message, /do not resolve to exactly one H1/i);
+  assert.match(result.evidence, /\/=2h1/);
+  assert.match(result.evidence, /\/benchmarks\/latest=0h1/);
 });

@@ -40,6 +40,11 @@ Open [http://localhost:3000](http://localhost:3000).
 pnpm dev         # run dev server
 pnpm lint        # eslint
 pnpm typecheck   # typescript checks
+pnpm test:unit   # vitest unit/component checks
+pnpm test:e2e    # playwright route smoke checks
+pnpm test:visual # playwright visual regression checks
+pnpm lhci        # lighthouse-ci lab checks for / and /benchmarks/latest
+pnpm quality:gates:local # local phase-3 quality gate bundle
 pnpm check:ci    # local CI-parity gate (recommended before opening PR)
 pnpm build       # production build
 pnpm start       # run production server
@@ -52,6 +57,53 @@ pnpm seo:test    # SEO script unit tests
 pnpm format      # prettier check
 pnpm format:write
 ```
+
+## Phase 3 Advisory Quality Gates
+
+Phase 3 adds non-blocking regression signals for landing and benchmark
+surfaces:
+
+- Vitest component/hook tests (`pnpm test:unit`)
+- Playwright smoke E2E tests (`pnpm test:e2e`)
+- Playwright visual snapshots with committed baselines (`pnpm test:visual`)
+- Lighthouse CI lab checks (`pnpm lhci`)
+
+Initial rollout is advisory by design and runs in
+`.github/workflows/quality-gates.yml`.
+
+To update visual baselines intentionally:
+
+```bash
+pnpm test:visual:update
+```
+
+Deterministic benchmark route checks use fixture mode in quality-gate commands:
+
+- `BENCHMARK_ENABLE_LOCAL_FIXTURE=1`
+- `BENCHMARK_SNAPSHOT_FIXTURE=sample`
+
+## Analytics
+
+- Vercel Web Analytics is enabled via `@vercel/analytics` in
+  `app/layout.tsx`.
+- Vercel Speed Insights is enabled via `@vercel/speed-insights` in
+  `app/layout.tsx`.
+- Mode is environment-aware:
+  - `production` only when `VERCEL_ENV=production`
+  - `development` for local and preview environments
+- This keeps production metrics clean while avoiding free-tier noise from
+  preview traffic.
+- Speed Insights is rendered only when `VERCEL_ENV=production` and uses
+  `sampleRate=1`.
+- A vendor-neutral helper lives at `lib/analytics/track-event.ts` for future
+  event instrumentation and eventual PostHog expansion.
+- Custom event emission is disabled by default and gated by
+  `NEXT_PUBLIC_ANALYTICS_CUSTOM_EVENTS=1`.
+- You can opt your own browser out of analytics and speed insights counting by
+  visiting any page once with `?analytics=off`. To opt back in for that
+  browser, visit with `?analytics=on`.
+- Event names and planned payloads are documented in
+  `docs/analytics/event-taxonomy.md`.
 
 ## Accessibility
 

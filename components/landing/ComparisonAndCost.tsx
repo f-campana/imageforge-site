@@ -23,7 +23,7 @@ function SourceLinks({ ids }: { ids: string[] }) {
           href={findSourceUrl(id)}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-emerald-300/90 transition hover:text-emerald-200"
+          className="ui-interact-link ui-focus-ring text-xs text-emerald-300/90 hover:text-emerald-200"
         >
           [{findSourceLabel(id)}]
         </a>
@@ -56,9 +56,9 @@ export function ComparisonAndCost() {
           </p>
         </MotionWrap>
 
-        <MotionWrap className="mt-10" delayMs={120}>
-          <div className="hidden overflow-x-auto md:block">
-            <table className="panel-card w-full min-w-[940px] border-collapse text-left">
+        <MotionWrap className="mt-10" delayMs={90}>
+          <div className="hidden w-full max-w-full overflow-x-auto md:block">
+            <table className="panel-card ui-interact-card w-full min-w-[940px] border-collapse text-left">
               <thead>
                 <tr className="border-b border-white/10 bg-white/[0.02]">
                   <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-zinc-400 uppercase">
@@ -82,7 +82,7 @@ export function ComparisonAndCost() {
                 {COMPARISON_ROWS.map((row) => (
                   <tr
                     key={row.capability}
-                    className="border-b border-white/8 last:border-b-0"
+                    className="border-b border-white/8 transition-colors duration-150 last:border-b-0 hover:bg-white/[0.02]"
                   >
                     <th className="px-4 py-4 align-top text-sm font-medium text-zinc-200">
                       <p>{row.capability}</p>
@@ -110,7 +110,10 @@ export function ComparisonAndCost() {
 
           <div className="grid gap-4 md:hidden">
             {COMPARISON_ROWS.map((row) => (
-              <article key={row.capability} className="panel-card p-4">
+              <article
+                key={row.capability}
+                className="panel-card ui-interact-card p-4"
+              >
                 <h3 className="text-base font-semibold text-zinc-100">
                   {row.capability}
                 </h3>

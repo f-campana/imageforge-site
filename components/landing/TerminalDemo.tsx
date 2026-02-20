@@ -4,21 +4,40 @@ import { useEffect, useRef, useState } from "react";
 
 import { TERMINAL_LINES } from "@/components/landing/constants";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { TERMINAL_ANIMATION } from "@/lib/animation/config";
 
-const PREVIEW_LINE_COUNT = 6;
+const PREVIEW_LINE_COUNT = TERMINAL_ANIMATION.previewLines;
+const INITIAL_VISIBLE_COUNT = Math.min(
+  PREVIEW_LINE_COUNT,
+  TERMINAL_LINES.length,
+);
 
 export function TerminalDemo() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const shouldAnimate = prefersReducedMotion === false;
   const shouldReduceMotion = prefersReducedMotion === true;
   const [isInView, setIsInView] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(PREVIEW_LINE_COUNT);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+  const [showFullOutput, setShowFullOutput] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const timersRef = useRef<number[]>([]);
+  const revealTimerRef = useRef<number | null>(null);
   const animationStartedRef = useRef(false);
 
+  const clearRevealTimer = () => {
+    if (revealTimerRef.current !== null) {
+      window.clearInterval(revealTimerRef.current);
+      revealTimerRef.current = null;
+    }
+  };
+
   useEffect(() => {
-    if (!shouldAnimate) return;
+    return () => {
+      clearRevealTimer();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate || showFullOutput) return;
 
     const node = containerRef.current;
     if (!node) return;
@@ -30,51 +49,69 @@ export function TerminalDemo() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 },
+      {
+        threshold: TERMINAL_ANIMATION.observerThreshold,
+        rootMargin: TERMINAL_ANIMATION.observerRootMargin,
+      },
     );
 
     observer.observe(node);
 
     return () => {
-      timersRef.current.forEach((timer) => window.clearTimeout(timer));
-      timersRef.current = [];
       observer.disconnect();
     };
-  }, [shouldAnimate]);
+  }, [shouldAnimate, showFullOutput]);
 
   useEffect(() => {
-    if (!shouldAnimate || !isInView || animationStartedRef.current) return;
+    if (
+      !shouldAnimate ||
+      !isInView ||
+      showFullOutput ||
+      animationStartedRef.current
+    )
+      return;
 
     animationStartedRef.current = true;
 
-    const startIndex = Math.min(PREVIEW_LINE_COUNT, TERMINAL_LINES.length);
-    const baseDelay =
-      startIndex > 0 ? (TERMINAL_LINES[startIndex - 1]?.delayMs ?? 0) : 0;
+    revealTimerRef.current = window.setInterval(() => {
+      setVisibleCount((currentCount) => {
+        if (currentCount >= TERMINAL_LINES.length) {
+          clearRevealTimer();
+          return currentCount;
+        }
 
-    timersRef.current = TERMINAL_LINES.slice(startIndex).map((line, index) =>
-      window.setTimeout(
-        () => {
-          setVisibleCount(startIndex + index + 1);
-        },
-        Math.max(line.delayMs - baseDelay, 0),
-      ),
-    );
+        return currentCount + 1;
+      });
+    }, TERMINAL_ANIMATION.revealStepMs);
 
     return () => {
-      timersRef.current.forEach((timer) => window.clearTimeout(timer));
-      timersRef.current = [];
+      clearRevealTimer();
     };
-  }, [isInView, shouldAnimate]);
+  }, [isInView, shouldAnimate, showFullOutput]);
+
+  const handleShowFullOutput = () => {
+    setShowFullOutput(true);
+    clearRevealTimer();
+    setVisibleCount(TERMINAL_LINES.length);
+  };
 
   const renderedCount = shouldReduceMotion
     ? TERMINAL_LINES.length
-    : shouldAnimate
-      ? visibleCount
-      : PREVIEW_LINE_COUNT;
+    : showFullOutput
+      ? TERMINAL_LINES.length
+      : shouldAnimate
+        ? visibleCount
+        : PREVIEW_LINE_COUNT;
+
+  const isRevealing =
+    shouldAnimate &&
+    isInView &&
+    !showFullOutput &&
+    renderedCount < TERMINAL_LINES.length;
 
   return (
     <div ref={containerRef} className="mx-auto w-full max-w-[760px]">
-      <div className="panel-card-strong overflow-hidden">
+      <div className="panel-card-strong ui-interact-card overflow-hidden">
         <div className="flex items-center gap-2 border-b border-white/14 bg-white/[0.05] px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
@@ -95,13 +132,28 @@ export function TerminalDemo() {
               {line.text}
             </div>
           ))}
-          {shouldAnimate &&
-          isInView &&
-          renderedCount < TERMINAL_LINES.length ? (
-            <span className="terminal-cursor" aria-hidden="true" />
+          {isRevealing ? (
+            <span
+              className="terminal-cursor"
+              aria-hidden="true"
+              style={{
+                animationDuration: `${TERMINAL_ANIMATION.cursorBlinkSeconds}s`,
+              }}
+            />
           ) : null}
         </div>
       </div>
+      {!shouldReduceMotion && renderedCount < TERMINAL_LINES.length ? (
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={handleShowFullOutput}
+            className="ui-interact-control ui-focus-ring rounded-md border border-white/18 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.68rem] tracking-[0.08em] text-zinc-300 uppercase hover:border-white/28 hover:text-zinc-100"
+          >
+            Show full output
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
