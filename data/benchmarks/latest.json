@@ -303,9 +303,7 @@
       "warmP50Pct": 0.256099,
       "warmP95Pct": 4.742366,
       "coldPct": 23.134104,
-      "alerts": [
-        "cold"
-      ]
+      "alerts": ["cold"]
     },
     {
       "profileId": "P1",
