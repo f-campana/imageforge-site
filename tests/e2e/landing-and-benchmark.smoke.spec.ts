@@ -60,3 +60,19 @@ test.describe("mobile benchmark surface", () => {
     expect(await recentCards.count()).toBeGreaterThan(0);
   });
 });
+
+test("security headers are present on landing and benchmark routes", async ({
+  page,
+}) => {
+  for (const route of ["/", "/benchmarks/latest"]) {
+    const response = await page.goto(route);
+    expect(response).not.toBeNull();
+    const headers = response!.headers();
+
+    expect(headers["x-content-type-options"]).toBe("nosniff");
+    expect(headers["x-frame-options"]).toBe("DENY");
+    expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+    expect(headers["permissions-policy"]).toContain("camera=()");
+    expect(headers["content-security-policy"]).toContain("default-src 'self'");
+  }
+});
