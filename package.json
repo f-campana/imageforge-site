@@ -29,6 +29,7 @@
     "animation:matrix": "node --experimental-strip-types scripts/animation/collect-matrix.mts",
     "animation:safety": "node --experimental-strip-types scripts/animation/assert-core-safety.mts",
     "animation:check": "bash scripts/animation/run-check.sh",
+    "check:workflow-action-pinning": "node scripts/security/check-workflow-action-pinning.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },
