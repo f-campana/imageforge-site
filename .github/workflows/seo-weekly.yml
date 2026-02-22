@@ -31,7 +31,7 @@ jobs:
       SEO_GSC_PRIVATE_KEY: ${{ secrets.SEO_GSC_PRIVATE_KEY }}
       SEO_GSC_PROPERTY_URI: ${{ secrets.SEO_GSC_PROPERTY_URI }}
       SEO_COMPETITOR_URLS: ${{ vars.SEO_COMPETITOR_URLS }}
-      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://example.com' }}
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
