@@ -9,30 +9,60 @@ This document defines the recurring governance loop for SEO and claim integrity.
 
 ## Recurring Reviews
 
-1. Weekly SEO review
-2. Monthly claims/source verification review
+1. Weekly SEO review (`YYYY-Www`)
+2. Monthly claims/source verification review (`YYYY-MM`)
 
 ## Automation Contract
 
-Automation runs from `.github/workflows/governance-cadence.yml` and creates issues via `scripts/governance/upsert-review-issue.mjs`.
+Automation runs from:
 
-1. Weekly issue key format: `YYYY-Www` (ISO week)
-2. Monthly issue key format: `YYYY-MM`
-3. Idempotency: if an open issue for the same review type and period key exists, no new issue is created.
+1. `/Users/fabiencampana/Documents/imageforge-site/.github/workflows/seo-weekly.yml` (weekly SEO upsert + evaluate + resolve)
+2. `/Users/fabiencampana/Documents/imageforge-site/.github/workflows/governance-cadence.yml` (monthly claims upsert + evaluate + resolve)
 
-## Review Checklist
+Resolver behavior:
 
-### Weekly SEO review
+1. A single sticky comment is upserted per issue with marker `<!-- governance-resolver:{kind}:{periodKey} -->`.
+2. Issues are closed automatically only when blocking checks pass.
+3. Closed issues are never auto-reopened.
+4. Issue matching is exact title + period key and uses `state=all` (no duplicate issue creation for a closed period).
 
-1. Inspect latest SEO artifacts from CI and weekly workflow.
-2. Confirm `critical=0` and track medium/low advisories.
-3. Create follow-up tasks for regressions and assign owner/date.
+## Auto-Close Criteria
 
-### Monthly claims/source review
+### Weekly SEO (`critical-only`)
 
-1. Verify pricing and external comparison claims still map to active sources.
-2. Confirm responsive-width claims remain aligned to `cli-contract-pin.md`.
-3. Verify benchmark snapshot freshness in `data/benchmarks/latest.json` and route rendering at `/benchmarks/latest`.
-4. Confirm benchmark snapshot lineage points to reviewed sync PR (no direct main edits).
-5. Verify benchmark evidence metadata used on landing remains derived from the latest approved snapshot.
-6. Update claim matrix `as-of` evidence references when source facts shift.
+1. Blocking pass criterion: SEO report `summary.critical == 0`.
+2. `high`/`medium`/`low` are advisory; they are reported in sticky comments but do not block closure.
+
+### Monthly Claims (`objective auto-close`)
+
+Blocking objective checks:
+
+1. Pricing links from landing sources are reachable with retry policy.
+2. `PRICING_AS_OF` parses and is fresh (`<=45` days).
+3. `PRICING_OWNER` is present.
+4. `data/benchmarks/latest.json` schema is valid and non-null (`schemaVersion=1.0`).
+5. Benchmark `generatedAt` freshness is within `<=14` days.
+6. Latest benchmark snapshot commit has merged PR lineage to `main` that touches `data/benchmarks/latest.json`.
+7. Benchmark evidence guardrails remain derived from latest snapshot source mapping.
+8. Contract pin SHA is aligned across claim matrix + CLI pin docs.
+9. `NEXT_PUBLIC_SITE_URL=https://example.com pnpm build` succeeds.
+
+Advisory only:
+
+1. Lineage naming convention checks.
+2. Subjective copy interpretation mismatch reminder.
+
+## Link Check HTTP Policy
+
+1. Attempt `HEAD` first.
+2. Timeout per attempt: 8s.
+3. Retry count: 3 with backoff 1s, 2s, 4s.
+4. Fallback to `GET` when `HEAD` is unsupported (`405`/`501`).
+5. Final non-2xx/3xx result is blocking.
+
+## Manual Dry-Run
+
+Both workflows support `workflow_dispatch` dry-run mode:
+
+1. Dry-run still upserts issue and sticky comment.
+2. Dry-run never closes issues.

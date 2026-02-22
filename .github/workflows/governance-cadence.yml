@@ -2,59 +2,100 @@ name: Governance Cadence
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run resolver in dry-run mode (do not close issues)"
+        required: false
+        default: true
+        type: boolean
   schedule:
-    - cron: "15 14 * * 1"
     - cron: "20 14 1 * *"
 
 permissions:
   contents: read
   issues: write
+  pull-requests: read
 
 concurrency:
   group: governance-cadence-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  weekly-seo-review:
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '15 14 * * 1'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
-        with:
-          node-version: 22
-
-      - name: Upsert weekly SEO governance issue
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          PERIOD_KEY="$(date -u +'%G-W%V')"
-          ISSUE_KIND="seo-weekly" \
-            PERIOD_KEY="$PERIOD_KEY" \
-            node scripts/governance/upsert-review-issue.mjs
-
   monthly-claims-review:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '20 14 1 * *'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+        with:
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compute governance context
+        id: governance
+        run: |
+          echo "period_key=$(date -u +'%Y-%m')" >> "$GITHUB_OUTPUT"
+          echo "run_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
       - name: Upsert monthly claims governance issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          PERIOD_KEY="$(date -u +'%Y-%m')"
+          mkdir -p .tmp/governance
           ISSUE_KIND="claims-monthly" \
-            PERIOD_KEY="$PERIOD_KEY" \
-            node scripts/governance/upsert-review-issue.mjs
+          PERIOD_KEY="${{ steps.governance.outputs.period_key }}" \
+            node scripts/governance/upsert-review-issue.mjs | tee \
+            ".tmp/governance/upsert-claims-monthly-${{ steps.governance.outputs.period_key }}.json"
+
+      - name: Evaluate monthly claims governance result
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          node scripts/governance/evaluate-claims-monthly.mjs \
+            --period-key "${{ steps.governance.outputs.period_key }}" \
+            --freshness-benchmark-days 14 \
+            --freshness-pricing-days 45 \
+            --output ".tmp/governance/claims-monthly-${{ steps.governance.outputs.period_key }}.json"
+
+      - name: Resolve monthly claims governance issue
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_KIND: claims-monthly
+          PERIOD_KEY: ${{ steps.governance.outputs.period_key }}
+          EVALUATION_JSON_PATH: .tmp/governance/claims-monthly-${{ steps.governance.outputs.period_key }}.json
+          RUN_URL: ${{ steps.governance.outputs.run_url }}
+        run: |
+          dry_flag=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            dry_flag="--dry-run"
+          fi
+
+          node scripts/governance/resolve-review-issue.mjs $dry_flag | tee \
+            ".tmp/governance/resolve-claims-monthly-${{ steps.governance.outputs.period_key }}.json"
+
+      - name: Upload governance artifacts
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: governance-monthly-artifacts
+          path: |
+            .tmp/governance/upsert-claims-monthly-${{ steps.governance.outputs.period_key }}.json
+            .tmp/governance/claims-monthly-${{ steps.governance.outputs.period_key }}.json
+            .tmp/governance/resolve-claims-monthly-${{ steps.governance.outputs.period_key }}.json
+          if-no-files-found: warn

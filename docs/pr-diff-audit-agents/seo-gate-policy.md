@@ -35,7 +35,9 @@ Without `NEXT_PUBLIC_SITE_URL`, advisory checks report one critical URL-resoluti
 
 ## Governance Cadence
 
-1. Weekly SEO review issue creation is automated by `.github/workflows/governance-cadence.yml`.
-2. Monthly claims/source review issue creation is automated by `.github/workflows/governance-cadence.yml`.
-3. Default owner is `@f-campana`, with review expected within 2 business days.
-4. Weekly and monthly reviews are idempotent per period key to prevent duplicate open issues.
+1. Weekly SEO governance is handled in `/Users/fabiencampana/Documents/imageforge-site/.github/workflows/seo-weekly.yml`.
+2. Monthly claims governance is handled in `/Users/fabiencampana/Documents/imageforge-site/.github/workflows/governance-cadence.yml`.
+3. Weekly auto-close rule is `critical-only` (`summary.critical == 0`).
+4. Monthly auto-close rule is `objective-only` with blocking checks for source reachability, freshness, lineage, pin alignment, and build safety.
+5. Resolver updates one sticky issue comment and closes only on pass; it does not auto-reopen closed issues.
+6. `workflow_dispatch` supports dry-run mode to validate resolver output without closing issues.

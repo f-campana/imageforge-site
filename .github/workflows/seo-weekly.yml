@@ -2,11 +2,18 @@ name: SEO Weekly
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run resolver in dry-run mode (do not close issues)"
+        required: false
+        default: true
+        type: boolean
   schedule:
     - cron: "0 14 * * 1"
 
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: seo-weekly-${{ github.ref }}
@@ -16,7 +23,7 @@ jobs:
   seo-weekly:
     name: seo-weekly
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       SEO_MODE: advisory
       SEO_LOCALE: en-US
@@ -43,8 +50,51 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Compute governance context
+        id: governance
+        run: |
+          echo "period_key=$(date -u +'%G-W%V')" >> "$GITHUB_OUTPUT"
+          echo "run_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upsert weekly SEO governance issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p .tmp/governance
+          ISSUE_KIND="seo-weekly" \
+          PERIOD_KEY="${{ steps.governance.outputs.period_key }}" \
+            node scripts/governance/upsert-review-issue.mjs | tee \
+            ".tmp/governance/upsert-seo-weekly-${{ steps.governance.outputs.period_key }}.json"
+
       - name: Run weekly SEO audit
         run: pnpm seo:full
+
+      - name: Evaluate weekly SEO governance result
+        run: |
+          node scripts/governance/evaluate-seo-weekly.mjs \
+            --report .tmp/seo/report.json \
+            --period-key "${{ steps.governance.outputs.period_key }}" \
+            --rule critical-only \
+            --output ".tmp/governance/seo-weekly-${{ steps.governance.outputs.period_key }}.json"
+
+      - name: Resolve weekly SEO governance issue
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_KIND: seo-weekly
+          PERIOD_KEY: ${{ steps.governance.outputs.period_key }}
+          EVALUATION_JSON_PATH: .tmp/governance/seo-weekly-${{ steps.governance.outputs.period_key }}.json
+          RUN_URL: ${{ steps.governance.outputs.run_url }}
+        run: |
+          dry_flag=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            dry_flag="--dry-run"
+          fi
+
+          node scripts/governance/resolve-review-issue.mjs $dry_flag | tee \
+            ".tmp/governance/resolve-seo-weekly-${{ steps.governance.outputs.period_key }}.json"
 
       - name: Upload SEO report artifacts
         if: always()
@@ -54,4 +104,15 @@ jobs:
           path: |
             .tmp/seo/report.md
             .tmp/seo/report.json
+          if-no-files-found: warn
+
+      - name: Upload governance artifacts
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: governance-weekly-artifacts
+          path: |
+            .tmp/governance/upsert-seo-weekly-${{ steps.governance.outputs.period_key }}.json
+            .tmp/governance/seo-weekly-${{ steps.governance.outputs.period_key }}.json
+            .tmp/governance/resolve-seo-weekly-${{ steps.governance.outputs.period_key }}.json
           if-no-files-found: warn
