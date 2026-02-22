@@ -187,7 +187,11 @@ export async function runEvaluateSeoWeekly({
   }
 
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(evaluation, null, 2)}\n`, "utf8");
+  await writeFile(
+    outputPath,
+    `${JSON.stringify(evaluation, null, 2)}\n`,
+    "utf8",
+  );
 
   return evaluation;
 }
@@ -197,7 +201,8 @@ export async function main(argv = process.argv.slice(2)) {
 
   const reportPath =
     typeof args.report === "string" ? path.resolve(args.report) : "";
-  const periodKey = typeof args["period-key"] === "string" ? args["period-key"] : "";
+  const periodKey =
+    typeof args["period-key"] === "string" ? args["period-key"] : "";
   const outputPath =
     typeof args.output === "string" ? path.resolve(args.output) : "";
   const rule = typeof args.rule === "string" ? args.rule : "critical-only";
@@ -223,8 +228,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const isMainModule =
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href;
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   main().catch((error) => {

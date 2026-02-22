@@ -170,8 +170,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const isMainModule =
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href;
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   main().catch((error) => {

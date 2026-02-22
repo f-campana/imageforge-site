@@ -21,7 +21,9 @@ function createFixtureRoot({
   claimSha = CLI_SHA,
   benchmarkGeneratedAt = "2026-02-20T03:21:54.350Z",
 } = {}) {
-  const rootDir = mkdtempSync(path.join(tmpdir(), "imageforge-claims-monthly-"));
+  const rootDir = mkdtempSync(
+    path.join(tmpdir(), "imageforge-claims-monthly-"),
+  );
 
   writeFixtureFile(
     rootDir,
@@ -58,7 +60,8 @@ function createFixtureRoot({
         asOfDate: "February 20, 2026",
         owner: "ImageForge Maintainers (CLI + Growth)",
         source: {
-          runUrl: "https://github.com/f-campana/imageforge/actions/runs/22209835535",
+          runUrl:
+            "https://github.com/f-campana/imageforge/actions/runs/22209835535",
         },
         summary: {
           totalPairs: 12,
@@ -308,12 +311,14 @@ test("evaluateClaimsMonthly fails on contract pin mismatch and build failure", a
   assert.equal(evaluation.result, "fail");
   assert.ok(
     evaluation.checks.some(
-      (check) => check.id === "contract-pin-alignment" && check.status === "fail",
+      (check) =>
+        check.id === "contract-pin-alignment" && check.status === "fail",
     ),
   );
   assert.ok(
     evaluation.checks.some(
-      (check) => check.id === "benchmark-build-safety" && check.status === "fail",
+      (check) =>
+        check.id === "benchmark-build-safety" && check.status === "fail",
     ),
   );
 });

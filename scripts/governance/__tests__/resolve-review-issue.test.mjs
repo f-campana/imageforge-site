@@ -4,7 +4,10 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 
-import { buildResolverComment, runResolveReviewIssue } from "../resolve-review-issue.mjs";
+import {
+  buildResolverComment,
+  runResolveReviewIssue,
+} from "../resolve-review-issue.mjs";
 
 function writeEvaluationFile(tempDir, result) {
   const filePath = path.join(tempDir, `evaluation-${result}.json`);

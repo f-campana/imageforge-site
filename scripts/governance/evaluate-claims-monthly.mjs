@@ -51,7 +51,9 @@ function ageInDays(date, now) {
 }
 
 function tailLines(text, maxLines = 20) {
-  const lines = String(text ?? "").trim().split(/\r?\n/u);
+  const lines = String(text ?? "")
+    .trim()
+    .split(/\r?\n/u);
   return lines.slice(-maxLines).join("\n");
 }
 
@@ -70,7 +72,9 @@ function runCommand(command, args, options = {}) {
 }
 
 function parsePricingConstants(source) {
-  const asOfMatch = source.match(/export const PRICING_AS_OF\s*=\s*"([^"]+)";/u);
+  const asOfMatch = source.match(
+    /export const PRICING_AS_OF\s*=\s*"([^"]+)";/u,
+  );
   const ownerMatch = source.match(
     /export const PRICING_OWNER\s*=\s*"([^"]+)";/u,
   );
@@ -211,7 +215,8 @@ function latestCommitTouchingPath(targetRelativePath, cwd, runCommandImpl) {
     return {
       ok: false,
       sha: "",
-      error: tailLines(`${result.stdout}\n${result.stderr}`) || "git log failed",
+      error:
+        tailLines(`${result.stdout}\n${result.stderr}`) || "git log failed",
     };
   }
 
@@ -250,7 +255,8 @@ function runBuildSafetyCheck(rootDir, runCommandImpl) {
   if (result.status === 0) {
     return {
       ok: true,
-      evidence: "pnpm build exited 0 with NEXT_PUBLIC_SITE_URL=https://example.com",
+      evidence:
+        "pnpm build exited 0 with NEXT_PUBLIC_SITE_URL=https://example.com",
     };
   }
 
@@ -374,7 +380,9 @@ export async function evaluateClaimsMonthly({
     const evidence = results
       .map((result) => {
         const statusPart =
-          result.status === null ? "status=none" : `status=${result.status.toString()}`;
+          result.status === null
+            ? "status=none"
+            : `status=${result.status.toString()}`;
         const errorPart = result.error ? ` error=${result.error}` : "";
         return `${result.url} method=${result.method} ${statusPart}${errorPart}`;
       })
@@ -707,7 +715,11 @@ export async function runEvaluateClaimsMonthly({
   });
 
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await writeFile(outputPath, `${JSON.stringify(evaluation, null, 2)}\n`, "utf8");
+  await writeFile(
+    outputPath,
+    `${JSON.stringify(evaluation, null, 2)}\n`,
+    "utf8",
+  );
 
   return evaluation;
 }
@@ -719,7 +731,10 @@ export async function main(argv = process.argv.slice(2)) {
     typeof args["period-key"] === "string" ? args["period-key"] : "";
   const outputPath =
     typeof args.output === "string" ? path.resolve(args.output) : "";
-  const freshnessBenchmarkDays = toInteger(args["freshness-benchmark-days"], 14);
+  const freshnessBenchmarkDays = toInteger(
+    args["freshness-benchmark-days"],
+    14,
+  );
   const freshnessPricingDays = toInteger(args["freshness-pricing-days"], 45);
 
   if (!periodKey) {
@@ -745,8 +760,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const isMainModule =
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href;
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   main().catch((error) => {
