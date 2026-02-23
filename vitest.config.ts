@@ -14,5 +14,10 @@ export default defineConfig({
     include: ["tests/unit/**/*.test.ts", "tests/unit/**/*.test.tsx"],
     clearMocks: true,
     restoreMocks: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json-summary", "lcov"],
+      reportsDirectory: "coverage",
+    },
   },
 });

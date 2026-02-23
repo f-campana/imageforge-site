@@ -48,6 +48,15 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Run unit coverage (advisory)
+        id: unit_coverage
+        run: |
+          set +e
+          pnpm test:unit:coverage
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
       - name: Run E2E tests (advisory)
         id: e2e
         run: |
@@ -86,12 +95,14 @@ jobs:
             test-results/e2e/**
             test-results/visual/**
             .tmp/lhci/**
+            coverage/**
           if-no-files-found: warn
 
       - name: Publish advisory summary
         if: always()
         run: |
           unit_status="${{ steps.unit.outputs.status }}"
+          unit_coverage_status="${{ steps.unit_coverage.outputs.status }}"
           e2e_status="${{ steps.e2e.outputs.status }}"
           visual_status="${{ steps.visual.outputs.status }}"
           lhci_status="${{ steps.lhci.outputs.status }}"
@@ -110,6 +121,7 @@ jobs:
             echo "| Gate | Exit Code | Result |"
             echo "| --- | ---: | --- |"
             echo "| Vitest unit | ${unit_status:-unknown} | $(format_status "${unit_status:-1}") |"
+            echo "| Vitest coverage | ${unit_coverage_status:-unknown} | $(format_status "${unit_coverage_status:-1}") |"
             echo "| Playwright e2e | ${e2e_status:-unknown} | $(format_status "${e2e_status:-1}") |"
             echo "| Playwright visual | ${visual_status:-unknown} | $(format_status "${visual_status:-1}") |"
             echo "| Lighthouse CI | ${lhci_status:-unknown} | $(format_status "${lhci_status:-1}") |"
