@@ -5,7 +5,22 @@ import { InstallCommands } from "@/components/landing/InstallCommands";
 
 describe("InstallCommands", () => {
   beforeEach(() => {
-    window.localStorage.clear();
+    const storage = window.localStorage as Storage & { clear?: () => void };
+    if (typeof storage.clear === "function") {
+      storage.clear();
+      return;
+    }
+
+    const keys: string[] = [];
+    for (let index = 0; index < storage.length; index += 1) {
+      const key = storage.key(index);
+      if (key) {
+        keys.push(key);
+      }
+    }
+    for (const key of keys) {
+      storage.removeItem(key);
+    }
   });
 
   it("renders ARIA tablist and selects npm by default", () => {
