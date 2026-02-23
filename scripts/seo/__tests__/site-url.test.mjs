@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveSiteUrlFromEnv } from "../config.mjs";
+import {
+  resolveAuditBaseUrlFromEnv,
+  resolveSiteUrlFromEnv,
+} from "../config.mjs";
 
 test("resolveSiteUrlFromEnv uses NEXT_PUBLIC_SITE_URL when valid", () => {
   const result = resolveSiteUrlFromEnv({
@@ -64,4 +67,24 @@ test("resolveSiteUrlFromEnv reports missing URL when no sources exist", () => {
   assert.equal(result.url, null);
   assert.equal(result.source, null);
   assert.ok(result.error?.includes("No canonical site URL found"));
+});
+
+test("resolveAuditBaseUrlFromEnv returns null when not configured", () => {
+  const result = resolveAuditBaseUrlFromEnv({});
+  assert.equal(result, null);
+});
+
+test("resolveAuditBaseUrlFromEnv returns normalized absolute URL", () => {
+  const result = resolveAuditBaseUrlFromEnv({
+    SEO_AUDIT_BASE_URL: "https://imageforge.dev",
+  });
+
+  assert.equal(result, "https://imageforge.dev/");
+});
+
+test("resolveAuditBaseUrlFromEnv throws when URL is invalid", () => {
+  assert.throws(
+    () => resolveAuditBaseUrlFromEnv({ SEO_AUDIT_BASE_URL: "not-a-url" }),
+    /SEO_AUDIT_BASE_URL is present but invalid/,
+  );
 });

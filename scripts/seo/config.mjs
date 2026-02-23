@@ -21,6 +21,7 @@ const ConfigSchema = z.object({
   suite: SeoSuiteSchema,
   locale: z.string().min(1),
   competitorUrls: z.array(z.string().url()),
+  auditBaseUrl: z.string().url().nullable(),
   rootDir: z.string().min(1),
   appDir: z.string().min(1),
   componentsDir: z.string().min(1),
@@ -162,6 +163,22 @@ export function resolveSiteUrlFromEnv(env = process.env) {
   });
 }
 
+export function resolveAuditBaseUrlFromEnv(env = process.env) {
+  const raw = env.SEO_AUDIT_BASE_URL?.trim();
+  if (!raw) {
+    return null;
+  }
+
+  const parsed = parseSiteUrlCandidate(raw);
+  if (!parsed) {
+    throw new Error(
+      "SEO_AUDIT_BASE_URL is present but invalid. Use an absolute http(s) URL.",
+    );
+  }
+
+  return parsed.toString();
+}
+
 export function loadConfig(argv = process.argv.slice(2), env = process.env) {
   const args = parseCliArgs(argv);
   const mode = args.mode ?? SeoModeSchema.parse(env.SEO_MODE ?? "advisory");
@@ -190,6 +207,7 @@ export function loadConfig(argv = process.argv.slice(2), env = process.env) {
     suite,
     locale,
     competitorUrls,
+    auditBaseUrl: resolveAuditBaseUrlFromEnv(env),
     rootDir,
     appDir: path.join(rootDir, "app"),
     componentsDir: path.join(rootDir, "components"),

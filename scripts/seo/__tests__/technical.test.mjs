@@ -159,3 +159,39 @@ test("evaluateRouteH1Coverage warns when a route has zero or multiple H1 entries
   assert.match(result.evidence, /\/=2h1/);
   assert.match(result.evidence, /\/benchmarks\/latest=0h1/);
 });
+
+test("evaluateRouteH1Coverage includes rendered-route evidence when render mode is used", () => {
+  const result = evaluateRouteH1Coverage([
+    {
+      route: "/",
+      h1Count: 1,
+      sourceFile: "app/page.tsx",
+      auditedFileCount: 0,
+      auditMode: "rendered",
+      auditTarget: "https://imageforge.dev/",
+      auditError: null,
+    },
+  ]);
+
+  assert.equal(result.status, "pass");
+  assert.match(result.evidence, /mode=rendered/);
+  assert.match(result.evidence, /url=https:\/\/imageforge\.dev\//);
+});
+
+test("evaluateRouteH1Coverage marks source fallback explicitly when render mode is unavailable", () => {
+  const result = evaluateRouteH1Coverage([
+    {
+      route: "/",
+      h1Count: 1,
+      sourceFile: "app/page.tsx",
+      auditedFileCount: 4,
+      auditMode: "source-fallback",
+      auditTarget: null,
+      auditError: null,
+    },
+  ]);
+
+  assert.equal(result.status, "pass");
+  assert.match(result.evidence, /mode=source-fallback/);
+  assert.match(result.evidence, /files=4/);
+});

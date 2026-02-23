@@ -280,6 +280,94 @@ function collectRouteSourceGraph(entryFilePath, fileContentsByPath, rootDir) {
   return [...visited];
 }
 
+function countHeadingOne(html) {
+  return [...String(html).matchAll(/<h1\b/giu)].length;
+}
+
+async function collectRenderedRouteH1Entries(
+  routeEntries,
+  auditBaseUrl,
+  fetchImpl = fetch,
+) {
+  return Promise.all(
+    routeEntries.map(async (entry) => {
+      const targetUrl = new URL(entry.route, auditBaseUrl).toString();
+
+      try {
+        const response = await fetchImpl(targetUrl, {
+          signal: AbortSignal.timeout(8000),
+        });
+
+        if (!response.ok) {
+          return {
+            route: entry.route,
+            h1Count: 0,
+            sourceFile: entry.sourceFile,
+            auditedFileCount: 0,
+            auditMode: "rendered",
+            auditTarget: targetUrl,
+            auditError: `HTTP ${response.status}`,
+          };
+        }
+
+        const html = await response.text();
+        return {
+          route: entry.route,
+          h1Count: countHeadingOne(html),
+          sourceFile: entry.sourceFile,
+          auditedFileCount: 0,
+          auditMode: "rendered",
+          auditTarget: targetUrl,
+          auditError: null,
+        };
+      } catch (error) {
+        return {
+          route: entry.route,
+          h1Count: 0,
+          sourceFile: entry.sourceFile,
+          auditedFileCount: 0,
+          auditMode: "rendered",
+          auditTarget: targetUrl,
+          auditError: error instanceof Error ? error.message : String(error),
+        };
+      }
+    }),
+  );
+}
+
+function collectSourceRouteH1Entries(
+  routeEntries,
+  fileContentsByPath,
+  rootDir,
+) {
+  return routeEntries.map((entry) => {
+    const routeSourceGraph = collectRouteSourceGraph(
+      entry.pageFilePath,
+      fileContentsByPath,
+      rootDir,
+    );
+    const auditedFiles = routeSourceGraph.filter((sourceFilePath) =>
+      includeInH1Audit(rootDir, sourceFilePath),
+    );
+    const h1Count = auditedFiles.reduce(
+      (count, sourceFilePath) =>
+        count +
+        (fileContentsByPath.get(sourceFilePath)?.match(/<h1\b/g)?.length ?? 0),
+      0,
+    );
+
+    return {
+      route: entry.route,
+      h1Count,
+      sourceFile: entry.sourceFile,
+      auditedFileCount: auditedFiles.length,
+      auditMode: "source-fallback",
+      auditTarget: null,
+      auditError: null,
+    };
+  });
+}
+
 export function evaluateRouteH1Coverage(routeEntries) {
   if (routeEntries.length === 0) {
     return {
@@ -291,10 +379,16 @@ export function evaluateRouteH1Coverage(routeEntries) {
 
   const invalidEntries = routeEntries.filter((entry) => entry.h1Count !== 1);
   const evidence = routeEntries
-    .map(
-      (entry) =>
-        `${entry.route}=${entry.h1Count}h1 (source=${entry.sourceFile}, files=${entry.auditedFileCount})`,
-    )
+    .map((entry) => {
+      if (entry.auditMode === "rendered") {
+        const errorSegment = entry.auditError
+          ? `, error=${entry.auditError}`
+          : "";
+        return `${entry.route}=${entry.h1Count}h1 (source=${entry.sourceFile}, mode=rendered, url=${entry.auditTarget}${errorSegment})`;
+      }
+
+      return `${entry.route}=${entry.h1Count}h1 (source=${entry.sourceFile}, mode=source-fallback, files=${entry.auditedFileCount})`;
+    })
     .join("; ");
 
   if (invalidEntries.length === 0) {
@@ -307,8 +401,7 @@ export function evaluateRouteH1Coverage(routeEntries) {
 
   return {
     status: "warn",
-    message:
-      "Some indexable routes do not resolve to exactly one H1 in audited source.",
+    message: "Some indexable routes do not resolve to exactly one H1.",
     evidence,
   };
 }
@@ -503,37 +596,28 @@ export async function runTechnicalChecks(config) {
   const pageFiles = await listFilesRecursively(config.appDir, (filePath) =>
     /page\.tsx$/.test(filePath),
   );
-  const routeH1Entries = pageFiles
+  const routePageEntries = pageFiles
     .map((pageFilePath) => {
       const route = resolveRouteFromFile(config.appDir, pageFilePath);
       if (!route) {
         return null;
       }
 
-      const routeSourceGraph = collectRouteSourceGraph(
+      return {
+        route,
         pageFilePath,
+        sourceFile: path.relative(config.rootDir, pageFilePath),
+      };
+    })
+    .filter((entry) => entry && !isDynamicRoute(entry.route));
+
+  const routeH1Entries = config.auditBaseUrl
+    ? await collectRenderedRouteH1Entries(routePageEntries, config.auditBaseUrl)
+    : collectSourceRouteH1Entries(
+        routePageEntries,
         fileContentsByPath,
         config.rootDir,
       );
-      const auditedFiles = routeSourceGraph.filter((sourceFilePath) =>
-        includeInH1Audit(config.rootDir, sourceFilePath),
-      );
-      const h1Count = auditedFiles.reduce(
-        (count, sourceFilePath) =>
-          count +
-          (fileContentsByPath.get(sourceFilePath)?.match(/<h1\b/g)?.length ??
-            0),
-        0,
-      );
-
-      return {
-        route,
-        h1Count,
-        sourceFile: path.relative(config.rootDir, pageFilePath),
-        auditedFileCount: auditedFiles.length,
-      };
-    })
-    .filter(Boolean);
 
   const h1Coverage = evaluateRouteH1Coverage(routeH1Entries);
   checks.push(
