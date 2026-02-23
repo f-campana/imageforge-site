@@ -28,6 +28,18 @@ export function HeaderNav() {
               ))}
             </div>
             <a
+              href="/docs"
+              className="ui-interact-link ui-focus-ring hover:text-zinc-100"
+            >
+              Docs
+            </a>
+            <a
+              href="/contact"
+              className="ui-interact-link ui-focus-ring hover:text-zinc-100"
+            >
+              Contact
+            </a>
+            <a
               href="https://github.com/f-campana/imageforge"
               target="_blank"
               rel="noopener noreferrer"
