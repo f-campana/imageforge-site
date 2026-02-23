@@ -123,6 +123,42 @@ jobs:
       - name: Run SEO unit tests
         run: pnpm seo:test
 
+  pricing-freshness:
+    name: pricing-freshness
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run pricing freshness unit tests
+        run: node --test scripts/governance/__tests__/check-pricing-freshness.test.mjs
+
+      - name: Run pricing freshness gate
+        run: pnpm governance:pricing:freshness
+
+      - name: Upload pricing freshness artifact
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: pricing-freshness
+          path: .tmp/governance/pricing-freshness.json
+          if-no-files-found: error
+
   benchmark-test:
     name: benchmark-test
     runs-on: ubuntu-latest
