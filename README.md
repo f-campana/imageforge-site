@@ -48,6 +48,7 @@ pnpm dev         # run dev server
 pnpm lint        # eslint
 pnpm typecheck   # typescript checks
 pnpm test:unit   # vitest unit/component checks
+pnpm test:mutation:pilot # stryker mutation pilot (advisory)
 pnpm test:e2e    # playwright route smoke checks
 pnpm test:visual # playwright visual regression checks
 pnpm lhci        # lighthouse-ci lab checks for / and /benchmarks/latest
@@ -72,6 +73,7 @@ Phase 3 adds non-blocking regression signals for landing and benchmark
 surfaces:
 
 - Vitest component/hook tests (`pnpm test:unit`)
+- Stryker mutation pilot with baseline trend summary (`pnpm test:mutation:pilot`)
 - Playwright smoke E2E tests (`pnpm test:e2e`)
 - Playwright visual snapshots with committed baselines (`pnpm test:visual`)
 - Lighthouse CI lab checks (`pnpm lhci`)
