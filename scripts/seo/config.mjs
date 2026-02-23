@@ -9,6 +9,7 @@ const SiteResolutionSchema = z.object({
   url: z.string().url().nullable(),
   source: z.string().nullable(),
   error: z.string().nullable(),
+  isPlaceholder: z.boolean(),
 });
 
 const ArgsSchema = z.object({
@@ -94,6 +95,18 @@ function parseDeploymentCandidate(value) {
   return parseSiteUrlCandidate(withProtocol);
 }
 
+export function isPlaceholderHostname(hostname) {
+  const normalized = String(hostname ?? "")
+    .trim()
+    .toLowerCase();
+  return (
+    normalized === "example.com" ||
+    normalized === "example.org" ||
+    normalized === "localhost" ||
+    normalized === "127.0.0.1"
+  );
+}
+
 export function resolveSiteUrlFromEnv(env = process.env) {
   const invalidCandidates = [];
 
@@ -105,6 +118,7 @@ export function resolveSiteUrlFromEnv(env = process.env) {
         url: primary.toString(),
         source: "NEXT_PUBLIC_SITE_URL",
         error: null,
+        isPlaceholder: isPlaceholderHostname(primary.hostname),
       });
     }
 
@@ -123,6 +137,7 @@ export function resolveSiteUrlFromEnv(env = process.env) {
         url: secondary.toString(),
         source: "SITE_URL",
         error: null,
+        isPlaceholder: isPlaceholderHostname(secondary.hostname),
       });
     }
 
@@ -143,6 +158,7 @@ export function resolveSiteUrlFromEnv(env = process.env) {
         ? "VERCEL_PROJECT_PRODUCTION_URL"
         : "VERCEL_URL",
       error: null,
+      isPlaceholder: isPlaceholderHostname(deployment.hostname),
     });
   }
 
@@ -152,6 +168,7 @@ export function resolveSiteUrlFromEnv(env = process.env) {
       url: null,
       source: highestPriorityInvalid.source,
       error: highestPriorityInvalid.error,
+      isPlaceholder: false,
     });
   }
 
@@ -160,6 +177,7 @@ export function resolveSiteUrlFromEnv(env = process.env) {
     source: null,
     error:
       "No canonical site URL found. Set NEXT_PUBLIC_SITE_URL (preferred) or a deployment URL.",
+    isPlaceholder: false,
   });
 }
 
