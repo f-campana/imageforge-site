@@ -226,7 +226,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run SEO checks
-        run: pnpm seo:check
+        run: pnpm seo:check:deterministic
 
       - name: Upload SEO report artifacts
         if: always()

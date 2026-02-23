@@ -99,7 +99,37 @@ export async function runOffpageChecks(config) {
   const localHrefs = await collectLocalBrandHrefs(config);
   let publicHrefs = [];
 
-  if (config.site.url) {
+  if (config.site.url && config.site.isPlaceholder) {
+    checks.push(
+      makeCheck({
+        id: "offpage.public_homepage_reachability",
+        suite: "offpage",
+        severity: "low",
+        status: "skip",
+        message:
+          "Skipped public crawlability check because a placeholder site URL is configured.",
+        evidence: `siteUrl=${config.site.url}`,
+        fixHint:
+          "Use a production-like site URL to enable public off-page checks.",
+        file: "app/layout.tsx",
+      }),
+    );
+
+    checks.push(
+      makeCheck({
+        id: "offpage.public_metadata_presence",
+        suite: "offpage",
+        severity: "low",
+        status: "skip",
+        message:
+          "Skipped public metadata check because a placeholder site URL is configured.",
+        evidence: `siteUrl=${config.site.url}`,
+        fixHint:
+          "Use a production-like site URL to verify rendered title/description metadata.",
+        file: "app/layout.tsx",
+      }),
+    );
+  } else if (config.site.url) {
     const homepage = await fetchHtml(config.site.url);
     checks.push(
       makeCheck({
