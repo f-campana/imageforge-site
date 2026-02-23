@@ -26,6 +26,7 @@
     "seo:full": "node scripts/seo/run.mjs --suite full --mode advisory",
     "seo:check": "node scripts/seo/run.mjs --suite full --mode ${SEO_MODE:-advisory}",
     "seo:check:deterministic": "node scripts/seo/run.mjs --suite tech --mode ${SEO_MODE:-advisory} && node scripts/seo/run.mjs --suite content --mode ${SEO_MODE:-advisory}",
+    "governance:pricing:freshness": "node scripts/governance/check-pricing-freshness.mjs",
     "audit:prod:reliable": "node scripts/security/audit-prod-deps.mjs",
     "test:fault-injection": "node --test scripts/security/__tests__/*.test.mjs",
     "seo:test": "node --test scripts/seo/__tests__/*.test.mjs",

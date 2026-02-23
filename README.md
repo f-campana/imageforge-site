@@ -53,6 +53,7 @@ pnpm seo:content # content SEO checks
 pnpm seo:offpage # off-page/public SEO checks
 pnpm seo:full    # full SEO checks (includes optional GSC adapter)
 pnpm seo:check   # CI-oriented SEO check (mode from SEO_MODE)
+pnpm governance:pricing:freshness # fail-closed pricing freshness check
 pnpm seo:test    # SEO script unit tests
 pnpm format      # prettier check
 pnpm format:write
@@ -151,6 +152,7 @@ pnpm check:ci
 ```
 
 This command intentionally uses `NEXT_PUBLIC_SITE_URL=https://example.com` for deterministic local parity.
+CI also runs `pnpm governance:pricing:freshness` as a required freshness gate.
 
 ## Deploy to Vercel
 
