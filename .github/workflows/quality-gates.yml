@@ -57,6 +57,17 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Run fault-injection pilot (advisory)
+        id: fault_injection
+        run: |
+          set +e
+          mkdir -p .tmp/fault-injection
+          pnpm test:fault-injection > .tmp/fault-injection/output.log 2>&1
+          status=$?
+          cat .tmp/fault-injection/output.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
       - name: Run E2E tests (advisory)
         id: e2e
         run: |
@@ -96,6 +107,7 @@ jobs:
             test-results/visual/**
             .tmp/lhci/**
             coverage/**
+            .tmp/fault-injection/**
           if-no-files-found: warn
 
       - name: Publish advisory summary
@@ -103,6 +115,7 @@ jobs:
         run: |
           unit_status="${{ steps.unit.outputs.status }}"
           unit_coverage_status="${{ steps.unit_coverage.outputs.status }}"
+          fault_injection_status="${{ steps.fault_injection.outputs.status }}"
           e2e_status="${{ steps.e2e.outputs.status }}"
           visual_status="${{ steps.visual.outputs.status }}"
           lhci_status="${{ steps.lhci.outputs.status }}"
@@ -122,6 +135,7 @@ jobs:
             echo "| --- | ---: | --- |"
             echo "| Vitest unit | ${unit_status:-unknown} | $(format_status "${unit_status:-1}") |"
             echo "| Vitest coverage | ${unit_coverage_status:-unknown} | $(format_status "${unit_coverage_status:-1}") |"
+            echo "| Fault-injection pilot | ${fault_injection_status:-unknown} | $(format_status "${fault_injection_status:-1}") |"
             echo "| Playwright e2e | ${e2e_status:-unknown} | $(format_status "${e2e_status:-1}") |"
             echo "| Playwright visual | ${visual_status:-unknown} | $(format_status "${visual_status:-1}") |"
             echo "| Lighthouse CI | ${lhci_status:-unknown} | $(format_status "${lhci_status:-1}") |"
