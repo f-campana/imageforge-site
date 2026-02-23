@@ -1,0 +1,8 @@
+{
+  "overallMutationScore": 64.1,
+  "detectableMutationScore": 65.79,
+  "totalMutants": 39,
+  "detectableMutants": 38,
+  "updatedAt": "2026-02-23T23:17:11Z",
+  "scope": ["hooks/usePrefersReducedMotion.ts", "lib/seo/schema.ts"]
+}

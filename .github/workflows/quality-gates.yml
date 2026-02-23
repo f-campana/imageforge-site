@@ -68,6 +68,26 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
+      - name: Run mutation pilot (advisory)
+        id: mutation
+        run: |
+          set +e
+          mkdir -p .tmp/mutation
+          pnpm test:mutation:pilot > .tmp/mutation/output.log 2>&1
+          status=$?
+          cat .tmp/mutation/output.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Summarize mutation report
+        if: always()
+        run: >
+          node scripts/testing/summarize-mutation-report.mjs
+          --report .tmp/mutation/report.json
+          --baseline .github/mutation-baseline.json
+          --summary-file "$GITHUB_STEP_SUMMARY"
+          --out-json .tmp/mutation/summary.json
+
       - name: Run E2E tests (advisory)
         id: e2e
         run: |
@@ -108,6 +128,7 @@ jobs:
             .tmp/lhci/**
             coverage/**
             .tmp/fault-injection/**
+            .tmp/mutation/**
           if-no-files-found: warn
 
       - name: Publish advisory summary
@@ -116,6 +137,7 @@ jobs:
           unit_status="${{ steps.unit.outputs.status }}"
           unit_coverage_status="${{ steps.unit_coverage.outputs.status }}"
           fault_injection_status="${{ steps.fault_injection.outputs.status }}"
+          mutation_status="${{ steps.mutation.outputs.status }}"
           e2e_status="${{ steps.e2e.outputs.status }}"
           visual_status="${{ steps.visual.outputs.status }}"
           lhci_status="${{ steps.lhci.outputs.status }}"
@@ -136,6 +158,7 @@ jobs:
             echo "| Vitest unit | ${unit_status:-unknown} | $(format_status "${unit_status:-1}") |"
             echo "| Vitest coverage | ${unit_coverage_status:-unknown} | $(format_status "${unit_coverage_status:-1}") |"
             echo "| Fault-injection pilot | ${fault_injection_status:-unknown} | $(format_status "${fault_injection_status:-1}") |"
+            echo "| Mutation pilot | ${mutation_status:-unknown} | $(format_status "${mutation_status:-1}") |"
             echo "| Playwright e2e | ${e2e_status:-unknown} | $(format_status "${e2e_status:-1}") |"
             echo "| Playwright visual | ${visual_status:-unknown} | $(format_status "${visual_status:-1}") |"
             echo "| Lighthouse CI | ${lhci_status:-unknown} | $(format_status "${lhci_status:-1}") |"
