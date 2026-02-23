@@ -23,12 +23,17 @@ export function FinalCtaFooter() {
         <MotionWrap className="mt-5 text-center" delayMs={160}>
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-400">
             <a
-              href="https://github.com/f-campana/imageforge#readme"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs"
               className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Docs
+            </a>
+            <span>·</span>
+            <a
+              href="/contact"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
+            >
+              Contact
             </a>
             <span>·</span>
             <a
@@ -86,7 +91,7 @@ export function FinalCtaFooter() {
             @imageforge/cli v{IMAGEFORGE_VERSION}
           </span>
           <span>·</span>
-          <span className="font-mono">Node &gt;= 22</span>
+          <span className="font-mono">Node &gt;= 20</span>
         </MotionWrap>
       </div>
     </section>

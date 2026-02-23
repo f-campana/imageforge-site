@@ -15,6 +15,12 @@ test("landing page renders hero, CTA, and package-manager tabs", async ({
   await expect(
     heroSection.getByRole("link", { name: /Get Started/i }),
   ).toBeVisible();
+  await expect(
+    heroSection.getByRole("link", { name: /Read Docs/i }),
+  ).toBeVisible();
+  await expect(
+    heroSection.getByRole("link", { name: /Contact/i }),
+  ).toBeVisible();
 
   await expect(
     heroSection.getByRole("tablist", { name: /Package managers/i }),
@@ -28,6 +34,20 @@ test("landing page renders hero, CTA, and package-manager tabs", async ({
   await heroSection.getByRole("tab", { name: "bun" }).click();
   await expect(
     heroSection.getByText("bun add -g @imageforge/cli"),
+  ).toBeVisible();
+});
+
+test("docs and contact routes render expected primary headings", async ({
+  page,
+}) => {
+  await page.goto("/docs");
+  await expect(
+    page.getByRole("heading", { level: 1, name: /ImageForge docs/i }),
+  ).toBeVisible();
+
+  await page.goto("/contact");
+  await expect(
+    page.getByRole("heading", { level: 1, name: /Contact and feedback/i }),
   ).toBeVisible();
 });
 
@@ -64,7 +84,7 @@ test.describe("mobile benchmark surface", () => {
 test("security headers are present on landing and benchmark routes", async ({
   page,
 }) => {
-  for (const route of ["/", "/benchmarks/latest"]) {
+  for (const route of ["/", "/benchmarks/latest", "/docs", "/contact"]) {
     const response = await page.goto(route);
     expect(response).not.toBeNull();
     const headers = response!.headers();

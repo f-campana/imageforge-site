@@ -42,12 +42,16 @@ export function Hero() {
               Get Started
             </a>
             <a
-              href="https://github.com/f-campana/imageforge"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs"
               className="ui-interact-control ui-focus-ring inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-white/35 hover:bg-white/10 hover:text-white focus-visible:border-white/35 focus-visible:bg-white/10"
             >
-              Read Docs (GitHub)
+              Read Docs
+            </a>
+            <a
+              href="/contact"
+              className="ui-interact-control ui-focus-ring inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-200 hover:border-white/35 hover:bg-white/10 hover:text-white focus-visible:border-white/35 focus-visible:bg-white/10"
+            >
+              Contact
             </a>
           </div>
         </MotionWrap>

@@ -24,6 +24,13 @@ This site intentionally describes ImageForge as:
 - `--json` machine-readable run report to stdout
 - `imageforge.json` manifest output by default
 
+## First-party routes
+
+- `/` landing page
+- `/benchmarks/latest` benchmark evidence page
+- `/docs` quick-start documentation entrypoint
+- `/contact` support and feedback entrypoint
+
 ## Local setup
 
 ```bash
