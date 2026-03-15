@@ -52,6 +52,7 @@ jobs:
           echo "run_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
       - name: Upsert monthly claims governance issue
+        id: upsert_issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -79,6 +80,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           ISSUE_KIND: claims-monthly
+          ISSUE_NUMBER: ${{ steps.upsert_issue.outputs.issue_number }}
           PERIOD_KEY: ${{ steps.governance.outputs.period_key }}
           EVALUATION_JSON_PATH: .tmp/governance/claims-monthly-${{ steps.governance.outputs.period_key }}.json
           RUN_URL: ${{ steps.governance.outputs.run_url }}

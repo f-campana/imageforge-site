@@ -7,6 +7,7 @@ import { pathToFileURL } from "node:url";
 
 import {
   closeIssue,
+  getIssue,
   findIssueByExactTitle,
   splitRepository,
   upsertIssueCommentByMarker,
@@ -89,19 +90,29 @@ export async function runResolveReviewIssue({
   periodKey,
   evaluationPath,
   runUrl,
+  issueNumber = null,
   dryRun = false,
   fetchImpl = fetch,
 }) {
   const { owner, repo } = splitRepository(repository);
   const { title } = issueTemplate(issueKind, periodKey);
-  const issue = await findIssueByExactTitle({
-    owner,
-    repo,
-    title,
-    token,
-    state: "all",
-    fetchImpl,
-  });
+  const issue =
+    typeof issueNumber === "number" && Number.isInteger(issueNumber)
+      ? await getIssue({
+          owner,
+          repo,
+          issueNumber,
+          token,
+          fetchImpl,
+        })
+      : await findIssueByExactTitle({
+          owner,
+          repo,
+          title,
+          token,
+          state: "all",
+          fetchImpl,
+        });
 
   if (!issue) {
     throw new Error(`No governance issue found for title '${title}'.`);
@@ -154,7 +165,14 @@ export async function main(argv = process.argv.slice(2)) {
   const issueKind = requireEnv("ISSUE_KIND");
   const periodKey = requireEnv("PERIOD_KEY");
   const evaluationPath = path.resolve(requireEnv("EVALUATION_JSON_PATH"));
+  const issueNumberValue = process.env.ISSUE_NUMBER?.trim() || "";
   const runUrl = process.env.RUN_URL?.trim() || "";
+  const issueNumber =
+    issueNumberValue === "" ? null : Number.parseInt(issueNumberValue, 10);
+
+  if (issueNumberValue !== "" && !Number.isInteger(issueNumber)) {
+    throw new Error(`Invalid ISSUE_NUMBER value: '${issueNumberValue}'`);
+  }
 
   const result = await runResolveReviewIssue({
     token,
@@ -163,6 +181,7 @@ export async function main(argv = process.argv.slice(2)) {
     periodKey,
     evaluationPath,
     runUrl,
+    issueNumber,
     dryRun,
   });
 

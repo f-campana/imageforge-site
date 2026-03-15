@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import test from "node:test";
 
-import { runUpsertReviewIssue } from "../upsert-review-issue.mjs";
+import {
+  runUpsertReviewIssue,
+  writeGithubOutputs,
+} from "../upsert-review-issue.mjs";
 
 function jsonResponse(body, options = {}) {
   return new Response(JSON.stringify(body), {
@@ -89,5 +95,31 @@ test("runUpsertReviewIssue creates issue when none exists", async () => {
   assert.deepEqual(
     calls.map((call) => call.method),
     ["GET", "POST"],
+  );
+});
+
+test("writeGithubOutputs emits issue metadata for workflows", async () => {
+  const tempDir = mkdtempSync(path.join(tmpdir(), "imageforge-upsert-"));
+  const outputPath = path.join(tempDir, "github-output.txt");
+
+  await writeGithubOutputs(
+    {
+      issueNumber: 51,
+      issueUrl: "https://github.com/f-campana/imageforge-site/issues/51",
+      issueState: "open",
+      created: true,
+    },
+    outputPath,
+  );
+
+  assert.equal(
+    readFileSync(outputPath, "utf8"),
+    [
+      "issue_number=51",
+      "issue_url=https://github.com/f-campana/imageforge-site/issues/51",
+      "issue_state=open",
+      "created=true",
+      "",
+    ].join("\n"),
   );
 });
