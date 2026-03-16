@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { appendFile } from "node:fs/promises";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 
@@ -63,6 +64,21 @@ export async function runUpsertReviewIssue({
   };
 }
 
+export async function writeGithubOutputs(result, outputPath) {
+  if (!outputPath) {
+    return;
+  }
+
+  const lines = [
+    `issue_number=${result.issueNumber}`,
+    `issue_url=${result.issueUrl}`,
+    `issue_state=${result.issueState}`,
+    `created=${result.created}`,
+  ];
+
+  await appendFile(outputPath, `${lines.join("\n")}\n`, "utf8");
+}
+
 export async function main() {
   const token = requireEnv("GITHUB_TOKEN");
   const repository = requireEnv("GITHUB_REPOSITORY");
@@ -76,6 +92,7 @@ export async function main() {
     periodKey,
   });
 
+  await writeGithubOutputs(result, process.env.GITHUB_OUTPUT);
   process.stdout.write(`${JSON.stringify(result)}\n`);
 }
 

@@ -112,6 +112,23 @@ export async function findIssueByExactTitle({
   );
 }
 
+export async function getIssue({
+  owner,
+  repo,
+  issueNumber,
+  token,
+  fetchImpl = fetch,
+}) {
+  const issueUrl = `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}`;
+  const issue = await ghRequest(issueUrl, token, {}, fetchImpl);
+
+  if (issue?.pull_request !== undefined) {
+    throw new Error(`Issue #${issueNumber} is a pull request, not an issue.`);
+  }
+
+  return issue;
+}
+
 export async function createIssue({
   owner,
   repo,

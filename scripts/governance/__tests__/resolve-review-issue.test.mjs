@@ -145,6 +145,79 @@ test("runResolveReviewIssue closes open issue on pass", async () => {
   assert.equal(result.issueState, "closed");
 });
 
+test("runResolveReviewIssue closes explicit issue number without title lookup", async () => {
+  const tempDir = mkdtempSync(path.join(tmpdir(), "imageforge-resolver-"));
+  const evaluationPath = writeEvaluationFile(tempDir, "pass");
+  let listedIssues = false;
+  let issueClosed = false;
+
+  const fetchImpl = async (url, options = {}) => {
+    if (url.includes("/issues?state=all&per_page=100")) {
+      listedIssues = true;
+      return new Response("[]", {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    if (url.endsWith("/issues/9") && !options.method) {
+      return new Response(
+        JSON.stringify({
+          number: 9,
+          title: "[Governance][seo-weekly] 2026-W08",
+          html_url: "https://github.com/f-campana/imageforge-site/issues/9",
+          state: "open",
+        }),
+        { status: 200, headers: { "content-type": "application/json" } },
+      );
+    }
+
+    if (url.endsWith("/issues/9/comments?per_page=100")) {
+      return new Response("[]", {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    if (url.endsWith("/issues/9/comments")) {
+      assert.equal(options.method, "POST");
+      return new Response(JSON.stringify({ id: 100 }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    if (url.endsWith("/issues/9")) {
+      assert.equal(options.method, "PATCH");
+      issueClosed = true;
+      return new Response(JSON.stringify({ number: 9, state: "closed" }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    }
+
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const result = await runResolveReviewIssue({
+    token: "token",
+    repository: "f-campana/imageforge-site",
+    issueKind: "seo-weekly",
+    periodKey: "2026-W08",
+    evaluationPath,
+    issueNumber: 9,
+    runUrl: "",
+    dryRun: false,
+    fetchImpl,
+  });
+
+  assert.equal(listedIssues, false);
+  assert.equal(issueClosed, true);
+  assert.equal(result.result, "pass");
+  assert.equal(result.issueNumber, 9);
+  assert.equal(result.issueState, "closed");
+});
+
 test("runResolveReviewIssue updates marker comment and leaves issue open on fail", async () => {
   const tempDir = mkdtempSync(path.join(tmpdir(), "imageforge-resolver-"));
   const evaluationPath = writeEvaluationFile(tempDir, "fail");

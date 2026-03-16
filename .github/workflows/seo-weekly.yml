@@ -42,7 +42,7 @@ jobs:
           version: 10
 
       - name: Setup Node.js
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
         with:
           node-version: 22
           cache: pnpm
@@ -57,6 +57,7 @@ jobs:
           echo "run_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_OUTPUT"
 
       - name: Upsert weekly SEO governance issue
+        id: upsert_issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -84,6 +85,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           ISSUE_KIND: seo-weekly
+          ISSUE_NUMBER: ${{ steps.upsert_issue.outputs.issue_number }}
           PERIOD_KEY: ${{ steps.governance.outputs.period_key }}
           EVALUATION_JSON_PATH: .tmp/governance/seo-weekly-${{ steps.governance.outputs.period_key }}.json
           RUN_URL: ${{ steps.governance.outputs.run_url }}
