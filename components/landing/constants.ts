@@ -292,20 +292,25 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   {
     capability: "Entry pricing",
     imageforge: "$0 (open source)",
-    vercel: "Free tier + paid usage beyond limits",
+    vercel:
+      "Hobby includes usage; paid usage is metered by transformations + cache reads/writes",
     cloudinary: "Plus plan from about $89-$99/mo",
     imgix: "Credit bundles from $25/mo + custom enterprise",
     sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
   },
   {
-    capability: "Illustrative 28K-image monthly scenario",
+    capability: "Illustrative 28K-transform monthly scenario",
     imageforge: "$0 recurring",
-    vercel: "About $115 overage on top of a Pro plan in one reported case",
-    cloudinary: "$224+ estimated at similar scale",
-    imgix: "Custom quote, often modeled as high three-figure+ monthly",
+    vercel:
+      "Current model is usage-based; one public legacy case reported ~$115 overage on top of Pro",
+    cloudinary:
+      "28K transforms ~= 28 credits (1 credit = 1K transforms), plus storage/bandwidth credits",
+    imgix:
+      "Credit-based pricing across transforms, delivery, and storage (Starter starts at $25/mo)",
     sourceIds: [
       "howdygo-case",
       "vercel-pricing",
+      "vercel-legacy-pricing",
       "cloudinary-pricing",
       "imgix-pricing",
     ],
@@ -331,6 +336,11 @@ export const PRICING_SOURCES: SourceLink[] = [
     id: "vercel-pricing",
     label: "Vercel limits and pricing",
     url: "https://vercel.com/docs/image-optimization/limits-and-pricing",
+  },
+  {
+    id: "vercel-legacy-pricing",
+    label: "Vercel legacy image pricing",
+    url: "https://vercel.com/docs/image-optimization/legacy-pricing",
   },
   {
     id: "cloudinary-pricing",
