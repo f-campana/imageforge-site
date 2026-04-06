@@ -292,7 +292,8 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
   {
     capability: "Entry pricing",
     imageforge: "$0 (open source)",
-    vercel: "Hobby includes usage; paid usage is metered by transformations + cache reads/writes",
+    vercel:
+      "Hobby includes usage; paid usage is metered by transformations + cache reads/writes",
     cloudinary: "Plus plan from about $89-$99/mo",
     imgix: "Credit bundles from $25/mo + custom enterprise",
     sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
