@@ -67,8 +67,8 @@ export type NavItem = {
 export const IMAGEFORGE_VERSION =
   process.env.NEXT_PUBLIC_IMAGEFORGE_VERSION ?? "local-dev";
 
-export const EXAMPLE_TIMESTAMP = "2026-02-11T09:30:00.000Z";
-export const PRICING_AS_OF = "February 11, 2026";
+export const EXAMPLE_TIMESTAMP = "2026-04-06T09:30:00.000Z";
+export const PRICING_AS_OF = "April 6, 2026";
 export const PRICING_OWNER = "ImageForge Maintainers (Product + Growth)";
 const BENCHMARK_INPUT_MB = formatMegabytes(
   BENCHMARK_EVIDENCE.sampleSet.inputBytes,
