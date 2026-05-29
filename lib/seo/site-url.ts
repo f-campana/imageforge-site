@@ -5,6 +5,24 @@ type ResolveSiteUrlOptions = {
   fallbackUrl?: string | URL;
 };
 
+function isTruthyFlag(value: string | undefined): boolean {
+  if (!value) {
+    return false;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  return normalized === "1" || normalized === "true";
+}
+
+function canUseLocalFallbackOutsideDevelopment(): boolean {
+  // Keep CI/deployment environments strict while allowing local checks to run.
+  const isCiLike =
+    isTruthyFlag(process.env.CI) || isTruthyFlag(process.env.GITHUB_ACTIONS);
+  const isVercelLike = isTruthyFlag(process.env.VERCEL);
+
+  return !isCiLike && !isVercelLike;
+}
+
 function parseAbsoluteHttpUrl(value: string): URL | null {
   try {
     const url = new URL(value);
@@ -92,6 +110,10 @@ export function resolveSiteUrl(options: ResolveSiteUrlOptions = {}): URL {
   }
 
   if (process.env.NODE_ENV === "development") {
+    return new URL(DEFAULT_LOCAL_URL);
+  }
+
+  if (canUseLocalFallbackOutsideDevelopment()) {
     return new URL(DEFAULT_LOCAL_URL);
   }
 
