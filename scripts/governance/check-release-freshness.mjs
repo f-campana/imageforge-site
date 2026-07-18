@@ -20,6 +20,23 @@ function isRetriableStatus(status) {
   return status === 408 || status === 429 || status >= 500;
 }
 
+async function fetchPackument(fetchImpl, requestTimeoutMs) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => {
+    controller.abort(
+      new DOMException("npm registry request timed out", "TimeoutError"),
+    );
+  }, requestTimeoutMs);
+  try {
+    return await fetchImpl(REGISTRY_URL, {
+      headers: { accept: "application/json" },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export class RegistryFetchError extends Error {
   constructor(message, attempts) {
     super(message);
@@ -147,10 +164,7 @@ export async function fetchPackumentWithRetry({
 
   for (let attempt = 0; attempt <= retryDelaysMs.length; attempt += 1) {
     try {
-      const response = await fetchImpl(REGISTRY_URL, {
-        headers: { accept: "application/json" },
-        signal: AbortSignal.timeout(requestTimeoutMs),
-      });
+      const response = await fetchPackument(fetchImpl, requestTimeoutMs);
       if (!response.ok) {
         const status = Number(response.status);
         const retriable = isRetriableStatus(status);
