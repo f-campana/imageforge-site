@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { DOC_CATALOG, DOC_SLUGS } from "@/lib/docs/catalog";
 import { DOCS, getDoc } from "@/lib/docs/content";
-import { IMAGEFORGE_CLI_VERSION } from "@/lib/release";
+import {
+  IMAGEFORGE_CLI_PACKAGE_SPEC,
+  IMAGEFORGE_CLI_VERSION,
+} from "@/lib/release";
 
 describe("documentation content contract", () => {
   it("publishes a unique, substantive set of high-intent guides", () => {
@@ -85,6 +88,20 @@ describe("documentation content contract", () => {
     expect(docsText).toContain(`Published version ${IMAGEFORGE_CLI_VERSION}`);
     expect(docsText).toContain("does not validate imageforge.json");
     expect(docsText).toContain("does not rewrite an empty manifest/cache");
+  });
+
+  it("pins every package-manager command to the checked-in release", () => {
+    const packageCommands = DOCS.flatMap(({ sections }) =>
+      sections.flatMap(({ code }) =>
+        code?.includes("@imageforge/cli") ? [code] : [],
+      ),
+    );
+
+    expect(packageCommands.length).toBeGreaterThan(0);
+    for (const command of packageCommands) {
+      expect(command).toContain(IMAGEFORGE_CLI_PACKAGE_SPEC);
+      expect(command).not.toMatch(/@imageforge\/cli(?=\s|$)/u);
+    }
   });
 
   it("states the published reference and schema boundaries", () => {

@@ -2,7 +2,10 @@ import {
   BENCHMARK_EVIDENCE,
   formatMegabytes,
 } from "@/components/landing/benchmark-evidence";
-import { IMAGEFORGE_CLI_VERSION } from "@/lib/release";
+import {
+  IMAGEFORGE_CLI_PACKAGE_SPEC,
+  IMAGEFORGE_CLI_VERSION,
+} from "@/lib/release";
 
 export type TerminalLine = {
   text: string;
@@ -358,7 +361,7 @@ export const SEGMENT_CARDS: SegmentCard[] = [
       "Profile: small product teams and agencies that need predictable hosting costs.",
     pain: "Pain: per-request optimization pricing grows faster than traffic budgets.",
     fit: "ImageForge fit: pre-generate optimized assets without a runtime transformation service or ImageForge usage fee.",
-    command: "npx @imageforge/cli ./public/images -f webp,avif",
+    command: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images -f webp,avif`,
   },
   {
     title: "CI/CD teams",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DOCS } from "@/lib/docs/content";
+import { IMAGEFORGE_CLI_PACKAGE_SPEC } from "@/lib/release";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildPageMetadata({
@@ -28,7 +29,7 @@ export default function DocsPage() {
       <div className="panel-card-strong mt-8 overflow-x-auto p-5">
         <p className="font-mono text-xs text-zinc-400">Safe first command</p>
         <code className="mt-3 block min-w-max font-mono text-sm text-emerald-200">
-          npx @imageforge/cli ./public/images --dry-run
+          npx {IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run
         </code>
       </div>
 

@@ -1,6 +1,9 @@
 import { PUBLISHED_RELEASE_COPY } from "@/lib/docs/release-copy";
 import { DOC_CATALOG, type DocSlug } from "@/lib/docs/catalog";
-import { IMAGEFORGE_CLI_VERSION } from "@/lib/release";
+import {
+  IMAGEFORGE_CLI_PACKAGE_SPEC,
+  IMAGEFORGE_CLI_VERSION,
+} from "@/lib/release";
 
 export type DocSection = {
   heading: string;
@@ -42,21 +45,21 @@ const DOC_CONTENT = {
         body: [
           `ImageForge CLI requires Node.js 20 or newer. Start from a project with at least one supported source such as public/images/hero.jpg, then preview the planned work. ${dryRunContract}`,
         ],
-        code: "npx @imageforge/cli ./public/images --dry-run",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
       },
       {
         heading: "2. Generate derivatives",
         body: [
           "Run the same command without --dry-run. This example writes responsive WebP and AVIF derivatives, blur placeholders, a cache, and imageforge.json.",
         ],
-        code: "npx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280`,
       },
       {
         heading: "3. Verify generated state",
         body: [
           `${checkContract} ${checkWriteContract} Add the exact same options used to generate your files.`,
         ],
-        code: "npx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280 --check",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280 --check`,
       },
       {
         heading: "4. Inspect the expected change",
@@ -107,7 +110,7 @@ const DOC_CONTENT = {
         body: [
           "This example starts with public/images/hero.jpg in a Next.js project. Install an exact CLI version in the project so the lockfile selects the same implementation locally and in CI.",
         ],
-        code: "pnpm add --save-dev --save-exact @imageforge/cli",
+        code: `pnpm add --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
       },
       {
         heading: "2. Generate and inspect",
@@ -200,7 +203,7 @@ const srcSet = (items: typeof avif) =>
         body: [
           `Start with public/images/hero.jpg and preview the bounded derivative set before generating it. ${dryRunContract}`,
         ],
-        code: "npx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280 --dry-run\nnpx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280 --dry-run\nnpx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280`,
       },
       {
         heading: "2. Inspect the manifest and files",
@@ -238,7 +241,7 @@ const srcSet = (items: typeof avif) =>
         body: [
           `${checkContract} ${checkWriteContract} Preview the page at its real breakpoints and use the browser network panel to confirm a generated AVIF or WebP candidate is selected.`,
         ],
-        code: "npx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280 --check",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280 --check`,
       },
     ],
   },
@@ -254,7 +257,7 @@ const srcSet = (items: typeof avif) =>
         body: [
           "Use an exact project dependency instead of a floating one-off download. The lockfile then selects the same CLI locally and in CI.",
         ],
-        code: "pnpm add --save-dev --save-exact @imageforge/cli",
+        code: `pnpm add --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
       },
       {
         heading: "Add scripts",
@@ -653,7 +656,7 @@ jobs:
         body: [
           "ImageForge is a candidate when the assets ship with the repository, the team wants generated files in pull-request review, and a fixed responsive set is sufficient. ImageForge itself has no runtime transformation fee; build compute, storage, CDN, requests, and transfer still belong to your hosting stack.",
         ],
-        code: "npx @imageforge/cli ./public/images --formats webp,avif --widths 320,640,960,1280 --dry-run",
+        code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --formats webp,avif --widths 320,640,960,1280 --dry-run`,
       },
       {
         heading: "Migrate one bounded directory",

@@ -28,15 +28,19 @@ test("landing page renders hero, CTA, and package-manager tabs", async ({
 
   await heroSection.getByRole("tab", { name: "pnpm" }).click();
   await expect(
-    heroSection.getByText("pnpm add --save-dev --save-exact @imageforge/cli"),
+    heroSection.getByText(
+      "pnpm add --save-dev --save-exact @imageforge/cli@0.1.9",
+    ),
   ).toBeVisible();
 
   await heroSection.getByRole("tab", { name: "bun" }).click();
   await expect(
-    heroSection.getByText("bun add --dev --exact @imageforge/cli"),
+    heroSection.getByText("bun add --dev --exact @imageforge/cli@0.1.9"),
   ).toBeVisible();
   await expect(
-    heroSection.getByText("bunx @imageforge/cli ./public/images --dry-run"),
+    heroSection.getByText(
+      "bunx @imageforge/cli@0.1.9 ./public/images --dry-run",
+    ),
   ).toBeVisible();
 
   await expect(

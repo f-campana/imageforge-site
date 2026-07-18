@@ -88,12 +88,27 @@ test("framework compatibility wording stays evidence-bounded", async () => {
 });
 
 test("production docs derive the published CLI version from release metadata", async () => {
-  const source = await readFile(
-    path.join(process.cwd(), "lib", "docs", "content.ts"),
-    "utf8",
+  const sourcePaths = [
+    ["lib", "docs", "content.ts"],
+    ["components", "landing", "package-managers.ts"],
+    ["components", "landing", "constants.ts"],
+    ["app", "docs", "page.tsx"],
+  ];
+  const sources = await Promise.all(
+    sourcePaths.map((segments) =>
+      readFile(path.join(process.cwd(), ...segments), "utf8"),
+    ),
   );
-  assert.match(source, /IMAGEFORGE_CLI_VERSION/u);
-  assert.doesNotMatch(source, /\bv?\d+\.\d+\.\d+\b/u);
+
+  assert.match(sources[0], /IMAGEFORGE_CLI_VERSION/u);
+  assert.doesNotMatch(sources[0], /\bv?\d+\.\d+\.\d+\b/u);
+  for (const source of sources) {
+    assert.match(source, /IMAGEFORGE_CLI_PACKAGE_SPEC/u);
+    assert.doesNotMatch(
+      source,
+      /(?:npx|pnpm (?:add|dlx)|yarn (?:add|dlx)|bun(?:x| add))[^\n]*@imageforge\/cli(?=\s|["'`])/u,
+    );
+  }
 });
 
 test("evaluateKeywordCoverage reports missing clusters", () => {
