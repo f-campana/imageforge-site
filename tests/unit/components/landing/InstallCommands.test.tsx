@@ -33,7 +33,7 @@ describe("InstallCommands", () => {
     const npmTab = screen.getByRole("tab", { name: "npm" });
     expect(npmTab).toHaveAttribute("aria-selected", "true");
     expect(
-      screen.getByText("npm install -g @imageforge/cli"),
+      screen.getByText("npm install --save-dev --save-exact @imageforge/cli"),
     ).toBeInTheDocument();
   });
 
@@ -49,7 +49,9 @@ describe("InstallCommands", () => {
 
     expect(pnpmTab).toHaveFocus();
     expect(pnpmTab).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText("pnpm add -g @imageforge/cli")).toBeInTheDocument();
+    expect(
+      screen.getByText("pnpm add --save-dev --save-exact @imageforge/cli"),
+    ).toBeInTheDocument();
 
     fireEvent.keyDown(pnpmTab, { key: "End" });
     expect(bunTab).toHaveFocus();

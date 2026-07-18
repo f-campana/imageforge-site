@@ -2,6 +2,7 @@ import {
   BENCHMARK_EVIDENCE,
   formatMegabytes,
 } from "@/components/landing/benchmark-evidence";
+import { IMAGEFORGE_CLI_VERSION } from "@/lib/release";
 
 export type TerminalLine = {
   text: string;
@@ -64,11 +65,10 @@ export type NavItem = {
   href: string;
 };
 
-export const IMAGEFORGE_VERSION =
-  process.env.NEXT_PUBLIC_IMAGEFORGE_VERSION ?? "local-dev";
+export const IMAGEFORGE_VERSION = IMAGEFORGE_CLI_VERSION;
 
 export const EXAMPLE_TIMESTAMP = "2026-05-29T09:30:00.000Z";
-export const PRICING_AS_OF = "May 29, 2026";
+export const PRICING_AS_OF = "July 18, 2026";
 export const PRICING_OWNER = "ImageForge Maintainers (Product + Growth)";
 const BENCHMARK_INPUT_MB = formatMegabytes(
   BENCHMARK_EVIDENCE.sampleSet.inputBytes,
@@ -80,6 +80,7 @@ const BENCHMARK_COLD_SECONDS =
   BENCHMARK_EVIDENCE.run.durationSeconds.toFixed(2);
 const BENCHMARK_WARM_P50_MS = BENCHMARK_EVIDENCE.metrics.warmP50Ms.toFixed(1);
 const BENCHMARK_SPEEDUP = BENCHMARK_EVIDENCE.metrics.speedup.toFixed(2);
+const TERMINAL_TOTAL = BENCHMARK_EVIDENCE.sampleSet.imageCount.toString();
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Comparison", href: "#comparison" },
@@ -96,7 +97,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
   },
   { text: "", tone: "terminal-muted", delayMs: 220 },
   {
-    text: `imageforge v${IMAGEFORGE_VERSION}`,
+    text: `Benchmark CLI version: ${BENCHMARK_EVIDENCE.cliVersion}`,
     tone: "terminal-muted",
     delayMs: 340,
   },
@@ -122,22 +123,22 @@ export const TERMINAL_LINES: TerminalLine[] = [
   },
   { text: "", tone: "terminal-muted", delayMs: 1120 },
   {
-    text: "  [1/12] ok hero.jpg -> hero.webp, hero.avif (345KB -> 98KB)",
+    text: `  [1/${TERMINAL_TOTAL}] ok hero.jpg -> hero.webp, hero.avif (345KB -> 98KB)`,
     tone: "terminal-default",
     delayMs: 1260,
   },
   {
-    text: "  [2/12] ok about.png -> about.webp, about.avif (1.2MB -> 180KB)",
+    text: `  [2/${TERMINAL_TOTAL}] ok about.png -> about.webp, about.avif (1.2MB -> 180KB)`,
     tone: "terminal-default",
     delayMs: 1460,
   },
   {
-    text: "  [3/12] cached logo.png",
+    text: `  [3/${TERMINAL_TOTAL}] cached logo.png`,
     tone: "terminal-muted",
     delayMs: 1640,
   },
   {
-    text: "  [4/12] ok team/alice.jpg -> team/alice.webp, team/alice.avif",
+    text: `  [4/${TERMINAL_TOTAL}] ok team/alice.jpg -> team/alice.webp, team/alice.avif`,
     tone: "terminal-default",
     delayMs: 1840,
   },
@@ -147,7 +148,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
     delayMs: 1980,
   },
   {
-    text: "  [12/12] ok banner.jpg -> banner.webp, banner.avif",
+    text: `  [${TERMINAL_TOTAL}/${TERMINAL_TOTAL}] ok banner.jpg -> banner.webp, banner.avif`,
     tone: "terminal-default",
     delayMs: 2140,
   },
@@ -182,9 +183,9 @@ export const TERMINAL_LINES: TerminalLine[] = [
 
 export const FEATURES: FeatureItem[] = [
   {
-    title: "Pay once at build time",
+    title: "Generate at build time",
     description:
-      "Generate deterministic WebP/AVIF assets before deploy so production traffic does not trigger transformation bills.",
+      "Generate stable WebP/AVIF paths before deploy without a runtime image transformation service.",
     flag: "-f webp,avif",
   },
   {
@@ -232,15 +233,15 @@ export const HOW_IT_WORKS_STEPS: StepItem[] = [
     number: "2",
     title: "Check",
     description:
-      "Add --check in CI so stale outputs fail the pipeline with a rerun command your team can copy and paste.",
-    code: "imageforge ./public/images --check\n# fails if outputs are stale",
+      "Add --check in CI so stale outputs fail the pipeline with a generation command that preserves the effective options; review shell quoting before running it.",
+    code: "imageforge ./public/images -f webp,avif --check\n# fails if outputs are stale",
     language: "bash",
   },
   {
     number: "3",
     title: "Ship",
     description:
-      "Read imageforge.json inside your app for dimensions, blurDataURL, and deterministic output paths.",
+      "Read imageforge.json inside your app for dimensions, blurDataURL, and stable output paths.",
     code: `{
   "generated": "${EXAMPLE_TIMESTAMP}",
   "images": {
@@ -293,27 +294,23 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
     capability: "Entry pricing",
     imageforge: "$0 (open source)",
     vercel:
-      "Hobby includes usage; paid usage is metered by transformations + cache reads/writes",
-    cloudinary: "Plus plan from about $89-$99/mo",
-    imgix: "Credit bundles from $25/mo + custom enterprise",
+      "Hobby includes 5K transforms, 300K cache reads, and 100K cache writes; paid overage is metered",
+    cloudinary:
+      "Free includes 25 monthly credits; Plus is $99 monthly or $89/mo billed annually",
+    imgix: "30-day trial includes 100 credits; Starter is $25/mo",
     sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
   },
   {
     capability: "Illustrative 28K-transform monthly scenario",
-    imageforge: "$0 recurring",
+    imageforge:
+      "No ImageForge runtime transformation fee; build, storage, CDN, and egress costs remain",
     vercel:
-      "Current model is usage-based; one public legacy case reported ~$115 overage on top of Pro",
+      "Depends on cache misses, cache units, region, transfer, and edge requests",
     cloudinary:
       "28K transforms ~= 28 credits (1 credit = 1K transforms), plus storage/bandwidth credits",
     imgix:
-      "Credit-based pricing across transforms, delivery, and storage (Starter starts at $25/mo)",
-    sourceIds: [
-      "howdygo-case",
-      "vercel-pricing",
-      "vercel-legacy-pricing",
-      "cloudinary-pricing",
-      "imgix-pricing",
-    ],
+      "Credit use spans transformations, media management, delivery, and cache reads",
+    sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
   },
   {
     capability: "CI quality gate",
@@ -338,11 +335,6 @@ export const PRICING_SOURCES: SourceLink[] = [
     url: "https://vercel.com/docs/image-optimization/limits-and-pricing",
   },
   {
-    id: "vercel-legacy-pricing",
-    label: "Vercel legacy image pricing",
-    url: "https://vercel.com/docs/image-optimization/legacy-pricing",
-  },
-  {
     id: "cloudinary-pricing",
     label: "Cloudinary pricing",
     url: "https://cloudinary.com/pricing",
@@ -351,11 +343,6 @@ export const PRICING_SOURCES: SourceLink[] = [
     id: "imgix-pricing",
     label: "imgix pricing",
     url: "https://www.imgix.com/pricing",
-  },
-  {
-    id: "howdygo-case",
-    label: "HowdyGo cost case study",
-    url: "https://www.howdygo.com/blog/cutting-howdygos-vercel-costs-by-80-without-compromising-ux-or-dx",
   },
   {
     id: "next-discussion",
@@ -370,7 +357,7 @@ export const SEGMENT_CARDS: SegmentCard[] = [
     profile:
       "Profile: small product teams and agencies that need predictable hosting costs.",
     pain: "Pain: per-request optimization pricing grows faster than traffic budgets.",
-    fit: "ImageForge fit: pre-generate optimized assets once and keep recurring image optimization spend at $0.",
+    fit: "ImageForge fit: pre-generate optimized assets without a runtime transformation service or ImageForge usage fee.",
     command: "npx @imageforge/cli ./public/images -f webp,avif",
   },
   {
@@ -378,7 +365,7 @@ export const SEGMENT_CARDS: SegmentCard[] = [
     profile:
       "Profile: engineering orgs that already enforce lint, typecheck, and formatting in pipeline gates.",
     pain: "Pain: unoptimized assets slip into deploys because image checks are manual.",
-    fit: "ImageForge fit: add --check so stale images fail fast with an exact remediation command.",
+    fit: "ImageForge fit: add --check so stale images fail fast with an effective-option remediation command.",
     command: "imageforge ./public/images --check",
   },
   {
@@ -449,17 +436,19 @@ export const MANIFEST_EXAMPLE = `{
   }
 }`;
 
-export const CI_FAIL_EXAMPLE = `$ imageforge ./public/images --check
+export const CI_FAIL_EXAMPLE = `# Illustrative transcript
+$ imageforge ./public/images --output imageforge.json --formats webp,avif --quality 80 --blur-size 16 --concurrency 4 --check
 
 [1/3] cached logo.png
 [2/3] needs processing hero.jpg
 [3/3] needs processing new-banner.png
 
 2 image(s) need processing.
-Run: imageforge ./public/images -f webp,avif
+Run: imageforge ./public/images --output imageforge.json --formats webp,avif --quality 80 --blur-size 16 --concurrency 4
 Exit code: 1`;
 
-export const CI_PASS_EXAMPLE = `$ imageforge ./public/images --check
+export const CI_PASS_EXAMPLE = `# Illustrative transcript
+$ imageforge ./public/images --output imageforge.json --formats webp,avif --quality 80 --blur-size 16 --concurrency 4 --check
 
 [1/3] cached logo.png
 [2/3] cached hero.jpg
@@ -470,9 +459,14 @@ Exit code: 0`;
 
 export const NEXT_INTEGRATION_EXAMPLE = `// lib/imageforge.ts
 import manifest from "../imageforge.json";
+import type { ImageForgeEntry } from "@imageforge/cli";
 
-export function getImageMeta(src: string) {
-  return manifest.images[src];
+const images = manifest.images as Record<string, ImageForgeEntry>;
+
+export function getImageMeta(src: string): ImageForgeEntry {
+  const image = images[src];
+  if (!image) throw new Error(\`ImageForge manifest entry not found: \${src}\`);
+  return image;
 }
 
 // app/page.tsx
@@ -480,7 +474,7 @@ import Image from "next/image";
 import { getImageMeta } from "@/lib/imageforge";
 
 const hero = getImageMeta("hero.jpg");
-const heroSrc = "/images/hero.jpg";
+const heroSrc = \`/images/\${hero.outputs.webp.path}\`;
 
 <Image
   src={heroSrc}
@@ -489,4 +483,5 @@ const heroSrc = "/images/hero.jpg";
   height={hero.height}
   placeholder="blur"
   blurDataURL={hero.blurDataURL}
+  unoptimized
 />;`;

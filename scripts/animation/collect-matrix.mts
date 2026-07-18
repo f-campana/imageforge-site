@@ -97,7 +97,9 @@ async function main(): Promise<void> {
               await page.goto(`${baseUrl}${route}`, {
                 waitUntil: "networkidle",
               });
-              await page.waitForTimeout(120);
+              // Let client preference hooks, web fonts, and the bounded entrance
+              // transitions settle before measuring the final layout contract.
+              await page.waitForTimeout(650);
 
               const metrics = await page.evaluate(() => {
                 const doc = document.documentElement;
@@ -107,17 +109,17 @@ async function main(): Promise<void> {
                 ).matches;
 
                 const heroHeading =
-                  document.querySelector("h1")?.textContent ?? "";
+                  document.querySelector("#top h1")?.textContent ?? "";
                 const heroClaimPresent =
-                  /optimize once,\s*deploy everywhere/i.test(heroHeading);
+                  /pre-generate responsive images/i.test(heroHeading) &&
+                  /verify them before deploy/i.test(heroHeading);
 
                 const ctaAnchors = Array.from(
-                  document.querySelectorAll("a[href]"),
+                  document.querySelectorAll("#top a[href]"),
                 );
-                const primaryCta = ctaAnchors.find((node) =>
-                  (node.textContent ?? "")
-                    .toLowerCase()
-                    .includes("get started"),
+                const primaryCta = ctaAnchors.find(
+                  (node) =>
+                    node.getAttribute("href") === "/docs/getting-started",
                 );
                 const primaryCtaHref = primaryCta?.getAttribute("href") ?? null;
 

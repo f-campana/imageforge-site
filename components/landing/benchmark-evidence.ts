@@ -91,7 +91,7 @@ const fallbackDurationSeconds = 2.1;
 export const BENCHMARK_EVIDENCE: BenchmarkEvidence = {
   asOfDate: latest?.asOfDate ?? "February 15, 2026",
   owner: latest?.owner ?? "ImageForge Maintainers (CLI + Growth)",
-  cliVersion: process.env.NEXT_PUBLIC_IMAGEFORGE_VERSION ?? "local-dev",
+  cliVersion: latest?.source.cliVersion ?? "not recorded",
   runner: latest?.source.runner ?? "GitHub-hosted ubuntu-24.04",
   nodeVersion: latest?.source.nodeVersion ?? "22",
   datasetVersion: latest?.source.datasetVersion ?? "1.0.0",

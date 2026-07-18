@@ -72,6 +72,26 @@ function createFixtureRoot({
     )}\n`,
   );
 
+  writeFixtureFile(
+    rootDir,
+    ".tmp/governance/release-freshness.json",
+    `${JSON.stringify({
+      status: "pass",
+      reason: "current",
+      localVersion: "0.1.9",
+      registryVersion: "0.1.9",
+    })}\n`,
+  );
+  writeFixtureFile(
+    rootDir,
+    ".tmp/governance/release-behavior.json",
+    `${JSON.stringify({
+      status: "pass",
+      package: "@imageforge/cli@0.1.9",
+      mismatches: [],
+    })}\n`,
+  );
+
   return rootDir;
 }
 
@@ -212,6 +232,77 @@ test("evaluateClaimsMonthly fails when pricing as-of date is stale", async () =>
     evaluation.checks.some(
       (check) =>
         check.id === "pricing-as-of-freshness" && check.status === "fail",
+    ),
+  );
+});
+
+test("evaluateClaimsMonthly records stale published CLI metadata", async () => {
+  const rootDir = createFixtureRoot();
+  writeFixtureFile(
+    rootDir,
+    ".tmp/governance/release-freshness.json",
+    `${JSON.stringify({
+      status: "fail",
+      reason: "release_metadata_mismatch",
+      localVersion: "0.1.9",
+      registryVersion: "0.2.0",
+    })}\n`,
+  );
+
+  const evaluation = await evaluateClaimsMonthly({
+    periodKey: "2026-02",
+    freshnessBenchmarkDays: 14,
+    freshnessPricingDays: 45,
+    rootDir,
+    token: "token",
+    repository: "f-campana/imageforge-site",
+    fetchImpl: makeFetch(),
+    runCommandImpl: makeRunCommand(),
+    now: new Date("2026-02-22T00:00:00.000Z"),
+  });
+
+  assert.equal(evaluation.result, "fail");
+  assert.ok(
+    evaluation.checks.some(
+      (check) =>
+        check.id === "published-cli-release-freshness" &&
+        check.status === "fail",
+    ),
+  );
+});
+
+test("evaluateClaimsMonthly records a published behavior mismatch", async () => {
+  const rootDir = createFixtureRoot();
+  writeFixtureFile(
+    rootDir,
+    ".tmp/governance/release-behavior.json",
+    `${JSON.stringify({
+      status: "fail",
+      package: "@imageforge/cli@0.1.9",
+      mismatches: [
+        { key: "checkValidatesManifest", declared: true, observed: false },
+      ],
+    })}\n`,
+  );
+
+  const evaluation = await evaluateClaimsMonthly({
+    periodKey: "2026-02",
+    freshnessBenchmarkDays: 14,
+    freshnessPricingDays: 45,
+    rootDir,
+    token: "token",
+    repository: "f-campana/imageforge-site",
+    fetchImpl: makeFetch(),
+    runCommandImpl: makeRunCommand(),
+    now: new Date("2026-02-22T00:00:00.000Z"),
+  });
+
+  assert.equal(evaluation.result, "fail");
+  assert.ok(
+    evaluation.checks.some(
+      (check) =>
+        check.id === "published-cli-behavior-contract" &&
+        check.status === "fail",
     ),
   );
 });

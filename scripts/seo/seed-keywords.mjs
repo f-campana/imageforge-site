@@ -62,8 +62,14 @@ const BASE_TERMS = [
   "avif conversion",
   "blurdataurl generation",
   "hash-based image caching",
-  "deterministic image optimization",
+  "image freshness workflow",
   "ci image optimization checks",
+  "responsive image cli",
+  "image manifest",
+  "imageforge sharp",
+  "vercel image optimization",
+  "next.js generated images",
+  "generated image freshness",
 ];
 
 function tokenize(input) {

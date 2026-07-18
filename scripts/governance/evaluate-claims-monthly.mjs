@@ -280,6 +280,14 @@ export async function evaluateClaimsMonthly({
   fetchImpl = fetch,
   runCommandImpl = runCommand,
   now = new Date(),
+  releaseFreshnessPath = path.join(
+    rootDir,
+    ".tmp/governance/release-freshness.json",
+  ),
+  releaseBehaviorPath = path.join(
+    rootDir,
+    ".tmp/governance/release-behavior.json",
+  ),
 }) {
   const checks = [];
   const notes = [];
@@ -298,6 +306,65 @@ export async function evaluateClaimsMonthly({
     rootDir,
     "docs/pr-diff-audit-agents/claim-matrix.md",
   );
+
+  try {
+    const releaseFreshness = JSON.parse(
+      await readFile(releaseFreshnessPath, "utf8"),
+    );
+    const current =
+      releaseFreshness.status === "pass" &&
+      releaseFreshness.reason === "current";
+    pushCheck(checks, {
+      id: "published-cli-release-freshness",
+      status: current ? "pass" : "fail",
+      severity: "critical",
+      message: current
+        ? "Published CLI metadata matches npm latest."
+        : "Published CLI metadata does not match npm latest.",
+      evidence: JSON.stringify({
+        status: releaseFreshness.status ?? null,
+        reason: releaseFreshness.reason ?? null,
+        localVersion: releaseFreshness.localVersion ?? null,
+        registryVersion: releaseFreshness.registryVersion ?? null,
+      }),
+    });
+  } catch (error) {
+    pushCheck(checks, {
+      id: "published-cli-release-freshness",
+      status: "fail",
+      severity: "critical",
+      message: "Published CLI freshness evidence is missing or invalid.",
+      evidence: error instanceof Error ? error.message : String(error),
+    });
+  }
+
+  try {
+    const releaseBehavior = JSON.parse(
+      await readFile(releaseBehaviorPath, "utf8"),
+    );
+    const verified = releaseBehavior.status === "pass";
+    pushCheck(checks, {
+      id: "published-cli-behavior-contract",
+      status: verified ? "pass" : "fail",
+      severity: "critical",
+      message: verified
+        ? "Published CLI behavior matches the documentation contract."
+        : "Published CLI behavior does not match the documentation contract.",
+      evidence: JSON.stringify({
+        status: releaseBehavior.status ?? null,
+        package: releaseBehavior.package ?? null,
+        mismatches: releaseBehavior.mismatches ?? [],
+      }),
+    });
+  } catch (error) {
+    pushCheck(checks, {
+      id: "published-cli-behavior-contract",
+      status: "fail",
+      severity: "critical",
+      message: "Published CLI behavior evidence is missing or invalid.",
+      evidence: error instanceof Error ? error.message : String(error),
+    });
+  }
 
   let pricingAsOf = "";
   let pricingOwner = "";

@@ -1,14 +1,17 @@
+import { IMAGEFORGE_CLI_VERSION } from "@/lib/release";
+
 type StructuredData = Record<string, unknown>;
 
 const PRODUCT_NAME = "ImageForge CLI";
 const PRODUCT_DESCRIPTION =
-  "Build-time image optimization for Next.js and modern web apps with WebP/AVIF conversion, blurDataURL placeholders, deterministic hash caching, and CI enforcement.";
+  "Build-time image optimization for Next.js and modern web apps with WebP/AVIF conversion, blurDataURL placeholders, content-hash caching, and CI enforcement.";
 
 export function buildWebsiteSchema(siteUrl: URL): StructuredData {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: PRODUCT_NAME,
+    alternateName: ["ImageForge", "imageforge.dev"],
     description: PRODUCT_DESCRIPTION,
     url: siteUrl.origin,
     inLanguage: "en-US",
@@ -23,7 +26,7 @@ export function buildSoftwareApplicationSchema(siteUrl: URL): StructuredData {
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Cross-platform",
     description: PRODUCT_DESCRIPTION,
-    softwareVersion: process.env.NEXT_PUBLIC_IMAGEFORGE_VERSION ?? "local-dev",
+    softwareVersion: IMAGEFORGE_CLI_VERSION,
     offers: {
       "@type": "Offer",
       price: "0",

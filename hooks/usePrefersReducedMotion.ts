@@ -8,10 +8,6 @@ export function usePrefersReducedMotion(): boolean | null {
   >(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     const handleChange = () => {
@@ -24,6 +20,7 @@ export function usePrefersReducedMotion(): boolean | null {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
+    // Stryker disable next-line ArrayDeclaration: A constant primitive dependency is equivalent to [].
   }, []);
 
   return prefersReducedMotion;

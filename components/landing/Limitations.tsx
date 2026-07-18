@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { MotionWrap } from "@/components/landing/MotionWrap";
 import { LIMITATIONS } from "@/components/landing/constants";
 
@@ -13,8 +15,8 @@ export function Limitations() {
             Honest limitations
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
-            ImageForge is optimized for deterministic build-time pipelines.
-            These tradeoffs keep costs predictable and operations simple.
+            ImageForge is optimized for reviewable build-time pipelines. These
+            tradeoffs keep costs predictable and operations simple.
           </p>
         </MotionWrap>
 
@@ -36,6 +38,21 @@ export function Limitations() {
             </MotionWrap>
           ))}
         </div>
+        <MotionWrap
+          className="mx-auto mt-6 max-w-2xl text-center"
+          delayMs={240}
+        >
+          <p className="text-sm text-zinc-400">
+            Check the constraints against your workload in the{" "}
+            <Link
+              href="/docs/when-to-use"
+              className="ui-focus-ring font-medium text-emerald-300 underline decoration-emerald-300/40 underline-offset-4 hover:text-emerald-200"
+            >
+              when-to-use decision guide
+            </Link>
+            .
+          </p>
+        </MotionWrap>
       </div>
     </section>
   );

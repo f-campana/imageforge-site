@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { MotionWrap } from "@/components/landing/MotionWrap";
 import { NAV_ITEMS } from "@/components/landing/constants";
 
@@ -27,18 +29,18 @@ export function HeaderNav() {
                 </a>
               ))}
             </div>
-            <a
+            <Link
               href="/docs"
               className="ui-interact-link ui-focus-ring hover:text-zinc-100"
             >
               Docs
-            </a>
-            <a
+            </Link>
+            <Link
               href="/contact"
               className="ui-interact-link ui-focus-ring hover:text-zinc-100"
             >
               Contact
-            </a>
+            </Link>
             <a
               href="https://github.com/f-campana/imageforge"
               target="_blank"

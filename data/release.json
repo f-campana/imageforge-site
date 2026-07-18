@@ -1,0 +1,18 @@
+{
+  "package": "@imageforge/cli",
+  "version": "0.1.9",
+  "publishedAt": "2026-06-04T14:33:05.358Z",
+  "npmUrl": "https://www.npmjs.com/package/@imageforge/cli/v/0.1.9",
+  "releaseUrl": "https://github.com/f-campana/imageforge/releases/tag/v0.1.9",
+  "evidence": {
+    "packageIntegrity": "sha512-G1FGq7Ty1gCIi6WBHR2vfIZncwnDB6qSXEBuxPGDVW50aliI9+NF3ER9RsrAkrngjuyZqGiPkoh2g6lgeskHlA==",
+    "sourceGitHead": "84921702849f80b5be5c3448c77dadac7a8611c0",
+    "verificationCommand": "node scripts/governance/verify-release-behavior.mjs"
+  },
+  "behavior": {
+    "dryRunIsFilesystemPure": false,
+    "checkIsFilesystemPure": false,
+    "checkValidatesManifest": false,
+    "emptyInputReconcilesGeneratedState": false
+  }
+}

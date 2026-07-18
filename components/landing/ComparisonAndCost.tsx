@@ -1,36 +1,21 @@
+import Link from "next/link";
+
 import { MotionWrap } from "@/components/landing/MotionWrap";
-import {
-  COMPARISON_ROWS,
-  PRICING_AS_OF,
-  PRICING_OWNER,
-  PRICING_SOURCES,
-} from "@/components/landing/constants";
 
-function findSourceLabel(id: string) {
-  return PRICING_SOURCES.find((source) => source.id === id)?.label ?? id;
-}
-
-function findSourceUrl(id: string) {
-  return PRICING_SOURCES.find((source) => source.id === id)?.url ?? "#";
-}
-
-function SourceLinks({ ids }: { ids: string[] }) {
-  return (
-    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
-      {ids.map((id) => (
-        <a
-          key={id}
-          href={findSourceUrl(id)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ui-interact-link ui-focus-ring text-xs text-emerald-300/90 hover:text-emerald-200"
-        >
-          [{findSourceLabel(id)}]
-        </a>
-      ))}
-    </div>
-  );
-}
+const DECISION_SUMMARY = [
+  {
+    title: "Choose build-time generation",
+    body: "Use ImageForge for repository-backed assets, fixed responsive candidates, reviewable generated files, and CI freshness enforcement.",
+  },
+  {
+    title: "Choose a managed runtime",
+    body: "Keep a managed image service for dynamic uploads, arbitrary transformations, media management, signed URLs, or an integrated delivery control plane.",
+  },
+  {
+    title: "Compare the whole system",
+    body: "Include build compute, storage, delivery, cache behavior, transfer, and operational ownership—not only transformation pricing.",
+  },
+];
 
 export function ComparisonAndCost() {
   return (
@@ -41,120 +26,46 @@ export function ComparisonAndCost() {
       <div className="section-shell">
         <MotionWrap>
           <h2 className="text-center text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
-            Comparison and cost
+            Choose the processing model that fits
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
-            Direct factual comparison of ImageForge, Vercel Image Optimization,
-            Cloudinary, and imgix. Pricing references are shown inline and dated
-            for context.
-          </p>
-          <p className="mx-auto mt-3 max-w-3xl text-center font-mono text-xs tracking-[0.1em] text-zinc-500 uppercase">
-            As of {PRICING_AS_OF}
-          </p>
-          <p className="mx-auto mt-1 max-w-3xl text-center font-mono text-[0.68rem] tracking-[0.08em] text-zinc-600 uppercase">
-            Owner: {PRICING_OWNER}
+            ImageForge is a build-time pipeline, not a replacement for every
+            managed media platform. Start with how your images arrive and who
+            should own transformation and delivery.
           </p>
         </MotionWrap>
 
-        <MotionWrap className="mt-10" delayMs={90}>
-          <div className="hidden w-full max-w-full overflow-x-auto md:block">
-            <table className="panel-card ui-interact-card w-full min-w-[940px] border-collapse text-left">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/[0.02]">
-                  <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-zinc-400 uppercase">
-                    Capability
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-emerald-300 uppercase">
-                    ImageForge
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-zinc-400 uppercase">
-                    Vercel Image Optimization
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-zinc-400 uppercase">
-                    Cloudinary
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs tracking-[0.12em] text-zinc-400 uppercase">
-                    imgix
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON_ROWS.map((row) => (
-                  <tr
-                    key={row.capability}
-                    className="border-b border-white/8 transition-colors duration-150 last:border-b-0 hover:bg-white/[0.02]"
-                  >
-                    <th className="px-4 py-4 align-top text-sm font-medium text-zinc-200">
-                      <p>{row.capability}</p>
-                      {row.sourceIds ? (
-                        <SourceLinks ids={row.sourceIds} />
-                      ) : null}
-                    </th>
-                    <td className="px-4 py-4 align-top text-sm text-zinc-300">
-                      {row.imageforge}
-                    </td>
-                    <td className="px-4 py-4 align-top text-sm text-zinc-400">
-                      {row.vercel}
-                    </td>
-                    <td className="px-4 py-4 align-top text-sm text-zinc-400">
-                      {row.cloudinary}
-                    </td>
-                    <td className="px-4 py-4 align-top text-sm text-zinc-400">
-                      {row.imgix}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="grid gap-4 md:hidden">
-            {COMPARISON_ROWS.map((row) => (
-              <article
-                key={row.capability}
-                className="panel-card ui-interact-card p-4"
-              >
-                <h3 className="text-base font-semibold text-zinc-100">
-                  {row.capability}
+        <div className="mx-auto mt-10 grid max-w-5xl gap-5 md:grid-cols-3">
+          {DECISION_SUMMARY.map((item, index) => (
+            <MotionWrap key={item.title} delayMs={index * 70}>
+              <article className="panel-card ui-interact-card h-full p-5">
+                <h3 className="text-lg font-semibold text-zinc-100">
+                  {item.title}
                 </h3>
-                {row.sourceIds ? <SourceLinks ids={row.sourceIds} /> : null}
-                <dl className="mt-3 space-y-2 text-sm">
-                  <div>
-                    <dt className="font-mono text-[0.68rem] tracking-[0.12em] text-emerald-300 uppercase">
-                      ImageForge
-                    </dt>
-                    <dd className="text-zinc-300">{row.imageforge}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[0.68rem] tracking-[0.12em] text-zinc-500 uppercase">
-                      Vercel Image Optimization
-                    </dt>
-                    <dd className="text-zinc-400">{row.vercel}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[0.68rem] tracking-[0.12em] text-zinc-500 uppercase">
-                      Cloudinary
-                    </dt>
-                    <dd className="text-zinc-400">{row.cloudinary}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[0.68rem] tracking-[0.12em] text-zinc-500 uppercase">
-                      imgix
-                    </dt>
-                    <dd className="text-zinc-400">{row.imgix}</dd>
-                  </div>
-                </dl>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                  {item.body}
+                </p>
               </article>
-            ))}
-          </div>
-        </MotionWrap>
+            </MotionWrap>
+          ))}
+        </div>
 
-        <MotionWrap className="mx-auto mt-5 max-w-4xl" delayMs={180}>
-          <p className="text-center text-xs leading-relaxed text-zinc-500">
-            Illustrative scenario values are directional and depend on plan,
-            region, and request patterns. Use provider calculators and account
-            analytics for exact billing projections.
-          </p>
+        <MotionWrap
+          className="mx-auto mt-7 flex max-w-3xl flex-wrap justify-center gap-3 text-sm"
+          delayMs={220}
+        >
+          <Link
+            href="/docs/when-to-use"
+            className="ui-interact-control ui-focus-ring inline-flex rounded-md border border-white/20 bg-white/5 px-4 py-2 font-medium text-zinc-200 hover:border-white/35 hover:bg-white/10 hover:text-white"
+          >
+            Check product fit
+          </Link>
+          <Link
+            href="/docs/image-service-comparison"
+            className="ui-interact-control ui-focus-ring inline-flex rounded-md border border-emerald-300/45 bg-emerald-300/10 px-4 py-2 font-semibold text-emerald-200 hover:border-emerald-200 hover:bg-emerald-300/20"
+          >
+            Open the sourced comparison
+          </Link>
         </MotionWrap>
       </div>
     </section>

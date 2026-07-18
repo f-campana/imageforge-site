@@ -6,7 +6,9 @@ This update stabilizes the ImageForge landing and SEO integration stack with str
 
 ## Post-release Verification Checklist
 
-1. Confirm npm serves `@imageforge/cli@0.1.6`.
+1. Run `pnpm governance:release:freshness` and confirm npm matches the version, integrity, git head,
+   and publication timestamp recorded in `data/release.json`.
 2. Confirm `cli-contract-pin.md` remains pinned to `022957c640615c3abb45d1a7e3fb4cba961be558` until the next contract change.
 3. Re-run strict SEO release verifier and attach report artifacts.
-4. Confirm production env has `NEXT_PUBLIC_IMAGEFORGE_VERSION=0.1.6`.
+4. Confirm the production build derives its release copy from `data/release.json`; the removed
+   `NEXT_PUBLIC_IMAGEFORGE_VERSION` environment variable must not be restored.

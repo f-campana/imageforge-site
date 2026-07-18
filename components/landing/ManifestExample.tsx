@@ -14,7 +14,7 @@ export function ManifestExample() {
             Manifest output
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-zinc-400">
-            Every run writes{" "}
+            A normal generation run writes{" "}
             <code className="font-mono text-zinc-200">imageforge.json</code>{" "}
             with source dimensions, format outputs, blurDataURL, and cache hash
             metadata. Example timestamp: {EXAMPLE_TIMESTAMP}.

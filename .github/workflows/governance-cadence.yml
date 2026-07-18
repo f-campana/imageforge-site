@@ -11,20 +11,66 @@ on:
   schedule:
     - cron: "20 14 1 * *"
 
-permissions:
-  contents: read
-  issues: write
-  pull-requests: read
-
 concurrency:
   group: governance-cadence-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  monthly-claims-review:
+  verify-release:
     if: github.event_name == 'workflow_dispatch' || github.event.schedule == '20 14 1 * *'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify published CLI release metadata
+        id: release_freshness
+        continue-on-error: true
+        run: pnpm governance:release:freshness
+
+      - name: Verify published CLI behavior contract
+        if: steps.release_freshness.outcome == 'success'
+        continue-on-error: true
+        run: pnpm governance:release:behavior
+
+      - name: Upload release verification artifacts
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: governance-release-verification
+          path: |
+            .tmp/governance/release-freshness.json
+            .tmp/governance/release-behavior.json
+          if-no-files-found: warn
+
+  monthly-claims-review:
+    if: always() && (github.event_name == 'workflow_dispatch' || github.event.schedule == '20 14 1 * *')
+    needs: verify-release
+    runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -50,6 +96,13 @@ jobs:
         run: |
           echo "period_key=$(date -u +'%Y-%m')" >> "$GITHUB_OUTPUT"
           echo "run_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Download release verification artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: governance-release-verification
+          path: .tmp/governance
 
       - name: Upsert monthly claims governance issue
         id: upsert_issue
@@ -102,4 +155,6 @@ jobs:
             .tmp/governance/upsert-claims-monthly-${{ steps.governance.outputs.period_key }}.json
             .tmp/governance/claims-monthly-${{ steps.governance.outputs.period_key }}.json
             .tmp/governance/resolve-claims-monthly-${{ steps.governance.outputs.period_key }}.json
+            .tmp/governance/release-freshness.json
+            .tmp/governance/release-behavior.json
           if-no-files-found: warn

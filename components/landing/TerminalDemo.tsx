@@ -117,7 +117,7 @@ export function TerminalDemo() {
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="h-2.5 w-2.5 rounded-full bg-zinc-600" />
           <span className="ml-2 font-mono text-[0.68rem] tracking-[0.16em] text-zinc-500 uppercase">
-            terminal
+            illustrative terminal replay
           </span>
         </div>
         <div className="min-h-[420px] overflow-x-auto px-4 py-4 md:px-6 md:py-6">
@@ -143,6 +143,10 @@ export function TerminalDemo() {
           ) : null}
         </div>
       </div>
+      <p className="mt-3 text-center text-xs leading-relaxed text-zinc-400">
+        Illustrative CLI output; summary timings are tied to the linked approved
+        benchmark snapshot.
+      </p>
       {!shouldReduceMotion && renderedCount < TERMINAL_LINES.length ? (
         <div className="mt-3 flex justify-end">
           <button

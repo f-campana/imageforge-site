@@ -139,6 +139,27 @@ export function evaluateTitleDescription(title, description) {
   return issues;
 }
 
+export async function collectCrawlableContentFiles(config) {
+  const routePageFiles = await listFilesRecursively(config.appDir, (filePath) =>
+    /page\.tsx$/.test(filePath),
+  );
+  const landingContentFiles = await listFilesRecursively(
+    path.join(config.componentsDir, "landing"),
+    (filePath) => /\.(tsx|ts)$/.test(filePath),
+  );
+  const docsContentFiles = await listFilesRecursively(
+    path.join(config.rootDir, "lib", "docs"),
+    (filePath) => /\.(tsx|ts|md)$/.test(filePath),
+  );
+  return [
+    ...new Set([
+      ...routePageFiles,
+      ...landingContentFiles,
+      ...docsContentFiles,
+    ]),
+  ];
+}
+
 export async function runContentChecks(config) {
   const checks = [];
   const opportunities = [];
@@ -172,17 +193,7 @@ export async function runContentChecks(config) {
     }),
   );
 
-  const routePageFiles = await listFilesRecursively(config.appDir, (filePath) =>
-    /page\.tsx$/.test(filePath),
-  );
-  const landingComponentsDir = path.join(config.componentsDir, "landing");
-  const landingContentFiles = await listFilesRecursively(
-    landingComponentsDir,
-    (filePath) => /\.(tsx|ts)$/.test(filePath),
-  );
-  const crawlableContentFiles = [
-    ...new Set([...routePageFiles, ...landingContentFiles]),
-  ];
+  const crawlableContentFiles = await collectCrawlableContentFiles(config);
 
   const sourceText = compactWhitespace(
     (

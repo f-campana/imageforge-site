@@ -18,7 +18,8 @@
     "runCount": 10,
     "datasetVersion": "1.0.0",
     "runner": "ubuntu-24.04",
-    "nodeVersion": "22"
+    "nodeVersion": "22",
+    "cliVersion": "0.1.9"
   },
   "thresholds": {
     "warmThresholdPct": 10,

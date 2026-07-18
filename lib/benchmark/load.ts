@@ -129,6 +129,7 @@ function parseSnapshot(value: unknown): SiteBenchmarkSnapshot | null {
       datasetVersion: asString(source.datasetVersion),
       runner: asString(source.runner),
       nodeVersion: asString(source.nodeVersion),
+      cliVersion: asString(source.cliVersion) || undefined,
     },
     thresholds: {
       warmThresholdPct: asNumber(thresholds.warmThresholdPct),

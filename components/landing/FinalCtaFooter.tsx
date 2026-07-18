@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { InstallCommands } from "@/components/landing/InstallCommands";
 import { MotionWrap } from "@/components/landing/MotionWrap";
 import { IMAGEFORGE_VERSION } from "@/components/landing/constants";
@@ -8,11 +10,12 @@ export function FinalCtaFooter() {
       <div className="section-shell">
         <MotionWrap className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-semibold tracking-tight text-zinc-100 md:text-[2.65rem]">
-            Build once. Ship fast. Keep costs at zero.
+            Build once. Ship pre-generated assets.
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zinc-400 md:text-base">
-            Start with one command, add --check in CI, and keep deterministic
-            image outputs in every deployment environment.
+            Preview with --dry-run, add --check in CI, and avoid a runtime
+            transformation service. Build, storage, CDN, and egress costs still
+            depend on your hosting setup.
           </p>
         </MotionWrap>
 
@@ -22,19 +25,19 @@ export function FinalCtaFooter() {
 
         <MotionWrap className="mt-5 text-center" delayMs={160}>
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-zinc-400">
-            <a
+            <Link
               href="/docs"
               className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Docs
-            </a>
+            </Link>
             <span>·</span>
-            <a
+            <Link
               href="/contact"
               className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Contact
-            </a>
+            </Link>
             <span>·</span>
             <a
               href="https://github.com/f-campana/imageforge/blob/main/CHANGELOG.md"
@@ -52,6 +55,15 @@ export function FinalCtaFooter() {
               className="ui-interact-link ui-focus-ring hover:text-emerald-300"
             >
               Issues
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/f-campana/imageforge/blob/main/CONTRIBUTING.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ui-interact-link ui-focus-ring hover:text-emerald-300"
+            >
+              Contribute a recipe
             </a>
             <span>·</span>
             <a
