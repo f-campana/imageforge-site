@@ -47,4 +47,5 @@ jobs:
         with:
           name: animation-matrix
           path: .tmp/animation/*.json
+          include-hidden-files: true
           if-no-files-found: warn

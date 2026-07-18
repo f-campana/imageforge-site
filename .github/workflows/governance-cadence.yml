@@ -60,6 +60,7 @@ jobs:
           path: |
             .tmp/governance/release-freshness.json
             .tmp/governance/release-behavior.json
+          include-hidden-files: true
           if-no-files-found: warn
 
   monthly-claims-review:
@@ -157,4 +158,5 @@ jobs:
             .tmp/governance/resolve-claims-monthly-${{ steps.governance.outputs.period_key }}.json
             .tmp/governance/release-freshness.json
             .tmp/governance/release-behavior.json
+          include-hidden-files: true
           if-no-files-found: warn

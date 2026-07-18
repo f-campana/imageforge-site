@@ -129,6 +129,7 @@ jobs:
             coverage/**
             .tmp/fault-injection/**
             .tmp/mutation/**
+          include-hidden-files: true
           if-no-files-found: warn
 
       - name: Publish advisory summary

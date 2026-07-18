@@ -157,6 +157,7 @@ jobs:
         with:
           name: pricing-freshness
           path: .tmp/governance/pricing-freshness.json
+          include-hidden-files: true
           if-no-files-found: error
 
   release-freshness:
@@ -201,6 +202,7 @@ jobs:
           path: |
             .tmp/governance/release-freshness.json
             .tmp/governance/release-behavior.json
+          include-hidden-files: true
           if-no-files-found: error
 
   benchmark-test:
@@ -316,4 +318,5 @@ jobs:
           path: |
             .tmp/seo/report.md
             .tmp/seo/report.json
+          include-hidden-files: true
           if-no-files-found: warn
