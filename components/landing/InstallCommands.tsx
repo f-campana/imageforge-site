@@ -116,8 +116,8 @@ export function InstallCommands({
         {includeRunOnce ? <CommandCard command={commandSet.runOnce} /> : null}
         {showHelpText ? (
           <p className="pl-0.5 font-mono text-xs text-zinc-500">
-            Use global install for repeated runs and one-off execution commands
-            when needed.
+            Pin a project dev dependency for repeatable runs; use the one-off
+            preview command when you are evaluating the CLI.
           </p>
         ) : null}
       </div>

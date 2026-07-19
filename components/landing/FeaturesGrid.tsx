@@ -11,7 +11,7 @@ export function FeaturesGrid() {
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
             Keep image optimization predictable with build-time outputs, CI
-            checks, and deterministic metadata your app can consume directly.
+            checks, and structured metadata your app can consume directly.
           </p>
         </MotionWrap>
         <div className="mt-12 grid gap-6 md:grid-cols-2">

@@ -157,6 +157,52 @@ jobs:
         with:
           name: pricing-freshness
           path: .tmp/governance/pricing-freshness.json
+          include-hidden-files: true
+          if-no-files-found: error
+
+  release-freshness:
+    name: release-freshness
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run release contract unit tests
+        run: |
+          node --test \
+            scripts/governance/__tests__/check-release-freshness.test.mjs \
+            scripts/governance/__tests__/verify-release-behavior.test.mjs
+
+      - name: Compare release metadata with npm
+        run: pnpm governance:release:freshness
+
+      - name: Verify published CLI behavior contract
+        run: pnpm governance:release:behavior
+
+      - name: Upload release freshness artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-freshness
+          path: |
+            .tmp/governance/release-freshness.json
+            .tmp/governance/release-behavior.json
+          include-hidden-files: true
           if-no-files-found: error
 
   benchmark-test:
@@ -272,4 +318,5 @@ jobs:
           path: |
             .tmp/seo/report.md
             .tmp/seo/report.json
+          include-hidden-files: true
           if-no-files-found: warn

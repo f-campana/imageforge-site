@@ -1,3 +1,5 @@
+import { IMAGEFORGE_CLI_PACKAGE_SPEC } from "@/lib/release";
+
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
 export type PackageManagerCommands = {
@@ -25,23 +27,23 @@ export const PACKAGE_MANAGER_COMMANDS: Record<
 > = {
   npm: {
     label: "npm",
-    install: "npm install -g @imageforge/cli",
-    runOnce: "npx @imageforge/cli ./public/images",
+    install: `npm install --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
+    runOnce: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
   },
   pnpm: {
     label: "pnpm",
-    install: "pnpm add -g @imageforge/cli",
-    runOnce: "pnpm dlx @imageforge/cli ./public/images",
+    install: `pnpm add --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
+    runOnce: `pnpm dlx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
   },
   yarn: {
     label: "yarn",
-    install: "yarn global add @imageforge/cli",
-    runOnce: "yarn dlx @imageforge/cli ./public/images",
+    install: `yarn add --dev --exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
+    runOnce: `yarn dlx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
   },
   bun: {
     label: "bun",
-    install: "bun add -g @imageforge/cli",
-    runOnce: "bunx @imageforge/cli ./public/images",
+    install: `bun add --dev --exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
+    runOnce: `bunx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
   },
 };
 

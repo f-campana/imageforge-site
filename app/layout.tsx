@@ -22,16 +22,16 @@ const monoFont = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
-  title: "ImageForge CLI | Build-Time Image Optimization, Zero Monthly Cost",
+  title: "ImageForge CLI | Build-Time Responsive Image Pipeline",
   description:
-    "ImageForge CLI pre-generates WebP/AVIF assets, writes imageforge.json, and adds --check CI enforcement so teams ship optimized images with zero recurring runtime cost.",
+    "ImageForge CLI pre-generates responsive WebP/AVIF assets, writes imageforge.json, and adds CI freshness checks for Next.js and modern web apps.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "ImageForge CLI",
     description:
-      "Build-time image optimization with WebP/AVIF, CI guardrails, and zero recurring runtime image optimization cost.",
+      "Build-time responsive WebP/AVIF generation, manifest metadata, and CI freshness checks.",
     type: "website",
     url: "/",
     siteName: "ImageForge CLI",
@@ -49,11 +49,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ImageForge CLI",
     description:
-      "Optimize once, deploy everywhere, and keep recurring image optimization costs at zero.",
+      "Pre-generate responsive images and verify them before deploy.",
     images: [
       {
         url: "/twitter-image",
-        alt: "ImageForge CLI deterministic build-time optimization social card",
+        alt: "ImageForge CLI build-time responsive image pipeline social card",
       },
     ],
   },
@@ -73,6 +73,12 @@ export default function RootLayout({
       <body
         className={`${headingFont.variable} ${monoFont.variable} antialiased`}
       >
+        <a
+          href="#main-content"
+          className="ui-focus-ring fixed top-3 left-3 z-[100] -translate-y-24 rounded-md bg-emerald-300 px-4 py-2 text-sm font-semibold text-black focus:translate-y-0"
+        >
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>

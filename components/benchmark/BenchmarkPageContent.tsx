@@ -132,7 +132,7 @@ export function BenchmarkPageContent({
 }: BenchmarkPageContentProps) {
   if (!latest) {
     return (
-      <main className="border-b border-white/10 py-24">
+      <main id="main-content" className="border-b border-white/10 py-24">
         <div className="section-shell">
           <MotionWrap surface="benchmark">
             <div className="panel-card mx-auto max-w-3xl p-8 text-center md:p-10">
@@ -183,7 +183,7 @@ export function BenchmarkPageContent({
   const recent = history.slice(0, 8);
 
   return (
-    <main>
+    <main id="main-content">
       <section className="border-b border-white/10 py-16 md:py-20">
         <div className="section-shell">
           <MotionWrap surface="benchmark" mode="static">

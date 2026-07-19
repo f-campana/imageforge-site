@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 import { CodeBlock } from "@/components/landing/CodeBlock";
 import { MotionWrap } from "@/components/landing/MotionWrap";
 import {
   CI_FAIL_EXAMPLE,
   CI_PASS_EXAMPLE,
 } from "@/components/landing/constants";
+import { PUBLISHED_RELEASE_COPY } from "@/lib/docs/release-copy";
 
 export function CICheckExample() {
   return (
@@ -15,8 +18,8 @@ export function CICheckExample() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-zinc-400">
             Use <code className="font-mono text-zinc-200">--check</code> in CI
-            to fail when source images need processing and keep output
-            deterministic across branches.
+            to fail when source, cache, or derivative state needs processing
+            across branches. {PUBLISHED_RELEASE_COPY.ciCheckCaveat}
           </p>
         </MotionWrap>
         <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-2">
@@ -37,6 +40,21 @@ export function CICheckExample() {
             </div>
           </MotionWrap>
         </div>
+        <MotionWrap
+          className="mx-auto mt-6 max-w-2xl text-center"
+          delayMs={240}
+        >
+          <p className="text-sm text-zinc-400">
+            Copy the complete workflow and generated-state policy from the{" "}
+            <Link
+              href="/docs/ci"
+              className="ui-focus-ring font-medium text-emerald-300 underline decoration-emerald-300/40 underline-offset-4 hover:text-emerald-200"
+            >
+              CI integration guide
+            </Link>
+            .
+          </p>
+        </MotionWrap>
       </div>
     </section>
   );

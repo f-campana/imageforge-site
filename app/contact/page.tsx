@@ -1,20 +1,46 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export const metadata = buildPageMetadata({
   title: "ImageForge Contact | Support and Feedback",
   description:
     "Contact and feedback entry points for ImageForge CLI support, bug reports, feature requests, and security reporting.",
-  alternates: {
-    canonical: "/contact",
-  },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen overflow-x-clip bg-[var(--background)] text-[var(--foreground)]">
       <div className="site-grid-layer" aria-hidden="true" />
-      <main className="section-shell py-20 md:py-28">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#06080d]/92 backdrop-blur-md">
+        <div className="section-shell flex items-center justify-between gap-4 py-4">
+          <Link
+            href="/"
+            className="ui-interact-link ui-focus-ring font-mono text-lg font-semibold text-zinc-100 hover:text-white"
+          >
+            imageforge
+          </Link>
+          <nav
+            aria-label="Primary"
+            className="flex gap-4 text-sm text-zinc-300"
+          >
+            <Link
+              href="/docs"
+              className="ui-interact-link ui-focus-ring hover:text-white"
+            >
+              Docs
+            </Link>
+            <Link
+              href="/benchmarks/latest"
+              className="ui-interact-link ui-focus-ring hover:text-white"
+            >
+              Benchmarks
+            </Link>
+          </nav>
+        </div>
+      </header>
+      <main id="main-content" className="section-shell py-20 md:py-28">
         <h1 className="max-w-3xl text-4xl leading-tight font-semibold tracking-tight text-zinc-100 md:text-6xl">
           Contact and feedback
         </h1>

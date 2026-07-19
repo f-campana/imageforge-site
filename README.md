@@ -28,7 +28,13 @@ This site intentionally describes ImageForge as:
 
 - `/` landing page
 - `/benchmarks/latest` benchmark evidence page
-- `/docs` quick-start documentation entrypoint
+- `/docs` documentation hub
+- `/docs/getting-started`, `/docs/nextjs`, `/docs/static-html`, `/docs/ci`,
+  `/docs/cli-reference`, `/docs/configuration`, `/docs/manifest`,
+  `/docs/troubleshooting`, and `/docs/when-to-use`
+- `/docs/build-time-vs-runtime`, `/docs/vercel-image-optimization`, and
+  `/docs/image-service-comparison`, and `/docs/imageforge-and-sharp` for
+  adoption-adjacent decision intent
 - `/contact` support and feedback entrypoint
 
 ## Local setup
@@ -112,7 +118,6 @@ Verification snapshot (2026-02-11):
 
 ## Environment variables
 
-`NEXT_PUBLIC_IMAGEFORGE_VERSION` is used for public version display in the UI.
 `NEXT_PUBLIC_SITE_URL` defines canonical/metadata base URL and should match production.
 In non-development flows (CI, release verification, local production build checks), this value is required.
 `SEO_MODE` controls audit mode (`advisory` or `strict`).
@@ -120,14 +125,25 @@ In non-development flows (CI, release verification, local production build check
 `SEO_COMPETITOR_URLS` optionally enables competitor snapshot checks.
 `SEO_GSC_CLIENT_EMAIL`, `SEO_GSC_PRIVATE_KEY`, and `SEO_GSC_PROPERTY_URI` enable Google Search Console analysis.
 
+The KPI definitions, privacy guardrails, and baseline procedure live in
+[`docs/adoption-measurement.md`](./docs/adoption-measurement.md). The repository deliberately does
+not equate page views, npm downloads, or GitHub stars with successful CLI or CI activation.
+
 Example:
 
 ```bash
-NEXT_PUBLIC_IMAGEFORGE_VERSION=0.1.6
 NEXT_PUBLIC_SITE_URL=https://imageforge.dev
 ```
 
-If unset, the site falls back to `local-dev`.
+The latest published CLI display comes from `data/release.json`. Benchmark methodology uses the
+independent `source.cliVersion` provenance in `data/benchmarks/latest.json`; do not substitute one
+for the other when updating evidence.
+
+When a CLI release is published, update `data/release.json` only after packaged-release verification.
+Record its npm version, timestamp, integrity, and source git head, then set each `behavior`
+capability from the packaged smoke test—not from an unmerged CLI branch. Run
+`pnpm governance:release:freshness` and `pnpm governance:release:behavior`; the docs derive
+version-specific caveats from this contract, and CI rejects provenance drift or behavior mismatch.
 
 ### Non-dev command contract
 
@@ -145,7 +161,7 @@ CI also runs `pnpm governance:pricing:freshness` as a required freshness gate.
 1. Push this repository to GitHub.
 2. In Vercel, create a new project and import the repository.
 3. Keep framework preset as **Next.js**.
-4. Set environment variables `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_IMAGEFORGE_VERSION` (required for release alignment and canonical metadata parity).
+4. Set `NEXT_PUBLIC_SITE_URL` to the production origin for canonical metadata parity.
 5. Deploy.
 
 Vercel build command and output settings can remain default for Next.js.

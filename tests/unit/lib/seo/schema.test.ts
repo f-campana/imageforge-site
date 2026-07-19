@@ -12,22 +12,34 @@ describe("SEO schema helpers", () => {
 
   it("builds a website schema with canonical origin", () => {
     const schema = buildWebsiteSchema(siteUrl) as {
+      "@context": string;
       "@type": string;
       url: string;
       name: string;
+      alternateName: string[];
       inLanguage: string;
+      description: string;
     };
 
+    expect(schema["@context"]).toBe("https://schema.org");
     expect(schema["@type"]).toBe("WebSite");
     expect(schema.url).toBe("https://imageforge.dev");
     expect(schema.name).toBe("ImageForge CLI");
+    expect(schema.alternateName).toEqual(["ImageForge", "imageforge.dev"]);
     expect(schema.inLanguage).toBe("en-US");
+    expect(schema.description).toBe(
+      "Build-time image optimization for Next.js and modern web apps with WebP/AVIF conversion, blurDataURL placeholders, content-hash caching, and CI enforcement.",
+    );
   });
 
   it("builds a software application schema with zero-cost offer", () => {
     const schema = buildSoftwareApplicationSchema(siteUrl) as {
+      "@context": string;
       "@type": string;
       url: string;
+      applicationCategory: string;
+      operatingSystem: string;
+      description: string;
       offers: {
         "@type": string;
         price: string;
@@ -36,8 +48,14 @@ describe("SEO schema helpers", () => {
       sameAs: string[];
     };
 
+    expect(schema["@context"]).toBe("https://schema.org");
     expect(schema["@type"]).toBe("SoftwareApplication");
     expect(schema.url).toBe("https://imageforge.dev");
+    expect(schema.applicationCategory).toBe("DeveloperApplication");
+    expect(schema.operatingSystem).toBe("Cross-platform");
+    expect(schema.description).toBe(
+      "Build-time image optimization for Next.js and modern web apps with WebP/AVIF conversion, blurDataURL placeholders, content-hash caching, and CI enforcement.",
+    );
     expect(schema.offers).toMatchObject({
       "@type": "Offer",
       price: "0",

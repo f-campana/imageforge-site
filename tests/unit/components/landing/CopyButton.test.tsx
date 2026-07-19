@@ -14,7 +14,9 @@ describe("CopyButton", () => {
       },
     });
 
-    render(<CopyButton text="pnpm add -g @imageforge/cli" />);
+    render(
+      <CopyButton text="pnpm add --save-dev --save-exact @imageforge/cli" />,
+    );
 
     const button = screen.getByRole("button", {
       name: /copy code to clipboard/i,
@@ -22,7 +24,9 @@ describe("CopyButton", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith("pnpm add -g @imageforge/cli");
+      expect(writeText).toHaveBeenCalledWith(
+        "pnpm add --save-dev --save-exact @imageforge/cli",
+      );
       expect(button).toHaveTextContent("Copied");
     });
 
@@ -44,7 +48,9 @@ describe("CopyButton", () => {
       },
     });
 
-    render(<CopyButton text="npm install -g @imageforge/cli" />);
+    render(
+      <CopyButton text="npm install --save-dev --save-exact @imageforge/cli" />,
+    );
 
     const button = screen.getByRole("button", {
       name: /copy code to clipboard/i,
@@ -52,7 +58,9 @@ describe("CopyButton", () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith("npm install -g @imageforge/cli");
+      expect(writeText).toHaveBeenCalledWith(
+        "npm install --save-dev --save-exact @imageforge/cli",
+      );
       expect(button).toHaveTextContent("Unavailable");
     });
 

@@ -60,6 +60,7 @@ export type SiteBenchmarkSnapshot = {
     datasetVersion: string;
     runner: string;
     nodeVersion: string;
+    cliVersion?: string;
   };
   thresholds: {
     warmThresholdPct: number;

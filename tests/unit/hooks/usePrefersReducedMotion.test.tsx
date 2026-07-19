@@ -55,18 +55,33 @@ function createMediaQueryList(initialValue: boolean) {
 describe("usePrefersReducedMotion", () => {
   it("reflects media query state and updates on change", async () => {
     const query = createMediaQueryList(false);
-    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue(query.mediaQueryList));
+    const matchMedia = vi.fn().mockReturnValue(query.mediaQueryList);
+    vi.stubGlobal("matchMedia", matchMedia);
 
-    const { result } = renderHook(() => usePrefersReducedMotion());
+    const { result, unmount } = renderHook(() => usePrefersReducedMotion());
 
     await waitFor(() => {
       expect(result.current).toBe(false);
     });
+
+    expect(matchMedia).toHaveBeenCalledExactlyOnceWith(
+      "(prefers-reduced-motion: reduce)",
+    );
+    expect(
+      query.mediaQueryList.addEventListener,
+    ).toHaveBeenCalledExactlyOnceWith("change", expect.any(Function));
 
     act(() => {
       query.emit(true);
     });
 
     expect(result.current).toBe(true);
+
+    const registeredListener = vi.mocked(query.mediaQueryList.addEventListener)
+      .mock.calls[0]?.[1];
+    unmount();
+    expect(
+      query.mediaQueryList.removeEventListener,
+    ).toHaveBeenCalledExactlyOnceWith("change", registeredListener);
   });
 });

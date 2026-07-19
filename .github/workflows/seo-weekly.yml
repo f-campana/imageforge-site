@@ -106,6 +106,7 @@ jobs:
           path: |
             .tmp/seo/report.md
             .tmp/seo/report.json
+          include-hidden-files: true
           if-no-files-found: warn
 
       - name: Upload governance artifacts
@@ -117,4 +118,5 @@ jobs:
             .tmp/governance/upsert-seo-weekly-${{ steps.governance.outputs.period_key }}.json
             .tmp/governance/seo-weekly-${{ steps.governance.outputs.period_key }}.json
             .tmp/governance/resolve-seo-weekly-${{ steps.governance.outputs.period_key }}.json
+          include-hidden-files: true
           if-no-files-found: warn
