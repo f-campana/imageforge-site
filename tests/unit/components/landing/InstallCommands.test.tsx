@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { InstallCommands } from "@/components/landing/InstallCommands";
+import { IMAGEFORGE_CLI_PACKAGE_SPEC } from "@/lib/release";
 
 describe("InstallCommands", () => {
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe("InstallCommands", () => {
     expect(npmTab).toHaveAttribute("aria-selected", "true");
     expect(
       screen.getByText(
-        "npm install --save-dev --save-exact @imageforge/cli@0.1.9",
+        `npm install --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
       ),
     ).toBeInTheDocument();
   });
@@ -53,7 +54,7 @@ describe("InstallCommands", () => {
     expect(pnpmTab).toHaveAttribute("aria-selected", "true");
     expect(
       screen.getByText(
-        "pnpm add --save-dev --save-exact @imageforge/cli@0.1.9",
+        `pnpm add --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
       ),
     ).toBeInTheDocument();
 

@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { IMAGEFORGE_CLI_PACKAGE_SPEC } from "@/lib/release";
+
 test("landing page renders hero, CTA, and package-manager tabs", async ({
   page,
 }) => {
@@ -29,17 +31,19 @@ test("landing page renders hero, CTA, and package-manager tabs", async ({
   await heroSection.getByRole("tab", { name: "pnpm" }).click();
   await expect(
     heroSection.getByText(
-      "pnpm add --save-dev --save-exact @imageforge/cli@0.1.9",
+      `pnpm add --save-dev --save-exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
     ),
   ).toBeVisible();
 
   await heroSection.getByRole("tab", { name: "bun" }).click();
   await expect(
-    heroSection.getByText("bun add --dev --exact @imageforge/cli@0.1.9"),
+    heroSection.getByText(
+      `bun add --dev --exact ${IMAGEFORGE_CLI_PACKAGE_SPEC}`,
+    ),
   ).toBeVisible();
   await expect(
     heroSection.getByText(
-      "bunx @imageforge/cli@0.1.9 ./public/images --dry-run",
+      `bunx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
     ),
   ).toBeVisible();
 

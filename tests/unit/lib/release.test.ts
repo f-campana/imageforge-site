@@ -10,16 +10,17 @@ import {
 describe("release provenance", () => {
   it("reads a published CLI version from checked-in evidence", () => {
     expect(IMAGEFORGE_CLI_VERSION).toMatch(/^\d+\.\d+\.\d+$/u);
-    expect(IMAGEFORGE_CLI_VERSION).toBe("0.1.9");
-    expect(IMAGEFORGE_CLI_PACKAGE_SPEC).toBe("@imageforge/cli@0.1.9");
+    expect(IMAGEFORGE_CLI_PACKAGE_SPEC).toBe(
+      `@imageforge/cli@${IMAGEFORGE_CLI_VERSION}`,
+    );
     expect(new Date(IMAGEFORGE_CLI_PUBLISHED_AT).toISOString()).toBe(
       IMAGEFORGE_CLI_PUBLISHED_AT,
     );
     expect(IMAGEFORGE_CLI_BEHAVIOR).toEqual({
-      dryRunIsFilesystemPure: false,
-      checkIsFilesystemPure: false,
-      checkValidatesManifest: false,
-      emptyInputReconcilesGeneratedState: false,
+      dryRunIsFilesystemPure: true,
+      checkIsFilesystemPure: true,
+      checkValidatesManifest: true,
+      emptyInputReconcilesGeneratedState: true,
     });
   });
 });

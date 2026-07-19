@@ -173,7 +173,7 @@ const srcSet = (items: typeof avif) =>
         heading: "5. Verify the integration",
         body: [
           "Run the application, inspect the rendered image request, and confirm it resolves to a generated path under /images rather than /_next/image. Test the actual sizes breakpoints so the browser does not select an unnecessarily large candidate.",
-          `${checkContract} ${checkWriteContract} The published release does not validate imageforge.json, so review and commit the manifest with the generated files.`,
+          `${checkContract} ${checkWriteContract} Review and commit imageforge.json with the generated files so CI validates the exact generated state.`,
         ],
         code: "pnpm exec imageforge ./public/images --formats webp,avif --widths 320,640,960,1280 --check",
       },

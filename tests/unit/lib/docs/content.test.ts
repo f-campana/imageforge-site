@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { DOC_CATALOG, DOC_SLUGS } from "@/lib/docs/catalog";
 import { DOCS, getDoc } from "@/lib/docs/content";
+import { PUBLISHED_RELEASE_COPY } from "@/lib/docs/release-copy";
 import {
   IMAGEFORGE_CLI_PACKAGE_SPEC,
   IMAGEFORGE_CLI_VERSION,
@@ -86,8 +87,10 @@ describe("documentation content contract", () => {
     const docsText = JSON.stringify(DOCS);
 
     expect(docsText).toContain(`Published version ${IMAGEFORGE_CLI_VERSION}`);
-    expect(docsText).toContain("does not validate imageforge.json");
-    expect(docsText).toContain("does not rewrite an empty manifest/cache");
+    expect(docsText).toContain(PUBLISHED_RELEASE_COPY.manifestContract);
+    expect(docsText).toContain(PUBLISHED_RELEASE_COPY.deletedSourceContract);
+    expect(docsText).not.toContain("does not validate imageforge.json");
+    expect(docsText).not.toContain("does not rewrite an empty manifest/cache");
   });
 
   it("pins every package-manager command to the checked-in release", () => {
