@@ -1,8 +1,406 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-23T03:22:23.744Z",
+  "generatedAt": "2026-08-26T03:25:11.674Z",
   "retention": 20,
   "items": [
+    {
+      "schemaVersion": "1.0",
+      "snapshotId": "32925957397.1",
+      "generatedAt": "2026-08-26T03:25:02.801Z",
+      "asOfDate": "August 26, 2026",
+      "owner": "ImageForge Maintainers (CLI + Growth)",
+      "source": {
+        "repository": "f-campana/imageforge",
+        "workflowName": "Benchmark CI",
+        "workflowPath": ".github/workflows/benchmark-ci.yml",
+        "runId": 32925957397,
+        "runAttempt": 1,
+        "runUrl": "https://github.com/f-campana/imageforge/actions/runs/32925957397",
+        "eventName": "schedule",
+        "refName": "main",
+        "sha": "9fea04a0f067ad118e47f130106e001bad688d5b",
+        "tier": "tier200",
+        "runCount": 10,
+        "datasetVersion": "1.0.0",
+        "runner": "ubuntu-24.04",
+        "nodeVersion": "22",
+        "cliVersion": "0.1.10"
+      },
+      "thresholds": {
+        "warmThresholdPct": 10,
+        "coldThresholdPct": 15,
+        "p95ThresholdPct": 20,
+        "smallBaselineMs": 100,
+        "minAbsoluteDeltaMs": 15
+      },
+      "summary": {
+        "totalPairs": 12,
+        "alertCount": 0,
+        "hasAlerts": false,
+        "headValidationPassed": true,
+        "baseValidationPassed": true
+      },
+      "benchmark": {
+        "profiles": [
+          {
+            "id": "P1",
+            "formats": "webp",
+            "quality": 80,
+            "blur": true,
+            "widths": null,
+            "description": "webp + blur + q80"
+          },
+          {
+            "id": "P2",
+            "formats": "webp,avif",
+            "quality": 80,
+            "blur": true,
+            "widths": null,
+            "description": "webp,avif + blur + q80"
+          },
+          {
+            "id": "P3",
+            "formats": "webp,avif",
+            "quality": 80,
+            "blur": true,
+            "widths": "320,640,960,1280",
+            "description": "webp,avif + blur + q80 + responsive widths"
+          }
+        ],
+        "scenarios": [
+          {
+            "name": "single-small",
+            "expectedTotal": 1
+          },
+          {
+            "name": "single-median",
+            "expectedTotal": 1
+          },
+          {
+            "name": "single-large",
+            "expectedTotal": 1
+          },
+          {
+            "name": "batch-all",
+            "expectedTotal": 200
+          }
+        ],
+        "headline": {
+          "profileId": "P2",
+          "scenario": "batch-all"
+        }
+      },
+      "profileScenarioMetrics": {
+        "P1": {
+          "single-small": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 123.985965,
+            "warmMeanMs": 98.772372,
+            "warmP50Ms": 99.151221,
+            "warmP95Ms": 103.266652,
+            "warmStddevMs": 2.279928,
+            "speedup": 1.25527,
+            "coldImagesPerSec": 8.065429,
+            "warmImagesPerSec": 10.124289,
+            "coldPerImageMs": 123.985965,
+            "warmPerImageMs": 98.772372,
+            "coldOriginalBytes": 1608,
+            "coldProcessedBytes": 634,
+            "validationPassed": true
+          },
+          "single-median": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 163.461803,
+            "warmMeanMs": 102.147028,
+            "warmP50Ms": 100.101294,
+            "warmP95Ms": 119.848219,
+            "warmStddevMs": 6.754019,
+            "speedup": 1.60026,
+            "coldImagesPerSec": 6.117637,
+            "warmImagesPerSec": 9.78981,
+            "coldPerImageMs": 163.461803,
+            "warmPerImageMs": 102.147028,
+            "coldOriginalBytes": 11070,
+            "coldProcessedBytes": 1722,
+            "validationPassed": true
+          },
+          "single-large": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 1051.841451,
+            "warmMeanMs": 97.811221,
+            "warmP50Ms": 97.641325,
+            "warmP95Ms": 99.123454,
+            "warmStddevMs": 0.714296,
+            "speedup": 10.753791,
+            "coldImagesPerSec": 0.950714,
+            "warmImagesPerSec": 10.223776,
+            "coldPerImageMs": 1051.841451,
+            "warmPerImageMs": 97.811221,
+            "coldOriginalBytes": 195738,
+            "coldProcessedBytes": 29844,
+            "validationPassed": true
+          },
+          "batch-all": {
+            "runCount": 10,
+            "imageCount": 200,
+            "coldWallMs": 13988.13073,
+            "warmMeanMs": 252.247456,
+            "warmP50Ms": 252.865098,
+            "warmP95Ms": 255.878936,
+            "warmStddevMs": 2.886852,
+            "speedup": 55.454001,
+            "coldImagesPerSec": 14.297836,
+            "warmImagesPerSec": 792.872218,
+            "coldPerImageMs": 69.940654,
+            "warmPerImageMs": 1.261237,
+            "coldOriginalBytes": 5346269,
+            "coldProcessedBytes": 1110114,
+            "validationPassed": true
+          }
+        },
+        "P2": {
+          "single-small": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 214.046611,
+            "warmMeanMs": 100.240123,
+            "warmP50Ms": 100.158021,
+            "warmP95Ms": 103.560554,
+            "warmStddevMs": 1.606512,
+            "speedup": 2.135339,
+            "coldImagesPerSec": 4.67188,
+            "warmImagesPerSec": 9.976045,
+            "coldPerImageMs": 214.046611,
+            "warmPerImageMs": 100.240123,
+            "coldOriginalBytes": 1608,
+            "coldProcessedBytes": 935,
+            "validationPassed": true
+          },
+          "single-median": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 382.69804,
+            "warmMeanMs": 99.495867,
+            "warmP50Ms": 99.387815,
+            "warmP95Ms": 101.892591,
+            "warmStddevMs": 1.835796,
+            "speedup": 3.846371,
+            "coldImagesPerSec": 2.613026,
+            "warmImagesPerSec": 10.050669,
+            "coldPerImageMs": 382.69804,
+            "warmPerImageMs": 99.495867,
+            "coldOriginalBytes": 11070,
+            "coldProcessedBytes": 2021,
+            "validationPassed": true
+          },
+          "single-large": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 5014.853665,
+            "warmMeanMs": 100.071778,
+            "warmP50Ms": 100.107275,
+            "warmP95Ms": 101.570731,
+            "warmStddevMs": 1.10467,
+            "speedup": 50.112567,
+            "coldImagesPerSec": 0.199408,
+            "warmImagesPerSec": 9.992827,
+            "coldPerImageMs": 5014.853665,
+            "warmPerImageMs": 100.071778,
+            "coldOriginalBytes": 195738,
+            "coldProcessedBytes": 30242,
+            "validationPassed": true
+          },
+          "batch-all": {
+            "runCount": 10,
+            "imageCount": 200,
+            "coldWallMs": 79847.168794,
+            "warmMeanMs": 283.805583,
+            "warmP50Ms": 283.697191,
+            "warmP95Ms": 291.98671,
+            "warmStddevMs": 6.634696,
+            "speedup": 281.344602,
+            "coldImagesPerSec": 2.504785,
+            "warmImagesPerSec": 704.707772,
+            "coldPerImageMs": 399.235844,
+            "warmPerImageMs": 1.419028,
+            "coldOriginalBytes": 5346269,
+            "coldProcessedBytes": 1179166,
+            "validationPassed": true
+          }
+        },
+        "P3": {
+          "single-small": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 248.385704,
+            "warmMeanMs": 101.226364,
+            "warmP50Ms": 101.362972,
+            "warmP95Ms": 102.549532,
+            "warmStddevMs": 0.982601,
+            "speedup": 2.453765,
+            "coldImagesPerSec": 4.025997,
+            "warmImagesPerSec": 9.878849,
+            "coldPerImageMs": 248.385704,
+            "warmPerImageMs": 101.226364,
+            "coldOriginalBytes": 1608,
+            "coldProcessedBytes": 1449,
+            "validationPassed": true
+          },
+          "single-median": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 695.01871,
+            "warmMeanMs": 101.369577,
+            "warmP50Ms": 101.401419,
+            "warmP95Ms": 102.876132,
+            "warmStddevMs": 0.913698,
+            "speedup": 6.856285,
+            "coldImagesPerSec": 1.43881,
+            "warmImagesPerSec": 9.864893,
+            "coldPerImageMs": 695.01871,
+            "warmPerImageMs": 101.369577,
+            "coldOriginalBytes": 11070,
+            "coldProcessedBytes": 4611,
+            "validationPassed": true
+          },
+          "single-large": {
+            "runCount": 10,
+            "imageCount": 1,
+            "coldWallMs": 970.147188,
+            "warmMeanMs": 102.917326,
+            "warmP50Ms": 103.392257,
+            "warmP95Ms": 104.655021,
+            "warmStddevMs": 1.377164,
+            "speedup": 9.426471,
+            "coldImagesPerSec": 1.030771,
+            "warmImagesPerSec": 9.716537,
+            "coldPerImageMs": 970.147188,
+            "warmPerImageMs": 102.917326,
+            "coldOriginalBytes": 195738,
+            "coldProcessedBytes": 5129,
+            "validationPassed": true
+          },
+          "batch-all": {
+            "runCount": 10,
+            "imageCount": 200,
+            "coldWallMs": 51223.608767,
+            "warmMeanMs": 456.904337,
+            "warmP50Ms": 454.969178,
+            "warmP95Ms": 468.269812,
+            "warmStddevMs": 5.658678,
+            "speedup": 112.110139,
+            "coldImagesPerSec": 3.90445,
+            "warmImagesPerSec": 437.72839,
+            "coldPerImageMs": 256.118044,
+            "warmPerImageMs": 2.284522,
+            "coldOriginalBytes": 5346269,
+            "coldProcessedBytes": 855008,
+            "validationPassed": true
+          }
+        }
+      },
+      "deltas": [
+        {
+          "profileId": "P1",
+          "scenario": "single-small",
+          "warmP50Pct": -0.922402,
+          "warmP95Pct": 0.302584,
+          "coldPct": -0.969654,
+          "alerts": []
+        },
+        {
+          "profileId": "P1",
+          "scenario": "single-median",
+          "warmP50Pct": -0.158748,
+          "warmP95Pct": 15.385953,
+          "coldPct": 1.281939,
+          "alerts": []
+        },
+        {
+          "profileId": "P1",
+          "scenario": "single-large",
+          "warmP50Pct": -2.698538,
+          "warmP95Pct": -2.656273,
+          "coldPct": 0.202522,
+          "alerts": []
+        },
+        {
+          "profileId": "P1",
+          "scenario": "batch-all",
+          "warmP50Pct": 0.772724,
+          "warmP95Pct": 0.045813,
+          "coldPct": 1.360622,
+          "alerts": []
+        },
+        {
+          "profileId": "P2",
+          "scenario": "single-small",
+          "warmP50Pct": 2.082255,
+          "warmP95Pct": 1.686456,
+          "coldPct": 0.86847,
+          "alerts": []
+        },
+        {
+          "profileId": "P2",
+          "scenario": "single-median",
+          "warmP50Pct": -0.545848,
+          "warmP95Pct": -1.429986,
+          "coldPct": -0.974729,
+          "alerts": []
+        },
+        {
+          "profileId": "P2",
+          "scenario": "single-large",
+          "warmP50Pct": 1.230099,
+          "warmP95Pct": -0.357883,
+          "coldPct": 0.512404,
+          "alerts": []
+        },
+        {
+          "profileId": "P2",
+          "scenario": "batch-all",
+          "warmP50Pct": 2.234027,
+          "warmP95Pct": 1.180144,
+          "coldPct": 0.28938,
+          "alerts": []
+        },
+        {
+          "profileId": "P3",
+          "scenario": "single-small",
+          "warmP50Pct": 2.293669,
+          "warmP95Pct": 0.917023,
+          "coldPct": 1.431963,
+          "alerts": []
+        },
+        {
+          "profileId": "P3",
+          "scenario": "single-median",
+          "warmP50Pct": 1.076344,
+          "warmP95Pct": 0.347542,
+          "coldPct": 0.400757,
+          "alerts": []
+        },
+        {
+          "profileId": "P3",
+          "scenario": "single-large",
+          "warmP50Pct": 2.387005,
+          "warmP95Pct": 1.213793,
+          "coldPct": 0.311489,
+          "alerts": []
+        },
+        {
+          "profileId": "P3",
+          "scenario": "batch-all",
+          "warmP50Pct": -0.330434,
+          "warmP95Pct": -2.054853,
+          "coldPct": 0.771515,
+          "alerts": []
+        }
+      ]
+    },
     {
       "schemaVersion": "1.0",
       "snapshotId": "32614899075.1",
@@ -7561,404 +7959,6 @@
           "warmP50Pct": -1.022763,
           "warmP95Pct": -0.241837,
           "coldPct": 0.025336,
-          "alerts": []
-        }
-      ]
-    },
-    {
-      "schemaVersion": "1.0",
-      "snapshotId": "29977057464.1",
-      "generatedAt": "2026-07-23T03:33:59.744Z",
-      "asOfDate": "July 23, 2026",
-      "owner": "ImageForge Maintainers (CLI + Growth)",
-      "source": {
-        "repository": "f-campana/imageforge",
-        "workflowName": "Benchmark CI",
-        "workflowPath": ".github/workflows/benchmark-ci.yml",
-        "runId": 29977057464,
-        "runAttempt": 1,
-        "runUrl": "https://github.com/f-campana/imageforge/actions/runs/29977057464",
-        "eventName": "schedule",
-        "refName": "main",
-        "sha": "9fea04a0f067ad118e47f130106e001bad688d5b",
-        "tier": "tier200",
-        "runCount": 10,
-        "datasetVersion": "1.0.0",
-        "runner": "ubuntu-24.04",
-        "nodeVersion": "22",
-        "cliVersion": "0.1.10"
-      },
-      "thresholds": {
-        "warmThresholdPct": 10,
-        "coldThresholdPct": 15,
-        "p95ThresholdPct": 20,
-        "smallBaselineMs": 100,
-        "minAbsoluteDeltaMs": 15
-      },
-      "summary": {
-        "totalPairs": 12,
-        "alertCount": 0,
-        "hasAlerts": false,
-        "headValidationPassed": true,
-        "baseValidationPassed": true
-      },
-      "benchmark": {
-        "profiles": [
-          {
-            "id": "P1",
-            "formats": "webp",
-            "quality": 80,
-            "blur": true,
-            "widths": null,
-            "description": "webp + blur + q80"
-          },
-          {
-            "id": "P2",
-            "formats": "webp,avif",
-            "quality": 80,
-            "blur": true,
-            "widths": null,
-            "description": "webp,avif + blur + q80"
-          },
-          {
-            "id": "P3",
-            "formats": "webp,avif",
-            "quality": 80,
-            "blur": true,
-            "widths": "320,640,960,1280",
-            "description": "webp,avif + blur + q80 + responsive widths"
-          }
-        ],
-        "scenarios": [
-          {
-            "name": "single-small",
-            "expectedTotal": 1
-          },
-          {
-            "name": "single-median",
-            "expectedTotal": 1
-          },
-          {
-            "name": "single-large",
-            "expectedTotal": 1
-          },
-          {
-            "name": "batch-all",
-            "expectedTotal": 200
-          }
-        ],
-        "headline": {
-          "profileId": "P2",
-          "scenario": "batch-all"
-        }
-      },
-      "profileScenarioMetrics": {
-        "P1": {
-          "single-small": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 126.886725,
-            "warmMeanMs": 101.764841,
-            "warmP50Ms": 101.509121,
-            "warmP95Ms": 107.845236,
-            "warmStddevMs": 2.744556,
-            "speedup": 1.246862,
-            "coldImagesPerSec": 7.881045,
-            "warmImagesPerSec": 9.826577,
-            "coldPerImageMs": 126.886725,
-            "warmPerImageMs": 101.764841,
-            "coldOriginalBytes": 1608,
-            "coldProcessedBytes": 634,
-            "validationPassed": true
-          },
-          "single-median": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 159.234437,
-            "warmMeanMs": 100.834837,
-            "warmP50Ms": 100.738257,
-            "warmP95Ms": 104.564042,
-            "warmStddevMs": 2.133991,
-            "speedup": 1.579161,
-            "coldImagesPerSec": 6.280049,
-            "warmImagesPerSec": 9.917207,
-            "coldPerImageMs": 159.234437,
-            "warmPerImageMs": 100.834837,
-            "coldOriginalBytes": 11070,
-            "coldProcessedBytes": 1722,
-            "validationPassed": true
-          },
-          "single-large": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 949.600312,
-            "warmMeanMs": 101.699934,
-            "warmP50Ms": 102.20087,
-            "warmP95Ms": 103.848525,
-            "warmStddevMs": 1.535266,
-            "speedup": 9.337276,
-            "coldImagesPerSec": 1.053075,
-            "warmImagesPerSec": 9.832848,
-            "coldPerImageMs": 949.600312,
-            "warmPerImageMs": 101.699934,
-            "coldOriginalBytes": 195738,
-            "coldProcessedBytes": 29844,
-            "validationPassed": true
-          },
-          "batch-all": {
-            "runCount": 10,
-            "imageCount": 200,
-            "coldWallMs": 14567.700157,
-            "warmMeanMs": 247.627204,
-            "warmP50Ms": 247.614954,
-            "warmP95Ms": 250.906745,
-            "warmStddevMs": 2.170301,
-            "speedup": 58.829159,
-            "coldImagesPerSec": 13.729003,
-            "warmImagesPerSec": 807.665705,
-            "coldPerImageMs": 72.838501,
-            "warmPerImageMs": 1.238136,
-            "coldOriginalBytes": 5346269,
-            "coldProcessedBytes": 1110114,
-            "validationPassed": true
-          }
-        },
-        "P2": {
-          "single-small": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 211.681898,
-            "warmMeanMs": 100.185609,
-            "warmP50Ms": 100.145958,
-            "warmP95Ms": 102.426698,
-            "warmStddevMs": 1.52533,
-            "speedup": 2.112897,
-            "coldImagesPerSec": 4.72407,
-            "warmImagesPerSec": 9.981474,
-            "coldPerImageMs": 211.681898,
-            "warmPerImageMs": 100.185609,
-            "coldOriginalBytes": 1608,
-            "coldProcessedBytes": 935,
-            "validationPassed": true
-          },
-          "single-median": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 359.231647,
-            "warmMeanMs": 101.539508,
-            "warmP50Ms": 101.392548,
-            "warmP95Ms": 103.024888,
-            "warmStddevMs": 0.892395,
-            "speedup": 3.537851,
-            "coldImagesPerSec": 2.783719,
-            "warmImagesPerSec": 9.848383,
-            "coldPerImageMs": 359.231647,
-            "warmPerImageMs": 101.539508,
-            "coldOriginalBytes": 11070,
-            "coldProcessedBytes": 2021,
-            "validationPassed": true
-          },
-          "single-large": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 4560.366461,
-            "warmMeanMs": 102.376574,
-            "warmP50Ms": 102.621539,
-            "warmP95Ms": 103.722598,
-            "warmStddevMs": 1.147288,
-            "speedup": 44.545019,
-            "coldImagesPerSec": 0.219281,
-            "warmImagesPerSec": 9.76786,
-            "coldPerImageMs": 4560.366461,
-            "warmPerImageMs": 102.376574,
-            "coldOriginalBytes": 195738,
-            "coldProcessedBytes": 30242,
-            "validationPassed": true
-          },
-          "batch-all": {
-            "runCount": 10,
-            "imageCount": 200,
-            "coldWallMs": 72379.703618,
-            "warmMeanMs": 277.107343,
-            "warmP50Ms": 275.675625,
-            "warmP95Ms": 290.847152,
-            "warmStddevMs": 7.288322,
-            "speedup": 261.197349,
-            "coldImagesPerSec": 2.763206,
-            "warmImagesPerSec": 721.74197,
-            "coldPerImageMs": 361.898518,
-            "warmPerImageMs": 1.385537,
-            "coldOriginalBytes": 5346269,
-            "coldProcessedBytes": 1179166,
-            "validationPassed": true
-          }
-        },
-        "P3": {
-          "single-small": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 242.472416,
-            "warmMeanMs": 105.118537,
-            "warmP50Ms": 105.802103,
-            "warmP95Ms": 107.027976,
-            "warmStddevMs": 1.606732,
-            "speedup": 2.306657,
-            "coldImagesPerSec": 4.12418,
-            "warmImagesPerSec": 9.51307,
-            "coldPerImageMs": 242.472416,
-            "warmPerImageMs": 105.118537,
-            "coldOriginalBytes": 1608,
-            "coldProcessedBytes": 1449,
-            "validationPassed": true
-          },
-          "single-median": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 650.573555,
-            "warmMeanMs": 103.361759,
-            "warmP50Ms": 103.20068,
-            "warmP95Ms": 106.689399,
-            "warmStddevMs": 1.803056,
-            "speedup": 6.294142,
-            "coldImagesPerSec": 1.537105,
-            "warmImagesPerSec": 9.674758,
-            "coldPerImageMs": 650.573555,
-            "warmPerImageMs": 103.361759,
-            "coldOriginalBytes": 11070,
-            "coldProcessedBytes": 4611,
-            "validationPassed": true
-          },
-          "single-large": {
-            "runCount": 10,
-            "imageCount": 1,
-            "coldWallMs": 904.060705,
-            "warmMeanMs": 104.168457,
-            "warmP50Ms": 104.104809,
-            "warmP95Ms": 105.536605,
-            "warmStddevMs": 1.152429,
-            "speedup": 8.678834,
-            "coldImagesPerSec": 1.10612,
-            "warmImagesPerSec": 9.599835,
-            "coldPerImageMs": 904.060705,
-            "warmPerImageMs": 104.168457,
-            "coldOriginalBytes": 195738,
-            "coldProcessedBytes": 5129,
-            "validationPassed": true
-          },
-          "batch-all": {
-            "runCount": 10,
-            "imageCount": 200,
-            "coldWallMs": 47137.127568,
-            "warmMeanMs": 452.023776,
-            "warmP50Ms": 450.192744,
-            "warmP95Ms": 460.531232,
-            "warmStddevMs": 5.575815,
-            "speedup": 104.280195,
-            "coldImagesPerSec": 4.24294,
-            "warmImagesPerSec": 442.454602,
-            "coldPerImageMs": 235.685638,
-            "warmPerImageMs": 2.260119,
-            "coldOriginalBytes": 5346269,
-            "coldProcessedBytes": 855008,
-            "validationPassed": true
-          }
-        }
-      },
-      "deltas": [
-        {
-          "profileId": "P1",
-          "scenario": "single-small",
-          "warmP50Pct": -0.175066,
-          "warmP95Pct": 3.257868,
-          "coldPct": 1.215772,
-          "alerts": []
-        },
-        {
-          "profileId": "P1",
-          "scenario": "single-median",
-          "warmP50Pct": 0.896981,
-          "warmP95Pct": 3.051339,
-          "coldPct": 3.679295,
-          "alerts": []
-        },
-        {
-          "profileId": "P1",
-          "scenario": "single-large",
-          "warmP50Pct": 0.604569,
-          "warmP95Pct": -1.745728,
-          "coldPct": 0.752267,
-          "alerts": []
-        },
-        {
-          "profileId": "P1",
-          "scenario": "batch-all",
-          "warmP50Pct": -1.579025,
-          "warmP95Pct": -6.742783,
-          "coldPct": 9.419675,
-          "alerts": []
-        },
-        {
-          "profileId": "P2",
-          "scenario": "single-small",
-          "warmP50Pct": -0.969436,
-          "warmP95Pct": -1.447753,
-          "coldPct": 0.119684,
-          "alerts": []
-        },
-        {
-          "profileId": "P2",
-          "scenario": "single-median",
-          "warmP50Pct": -0.763791,
-          "warmP95Pct": -0.216244,
-          "coldPct": -1.839626,
-          "alerts": []
-        },
-        {
-          "profileId": "P2",
-          "scenario": "single-large",
-          "warmP50Pct": 1.566537,
-          "warmP95Pct": -0.627015,
-          "coldPct": 0.368683,
-          "alerts": []
-        },
-        {
-          "profileId": "P2",
-          "scenario": "batch-all",
-          "warmP50Pct": -2.636952,
-          "warmP95Pct": 1.728079,
-          "coldPct": -0.701304,
-          "alerts": []
-        },
-        {
-          "profileId": "P3",
-          "scenario": "single-small",
-          "warmP50Pct": 3.210355,
-          "warmP95Pct": 2.699661,
-          "coldPct": 0.855947,
-          "alerts": []
-        },
-        {
-          "profileId": "P3",
-          "scenario": "single-median",
-          "warmP50Pct": 0.501844,
-          "warmP95Pct": 0.839455,
-          "coldPct": -0.117983,
-          "alerts": []
-        },
-        {
-          "profileId": "P3",
-          "scenario": "single-large",
-          "warmP50Pct": 0.484623,
-          "warmP95Pct": -0.894255,
-          "coldPct": 0.578071,
-          "alerts": []
-        },
-        {
-          "profileId": "P3",
-          "scenario": "batch-all",
-          "warmP50Pct": -0.900877,
-          "warmP95Pct": 0.606702,
-          "coldPct": 0.17822,
           "alerts": []
         }
       ]
