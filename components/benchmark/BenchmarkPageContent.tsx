@@ -194,11 +194,14 @@ export function BenchmarkPageContent({
               Latest approved benchmark snapshot
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-400 md:text-base">
-              Canonical source policy: nightly tier200 on main. Current
-              snapshot: {latest.source.eventName} / {latest.source.tier} /{" "}
+              Final v{latest.source.cliVersion} snapshot:{" "}
+              {latest.source.eventName} / {latest.source.tier} /{" "}
               {latest.source.refName} on {latest.source.runner} (Node{" "}
-              {latest.source.nodeVersion}). Updates are synced via PR and
-              require manual review before merge.
+              {latest.source.nodeVersion}). The workflow ran in advisory mode; a
+              separate strict comparison found no alerts. Both runs used the
+              same release commit, so differences reflect run-to-run variation,
+              not a version comparison. Results are specific to this dataset and
+              environment.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-emerald-300/35 bg-emerald-300/10 px-3 py-1 font-mono text-[0.66rem] tracking-[0.08em] text-emerald-200 uppercase">

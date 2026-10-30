@@ -294,28 +294,6 @@ export const COMPARISON_ROWS: ComparisonRow[] = [
     imgix: "Runtime URL transformations",
   },
   {
-    capability: "Entry pricing",
-    imageforge: "$0 (open source)",
-    vercel:
-      "Hobby includes 5K transforms, 300K cache reads, and 100K cache writes; paid overage is metered",
-    cloudinary:
-      "Free includes 25 monthly credits; Plus is $99 monthly or $89/mo billed annually",
-    imgix: "30-day trial includes 100 credits; Starter is $25/mo",
-    sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
-  },
-  {
-    capability: "Illustrative 28K-transform monthly scenario",
-    imageforge:
-      "No ImageForge runtime transformation fee; build, storage, CDN, and egress costs remain",
-    vercel:
-      "Depends on cache misses, cache units, region, transfer, and edge requests",
-    cloudinary:
-      "28K transforms ~= 28 credits (1 credit = 1K transforms), plus storage/bandwidth credits",
-    imgix:
-      "Credit use spans transformations, media management, delivery, and cache reads",
-    sourceIds: ["vercel-pricing", "cloudinary-pricing", "imgix-pricing"],
-  },
-  {
     capability: "CI quality gate",
     imageforge: "Built-in --check",
     vercel: "Not a CLI check mode",

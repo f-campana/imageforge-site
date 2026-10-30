@@ -7,7 +7,7 @@ import { resolveSiteUrl } from "@/lib/seo/site-url";
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = resolveSiteUrl();
 
-  const contentUpdated = new Date("2026-07-18T00:00:00.000Z");
+  const contentUpdated = new Date("2026-10-30T00:00:00.000Z");
   const parsedBenchmarkUpdated = new Date(latestBenchmark.generatedAt);
   const benchmarkUpdated = Number.isNaN(parsedBenchmarkUpdated.getTime())
     ? contentUpdated
@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: new URL("/benchmarks/latest", siteUrl).toString(),
       lastModified: benchmarkUpdated,
-      changeFrequency: "daily",
+      changeFrequency: "yearly",
       priority: 0.8,
     },
     {

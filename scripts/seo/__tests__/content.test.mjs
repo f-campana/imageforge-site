@@ -101,7 +101,8 @@ test("production docs derive the published CLI version from release metadata", a
   );
 
   assert.match(sources[0], /IMAGEFORGE_CLI_VERSION/u);
-  assert.doesNotMatch(sources[0], /\bv?\d+\.\d+\.\d+\b/u);
+  assert.match(sources[0], /Node\.js 20\.10\.0 or newer/u);
+  assert.doesNotMatch(sources[0], /Upgrading to v\d+\.\d+\.\d+/u);
   for (const source of sources) {
     assert.match(source, /IMAGEFORGE_CLI_PACKAGE_SPEC/u);
     assert.doesNotMatch(

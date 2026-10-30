@@ -24,8 +24,9 @@ export function Methodology() {
             Methodology
           </h2>
           <p className="mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed text-zinc-400 md:text-base">
-            Headline benchmark numbers are sourced from a documented benchmark
-            evidence record and are updated through approval-gated sync PRs.
+            Headline numbers are from the final dated v0.2.0 benchmark snapshot.
+            Results reflect this dataset and runner, not a universal performance
+            guarantee.
           </p>
           <p className="mt-3 text-center text-sm text-zinc-400">
             <a
@@ -77,8 +78,8 @@ export function Methodology() {
               </p>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">
                 Benchmark evidence source: {BENCHMARK_EVIDENCE.sourceWorkflow}.
-                Sync path: automated nightly snapshot PR to imageforge-site with
-                manual reviewer approval.
+                This final snapshot was produced by a manual run against the
+                release tag.
               </p>
             </article>
           </MotionWrap>

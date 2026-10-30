@@ -79,6 +79,10 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <div className="border-b border-white/10 bg-zinc-950 px-5 py-3 text-center text-sm leading-relaxed text-zinc-300">
+          ImageForge is sunset. The site and npm package remain available; no
+          new feature work is planned.
+        </div>
         {children}
       </body>
     </html>

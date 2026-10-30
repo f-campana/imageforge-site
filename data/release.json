@@ -1,12 +1,12 @@
 {
   "package": "@imageforge/cli",
-  "version": "0.1.10",
-  "publishedAt": "2026-07-19T11:40:50.959Z",
-  "npmUrl": "https://www.npmjs.com/package/@imageforge/cli/v/0.1.10",
-  "releaseUrl": "https://github.com/f-campana/imageforge/releases/tag/v0.1.10",
+  "version": "0.2.0",
+  "publishedAt": "2026-10-30T09:25:26.228Z",
+  "npmUrl": "https://www.npmjs.com/package/@imageforge/cli/v/0.2.0",
+  "releaseUrl": "https://github.com/f-campana/imageforge/releases/tag/v0.2.0",
   "evidence": {
-    "packageIntegrity": "sha512-2G58bEiVpYDniL/R5pWdTXcuFaOnVmIM136ZNw9hpLNLwdUtXCJDv9v2CC4j8XomXpcjbQio+psJhQqRoIanbA==",
-    "sourceGitHead": "9fea04a0f067ad118e47f130106e001bad688d5b",
+    "packageIntegrity": "sha512-z9Wr84Y6Lg9PzLptmWwiNUzopeIAdyO5JjR11UQES5qPDLJ0gVXPHu4Csyjhulg1YkA882U6g8lKfI1aUt7kKA==",
+    "sourceGitHead": "5d059ddbcc7319768129afac1f0f821ea338ba51",
     "verificationCommand": "node scripts/governance/verify-release-behavior.mjs"
   },
   "behavior": {
