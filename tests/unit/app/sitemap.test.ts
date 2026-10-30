@@ -27,14 +27,14 @@ describe("sitemap", () => {
       ),
     ).toEqual({
       "https://imageforge.dev/": "weekly",
-      "https://imageforge.dev/benchmarks/latest": "daily",
+      "https://imageforge.dev/benchmarks/latest": "yearly",
       "https://imageforge.dev/docs": "weekly",
       "https://imageforge.dev/contact": "monthly",
     });
     expect(
       entries.find((entry) => entry.url.endsWith("/benchmarks/latest"))
         ?.lastModified,
-    ).toEqual(new Date("2026-07-10T06:20:38.299Z"));
+    ).toEqual(new Date("2026-10-30T13:45:48.346Z"));
     for (const entry of entries) {
       expect(entry.lastModified).toBeInstanceOf(Date);
       expect((entry.lastModified as Date).getUTCFullYear()).toBe(2026);

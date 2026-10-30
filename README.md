@@ -1,5 +1,7 @@
 # ImageForge CLI Landing Site
 
+> ImageForge is sunset. The site and npm package remain available; no new feature work is planned.
+
 Marketing landing page for **ImageForge CLI** built with Next.js App Router, TypeScript, Tailwind CSS, and pnpm.
 
 ## Tech stack

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildPageMetadata({
-  title: "ImageForge Contact | Support and Feedback",
+  title: "ImageForge Contact | Security and Documentation",
   description:
-    "Contact and feedback entry points for ImageForge CLI support, bug reports, feature requests, and security reporting.",
+    "Documentation and private security reporting for the sunset ImageForge CLI.",
   path: "/contact",
 });
 
@@ -45,26 +45,11 @@ export default function ContactPage() {
           Contact and feedback
         </h1>
         <p className="mt-5 max-w-3xl text-base leading-relaxed text-zinc-300 md:text-lg">
-          Use these channels for support, bug reports, roadmap discussion, and
-          coordinated security disclosure.
+          ImageForge is sunset. Browse the documentation or report security
+          vulnerabilities privately. Responses and fixes are not guaranteed.
         </p>
 
         <section className="mt-10 grid gap-4 md:grid-cols-2">
-          <a
-            href="https://github.com/f-campana/imageforge/issues"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ui-interact-control ui-focus-ring rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-white/20 hover:bg-white/10"
-          >
-            <h2 className="text-lg font-semibold text-zinc-100">
-              Bug reports and feature requests
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
-              Open or search GitHub issues for product feedback and engineering
-              support.
-            </p>
-          </a>
-
           <a
             href="https://github.com/f-campana/imageforge/blob/main/SECURITY.md"
             target="_blank"
@@ -75,8 +60,8 @@ export default function ContactPage() {
               Security reporting
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-zinc-300">
-              Follow the coordinated disclosure process documented in
-              SECURITY.md.
+              Report vulnerabilities privately through GitHub Security
+              Advisories.
             </p>
           </a>
         </section>

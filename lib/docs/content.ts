@@ -43,7 +43,7 @@ const DOC_CONTENT = {
       {
         heading: "1. Preview safely",
         body: [
-          `ImageForge CLI requires Node.js 20 or newer. Start from a project with at least one supported source such as public/images/hero.jpg, then preview the planned work. ${dryRunContract}`,
+          `ImageForge CLI requires Node.js 20.10.0 or newer. Start from a project with at least one supported source such as public/images/hero.jpg, then preview the planned work. ${dryRunContract}`,
         ],
         code: `npx ${IMAGEFORGE_CLI_PACKAGE_SPEC} ./public/images --dry-run`,
       },
@@ -331,7 +331,7 @@ jobs:
         heading: "Generation options",
         body: [],
         bullets: [
-          "-f, --formats <formats>: webp, avif, or both",
+          "-f, --formats <formats>: webp, avif, or both; unsupported values exit with an error before processing",
           "-q, --quality <number>: output quality from 1 to 100",
           "--widths <list>: up to 16 source-bounded responsive widths",
           "--blur / --no-blur: enable or disable blurDataURL generation",
@@ -364,6 +364,7 @@ jobs:
         body: [
           "Check and dry-run modes cannot be combined. Width lists allow at most 16 unique positive targets and never upscale beyond source dimensions. Discovery skips symlinks, output collision checks are case-insensitive, and existing conflicting outputs are protected unless overwrite is explicitly authorized.",
           "Include and exclude globs are input-relative. Keep generation and check options identical; changing formats, quality, widths, filters, output path, or output directory changes the generated-state contract.",
+          `Upgrading to v${IMAGEFORGE_CLI_VERSION} invalidates existing cache entries because Sharp and libvips changed. Regenerate and review derivatives, manifest, and cache before running --check.`,
         ],
       },
       {
@@ -464,7 +465,7 @@ jobs:
       {
         heading: "JSON run-report contract",
         body: [
-          "The --json flag writes a machine-readable run report to stdout with effective options, per-image status, summary counters, size totals, responsive variant widths when present, and a remediation command for failed checks. Keep diagnostics on stderr separate from the JSON consumer.",
+          "The --json flag writes a machine-readable run report to stdout with effective options, per-image status, summary counters, size totals, responsive variant widths when present, and a remediation command for failed checks. Invalid output formats instead exit nonzero and write a JSON error object to stdout with code INVALID_FORMATS, message, invalidFormats, and supportedFormats. Keep diagnostics on stderr separate from the JSON consumer.",
         ],
         code: "imageforge ./public/images --json > imageforge-report.json",
       },
@@ -508,7 +509,7 @@ jobs:
       {
         heading: "Sharp cannot install or load",
         body: [
-          "ImageForge depends on Sharp's native binaries. Confirm Node.js 20 or newer, the target platform support, and that the package manager was allowed to install required native artifacts. Reproduce from a clean frozen install before changing image options.",
+          "ImageForge depends on Sharp's native binaries. Confirm Node.js 20.10.0 or newer, the target platform support, and that the package manager was allowed to install required native artifacts. Reproduce from a clean frozen install before changing image options.",
         ],
         links: [
           {
