@@ -37,7 +37,7 @@ This site intentionally describes ImageForge as:
 - `/docs/build-time-vs-runtime`, `/docs/vercel-image-optimization`, and
   `/docs/image-service-comparison`, and `/docs/imageforge-and-sharp` for
   adoption-adjacent decision intent
-- `/contact` support and feedback entrypoint
+- `/contact` documentation and security reporting entrypoint
 
 ## Local setup
 
@@ -69,7 +69,7 @@ pnpm seo:content # content SEO checks
 pnpm seo:offpage # off-page/public SEO checks
 pnpm seo:full    # full SEO checks (includes optional GSC adapter)
 pnpm seo:check   # CI-oriented SEO check (mode from SEO_MODE)
-pnpm governance:pricing:freshness # fail-closed pricing freshness check
+pnpm governance:pricing:freshness # historical pricing freshness check (not run in CI)
 pnpm seo:test    # SEO script unit tests
 pnpm format      # prettier check
 pnpm format:write
@@ -156,7 +156,7 @@ pnpm check:ci
 ```
 
 This command intentionally uses `NEXT_PUBLIC_SITE_URL=https://example.com` for deterministic local parity.
-CI also runs `pnpm governance:pricing:freshness` as a required freshness gate.
+The historical pricing freshness command is no longer a CI gate after sunset.
 
 ## Deploy to Vercel
 
